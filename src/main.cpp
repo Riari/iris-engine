@@ -1,6 +1,6 @@
-#include <iostream>
 #include <glad\glad.h>
 #include <GLFW\glfw3.h>
+#include <spdlog\spdlog.h>
 
 int main() {
     glfwInit();
@@ -11,17 +11,21 @@ int main() {
     GLFWwindow* window = glfwCreateWindow(800, 600, "LearnOpenGL", NULL, NULL);
     if (window == NULL)
     {
-        std::cout << "Failed to create GLFW window" << std::endl;
+        spdlog::critical("Failed to create GLFW window");
         glfwTerminate();
         return -1;
     }
     glfwMakeContextCurrent(window);
 
+    spdlog::info("Window created");
+
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
-        std::cout << "Failed to initialize GLAD" << std::endl;
+        spdlog::critical("Failed to initialize GLAD");
         return -1;
     }
+
+    spdlog::info("GLAD initialized");
 
     return 0;
 }
