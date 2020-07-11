@@ -2,6 +2,9 @@
 #include <GLFW\glfw3.h>
 #include <spdlog\spdlog.h>
 
+#include "GL/BufferObject.h"
+#include "GL/Shader/ShaderProgram.h"
+
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
     glViewport(0, 0, width, height);
@@ -13,6 +16,21 @@ void processInput(GLFWwindow *window)
     {
         glfwSetWindowShouldClose(window, true);
     }
+}
+
+void renderTriangle()
+{
+    float vertices[] = {
+        -0.5f, -0.5f, 0.0f,
+        0.5f, -0.5f, 0.0f,
+        0.0f,  0.5f, 0.0f
+    };
+
+    BufferObject VBO(GL_ARRAY_BUFFER);
+    VBO.Bind();
+    VBO.SetData(vertices, GL_STATIC_DRAW);
+
+    ShaderProgram triangleShader("Triangle");
 }
 
 int main() {
@@ -44,12 +62,14 @@ int main() {
 
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
-    while(!glfwWindowShouldClose(window))
+    while (!glfwWindowShouldClose(window))
     {
         processInput(window);
 
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
+
+        renderTriangle();
 
         glfwSwapBuffers(window);
         glfwPollEvents();
