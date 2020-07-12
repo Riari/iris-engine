@@ -2,7 +2,7 @@
 #include <GLFW\glfw3.h>
 #include <spdlog\spdlog.h>
 
-#include "GL/BufferObject.h"
+#include "GL/VBO.h"
 #include "GL/Shader/ShaderProgram.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
@@ -16,21 +16,6 @@ void processInput(GLFWwindow *window)
     {
         glfwSetWindowShouldClose(window, true);
     }
-}
-
-void renderTriangle()
-{
-    float vertices[] = {
-        -0.5f, -0.5f, 0.0f,
-        0.5f, -0.5f, 0.0f,
-        0.0f,  0.5f, 0.0f
-    };
-
-    BufferObject VBO(GL_ARRAY_BUFFER);
-    VBO.Bind();
-    VBO.SetData(vertices, GL_STATIC_DRAW);
-
-    ShaderProgram triangleShader("Triangle");
 }
 
 int main() {
@@ -62,6 +47,25 @@ int main() {
 
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
+    ShaderProgram triangleShaderProgram("Triangle");
+    triangleShaderProgram.Compile();
+    triangleShaderProgram.Link();
+    triangleShaderProgram.CleanUp();
+
+    float vertices[] = {
+            -0.5f, -0.5f, 0.0f,
+            0.5f, -0.5f, 0.0f,
+            0.0f,  0.5f, 0.0f
+    };
+
+    unsigned int VAO;
+    glGenVertexArrays(1, &VAO);
+
+    VBO vbo;
+    vbo.Bind();
+    vbo.SetData(vertices, GL_STATIC_DRAW);
+    VBO::SetVertexAttribute(0, 3);
+
     while (!glfwWindowShouldClose(window))
     {
         processInput(window);
@@ -69,7 +73,10 @@ int main() {
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        renderTriangle();
+        triangleShaderProgram.Use();
+
+        glBindVertexArray(VAO);
+        glDrawArrays(GL_TRIANGLES, 0, 3);
 
         glfwSwapBuffers(window);
         glfwPollEvents();

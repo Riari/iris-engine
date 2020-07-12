@@ -1,30 +1,51 @@
 #include <memory>
 #include <glad\glad.h>
+#include <spdlog\spdlog.h>
 #include "ShaderProgram.h"
-#include "VertexShaderSource.h"
-#include "FragmentShaderSource.h"
+#include "VertexShader.h"
+#include "FragmentShader.h"
 #include "../../Exception/Exception.h"
 
 ShaderProgram::ShaderProgram(std::string name) :
     m_name(std::move(name)),
-    m_vertexShader(glCreateShader(GL_VERTEX_SHADER)),
-    m_vertexShaderSource(new VertexShaderSource(m_name)),
-    m_fragmentShader(glCreateShader(GL_FRAGMENT_SHADER)),
-    m_fragmentShaderSource(new FragmentShaderSource(m_name)) {
-    Compile();
-}
+    m_program(glCreateProgram()),
+    m_vertexShader(new VertexShader(m_name)),
+    m_fragmentShader(new FragmentShader(m_name)) {}
 
 void ShaderProgram::Compile() const {
-    glShaderSource(m_vertexShader, 1, reinterpret_cast<const GLchar *const *>(m_vertexShaderSource->GetSource()), NULL);
-    glCompileShader(m_vertexShader);
+    m_vertexShader->Compile();
+    m_fragmentShader->Compile();
+}
 
-    int success;
-    char infoLog[512];
-    glGetShaderiv(m_vertexShader, GL_COMPILE_STATUS, &success);
+void ShaderProgram::Link() const {
+    glAttachShader(m_program, m_vertexShader->GetID());
+    glAttachShader(m_program, m_fragmentShader->GetID());
+    glLinkProgram(m_program);
 
-    if (!success)
-    {
-        glGetShaderInfoLog(m_vertexShader, 512, NULL, infoLog);
-        throw Exception("Vertex shader compilation failed");
+    GLint success;
+    glGetProgramiv(m_program, GL_LINK_STATUS, &success);
+
+    if (success == GL_FALSE) {
+        GLint maxLength = 0;
+        glGetProgramiv(m_program, GL_INFO_LOG_LENGTH, &maxLength);
+
+        std::string info;
+        info.resize(static_cast<std::string::size_type>(maxLength - 1));
+        glGetProgramInfoLog(m_program, 512, NULL, info.data());
+        throw Exception("Program linking failed: " + info);
     }
+
+    spdlog::info("Shader program " + m_name + " linked");
+}
+
+void ShaderProgram::CleanUp() {
+    glDeleteShader(m_vertexShader->GetID());
+    glDeleteShader(m_fragmentShader->GetID());
+
+    delete m_vertexShader;
+    delete m_fragmentShader;
+}
+
+void ShaderProgram::Use() const {
+    glUseProgram(m_program);
 }
