@@ -8,6 +8,6 @@ void BufferObject::Bind() const {
     glBindBuffer(m_target, m_vbo);
 }
 
-void BufferObject::SetData(const void *data, const GLenum usage) const {
-    glBufferData(m_target, sizeof(data), data, usage);
+void BufferObject::SetData(const void *data, unsigned int size, const GLenum usage) const {
+    glBufferData(m_target, size, data, usage);
 }

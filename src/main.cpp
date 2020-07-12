@@ -63,7 +63,7 @@ int main() {
     VBO vbo;
     glBindVertexArray(VAO);
     vbo.Bind();
-    vbo.SetData(vertices, GL_STATIC_DRAW);
+    vbo.SetData(vertices, sizeof(vertices), GL_STATIC_DRAW);
     VBO::SetVertexAttribute(0, 3);
 
     while (!glfwWindowShouldClose(window))
