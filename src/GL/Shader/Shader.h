@@ -6,6 +6,7 @@
 class Shader {
 public:
     Shader(GLenum type, const std::string& name, const std::string& suffix);
+    ~Shader();
 
     [[nodiscard]] unsigned int GetID() const;
     void Compile() const;

@@ -60,8 +60,8 @@ int main() {
 
     unsigned int VAO;
     glGenVertexArrays(1, &VAO);
-
     VBO vbo;
+    glBindVertexArray(VAO);
     vbo.Bind();
     vbo.SetData(vertices, GL_STATIC_DRAW);
     VBO::SetVertexAttribute(0, 3);
@@ -75,7 +75,6 @@ int main() {
 
         triangleShaderProgram.Use();
 
-        glBindVertexArray(VAO);
         glDrawArrays(GL_TRIANGLES, 0, 3);
 
         glfwSwapBuffers(window);

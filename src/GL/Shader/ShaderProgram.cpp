@@ -39,9 +39,6 @@ void ShaderProgram::Link() const {
 }
 
 void ShaderProgram::CleanUp() {
-    glDeleteShader(m_vertexShader->GetID());
-    glDeleteShader(m_fragmentShader->GetID());
-
     delete m_vertexShader;
     delete m_fragmentShader;
 }

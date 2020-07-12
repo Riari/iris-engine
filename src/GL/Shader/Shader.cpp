@@ -1,4 +1,3 @@
-#include <utility>
 #include <string>
 #include <fstream>
 #include <iostream>
@@ -7,6 +6,10 @@
 #include "../../Exception/Exception.h"
 
 Shader::Shader(GLenum type, const std::string& name, const std::string& suffix) : m_id(glCreateShader(type)), m_name(name + suffix) {}
+
+Shader::~Shader() {
+    glDeleteShader(m_id);
+}
 
 unsigned int Shader::GetID() const {
     return m_id;
