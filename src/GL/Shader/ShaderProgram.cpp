@@ -12,6 +12,10 @@ ShaderProgram::ShaderProgram(std::string name) :
     m_vertexShader(new VertexShader(m_name)),
     m_fragmentShader(new FragmentShader(m_name)) {}
 
+ShaderProgram::~ShaderProgram() {
+    glDeleteProgram(m_program);
+}
+
 void ShaderProgram::Compile() const {
     m_vertexShader->Compile();
     m_fragmentShader->Compile();
@@ -38,7 +42,7 @@ void ShaderProgram::Link() const {
     spdlog::info("Shader program " + m_name + " linked");
 }
 
-void ShaderProgram::CleanUp() {
+void ShaderProgram::Release() {
     delete m_vertexShader;
     delete m_fragmentShader;
 }

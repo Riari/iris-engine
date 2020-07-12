@@ -7,10 +7,11 @@
 class ShaderProgram {
 public:
     explicit ShaderProgram(std::string name);
+    ~ShaderProgram();
 
     void Compile() const;
     void Link() const;
-    void CleanUp();
+    void Release();
     void Use() const;
 private:
     const std::string m_name;

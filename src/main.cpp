@@ -2,6 +2,7 @@
 #include <GLFW\glfw3.h>
 #include <spdlog\spdlog.h>
 
+#include "GL/VAO.h"
 #include "GL/VBO.h"
 #include "GL/Shader/ShaderProgram.h"
 
@@ -47,24 +48,26 @@ int main() {
 
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
-    ShaderProgram triangleShaderProgram("Triangle");
-    triangleShaderProgram.Compile();
-    triangleShaderProgram.Link();
-    triangleShaderProgram.CleanUp();
+    auto* triangleShaderProgram = new ShaderProgram("Triangle");
+    triangleShaderProgram->Compile();
+    triangleShaderProgram->Link();
+    triangleShaderProgram->Release();
 
     float vertices[] = {
-            -0.5f, -0.5f, 0.0f,
-            0.5f, -0.5f, 0.0f,
-            0.0f,  0.5f, 0.0f
+        -0.5f, -0.5f, 0.0f,
+        0.5f, -0.5f, 0.0f,
+        0.0f,  0.5f, 0.0f
     };
 
-    unsigned int VAO;
-    glGenVertexArrays(1, &VAO);
+    VAO vao;
     VBO vbo;
-    glBindVertexArray(VAO);
+    vao.Bind();
     vbo.Bind();
     vbo.SetData(vertices, sizeof(vertices), GL_STATIC_DRAW);
     VBO::SetVertexAttribute(0, 3);
+
+    vbo.Unbind();
+    VAO::Unbind();
 
     while (!glfwWindowShouldClose(window))
     {
@@ -73,13 +76,16 @@ int main() {
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        triangleShaderProgram.Use();
-
+        triangleShaderProgram->Use();
         glDrawArrays(GL_TRIANGLES, 0, 3);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
+
+    vbo.Release();
+    vao.Release();
+    delete triangleShaderProgram;
 
     glfwTerminate();
 
