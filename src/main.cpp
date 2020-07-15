@@ -2,9 +2,10 @@
 #include <GLFW/glfw3.h>
 #include <spdlog/spdlog.h>
 
+#include "GL/Shader/ShaderProgram.h"
+#include "GL/EBO.h"
 #include "GL/VAO.h"
 #include "GL/VBO.h"
-#include "GL/Shader/ShaderProgram.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
@@ -42,22 +43,32 @@ int main()
     triangleShaderProgram->DeleteShaders();
 
     float vertices[] = {
-            -0.5f, -0.5f, 0.0f, // left
-            0.5f, -0.5f, 0.0f, // right
-            0.0f,  0.5f, 0.0f  // top
+        0.5f,  0.5f, 0.0f,
+        0.5f, -0.5f, 0.0f,
+        -0.5f, -0.5f, 0.0f,
+        -0.5f,  0.5f, 0.0f
+    };
+    unsigned int indices[] = {
+        0, 1, 3,
+        1, 2, 3
     };
 
     VAO *vao = new VAO();
     VBO *vbo = new VBO();
+    EBO *ebo = new EBO();
 
     vao->Bind();
     vbo->Bind();
+    ebo->Bind();
 
     vbo->SetData(sizeof(vertices), vertices, GL_STATIC_DRAW);
     VBO::SetVertexAttribute(0, 3);
 
+    ebo->SetData(sizeof(indices), indices, GL_STATIC_DRAW);
+
     vbo->Unbind();
     VAO::Unbind();
+    ebo->Unbind();
 
     while (!glfwWindowShouldClose(window))
     {
@@ -68,7 +79,8 @@ int main()
 
         triangleShaderProgram->Use();
         vao->Bind();
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        ebo->Bind();
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
@@ -76,6 +88,7 @@ int main()
 
     delete vao;
     delete vbo;
+    delete ebo;
     delete triangleShaderProgram;
 
     glfwTerminate();
