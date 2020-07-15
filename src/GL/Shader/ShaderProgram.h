@@ -11,7 +11,7 @@ public:
 
     void Compile() const;
     void Link() const;
-    void Release();
+    void DeleteShaders();
     void Use() const;
 private:
     const std::string m_name;

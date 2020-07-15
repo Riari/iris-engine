@@ -39,7 +39,7 @@ int main()
     auto* triangleShaderProgram = new ShaderProgram("Triangle");
     triangleShaderProgram->Compile();
     triangleShaderProgram->Link();
-    triangleShaderProgram->Release();
+    triangleShaderProgram->DeleteShaders();
 
     float vertices[] = {
             -0.5f, -0.5f, 0.0f, // left

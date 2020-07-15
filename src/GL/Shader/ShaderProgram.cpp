@@ -42,7 +42,7 @@ void ShaderProgram::Link() const {
     spdlog::info("Shader program " + m_name + " linked");
 }
 
-void ShaderProgram::Release() {
+void ShaderProgram::DeleteShaders() {
     delete m_vertexShader;
     delete m_fragmentShader;
 }
