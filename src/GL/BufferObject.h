@@ -6,6 +6,7 @@
 class BufferObject {
 public:
     explicit BufferObject(GLenum target);
+    ~BufferObject();
 
     void Bind() const;
     void SetData(unsigned int size, const void *data, GLenum usage) const;
