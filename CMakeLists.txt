@@ -30,12 +30,12 @@ file(GLOB_RECURSE SOURCES RELATIVE ${CMAKE_SOURCE_DIR} "src/*.cpp")
 
 add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
 
-add_custom_command(
-    TARGET ${PROJECT_NAME} POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory
-    "${SRC_DIR}/GL/Shader/Source" "$<TARGET_FILE_DIR:${PROJECT_NAME}>/resources/shaders"
-    COMMENT "Copying shaders" VERBATIM
+add_custom_target(
+        copy-shader-sources ALL
+        COMMAND ${CMAKE_COMMAND} -E copy_directory "${SRC_DIR}/GL/Shader/Source" "${CMAKE_BINARY_DIR}/resources/shaders"
 )
+
+add_dependencies(${PROJECT_NAME} copy-shader-sources)
 
 target_include_directories(${PROJECT_NAME} PRIVATE "${SRC_DIR}/GL")
 target_link_libraries(${PROJECT_NAME} PUBLIC glfw glad spdlog)
