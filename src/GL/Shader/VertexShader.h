@@ -4,5 +4,5 @@
 
 class VertexShader : public Shader {
 public:
-    explicit VertexShader(std::string name);
+    explicit VertexShader(const std::string& name);
 };

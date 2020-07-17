@@ -50,3 +50,11 @@ void ShaderProgram::DeleteShaders() {
 void ShaderProgram::Use() const {
     glUseProgram(m_program);
 }
+
+int ShaderProgram::GetUniformLocation(const std::string& name) const {
+    return glGetUniformLocation(m_program, name.c_str());
+}
+
+void ShaderProgram::SetUniform4f(const std::string& uniform, std::vector<float> values) const {
+    glUniform4f(GetUniformLocation(uniform), values[0], values[1], values[2], values[3]);
+}
