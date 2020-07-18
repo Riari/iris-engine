@@ -43,10 +43,10 @@ int main()
     triangleShaderProgram->DeleteShaders();
 
     float vertices[] = {
-        0.5f,  0.5f, 0.0f,
-        0.5f, -0.5f, 0.0f,
-        -0.5f, -0.5f, 0.0f,
-        -0.5f,  0.5f, 0.0f
+        // positions        // colors
+        0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 0.0f,   // bottom right
+        -0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f,   // bottom left
+        0.0f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f    // top
     };
     unsigned int indices[] = {
         0, 1, 3,
@@ -55,20 +55,21 @@ int main()
 
     VAO *vao = new VAO();
     VBO *vbo = new VBO();
-    EBO *ebo = new EBO();
+    //EBO *ebo = new EBO();
 
     vao->Bind();
     vbo->Bind();
-    ebo->Bind();
+    //ebo->Bind();
 
     vbo->SetData(sizeof(vertices), vertices, GL_STATIC_DRAW);
-    VBO::SetVertexAttribute(0, 3);
+    VBO::SetVertexAttribute(0, 3, 6 * sizeof(float)); // position
+    VBO::SetVertexAttribute(1, 3, 6 * sizeof(float), (void*)(3 * sizeof(float))); // colour
 
-    ebo->SetData(sizeof(indices), indices, GL_STATIC_DRAW);
+    //ebo->SetData(sizeof(indices), indices, GL_STATIC_DRAW);
 
     vbo->Unbind();
     VAO::Unbind();
-    ebo->Unbind();
+    //ebo->Unbind();
 
     while (!glfwWindowShouldClose(window))
     {
@@ -79,14 +80,15 @@ int main()
 
         triangleShaderProgram->Use();
 
-        float timeValue = glfwGetTime();
-        float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
+        //float timeValue = glfwGetTime();
+        //float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
 
-        triangleShaderProgram->SetUniform4f("ourColor", std::vector<float> { 1.0f, greenValue, 0.0f, 1.0f });
+        //triangleShaderProgram->SetUniform4f("ourColor", std::vector<float> { 1.0f, greenValue, 0.0f, 1.0f });
 
         vao->Bind();
-        ebo->Bind();
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        //ebo->Bind();
+        //glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0); // used with EBOs
+        glDrawArrays(GL_TRIANGLES, 0, 3);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
@@ -94,7 +96,7 @@ int main()
 
     delete vao;
     delete vbo;
-    delete ebo;
+    //delete ebo;
     delete triangleShaderProgram;
 
     glfwTerminate();
