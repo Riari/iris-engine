@@ -10,6 +10,7 @@ set(GLAD_DIR "${EXT_DIR}/glad")
 set(KHR_DIR "${EXT_DIR}/KHR")
 set(GLFW_DIR "${EXT_DIR}/glfw")
 set(SPDLOG_DIR "${EXT_DIR}/spdlog")
+set(STB_DIR "${EXT_DIR}/stb")
 
 set(SRC_DIR "${CMAKE_SOURCE_DIR}/src")
 
@@ -21,6 +22,7 @@ add_library(glad "${GLAD_DIR}/include/glad/glad.h" "${GLAD_DIR}/src/glad.c")
 target_include_directories(glad PUBLIC "${KHR_DIR}/include")
 
 include_directories("${GLAD_DIR}/include")
+include_directories("${STB_DIR}")
 
 add_subdirectory(${GLFW_DIR})
 add_subdirectory(${SPDLOG_DIR})
