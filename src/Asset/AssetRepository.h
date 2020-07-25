@@ -14,7 +14,7 @@ public:
         m_assets[path] = instance;
 
         return instance;
-    }
+    };
 protected:
     std::map<std::string, std::shared_ptr<T>> m_assets;
 private:

@@ -7,8 +7,10 @@ class Texture {
 public:
     explicit Texture(std::shared_ptr<Image> image);
 
+    void Bind(GLenum unit) const;
     void Bind() const;
-    void Generate() const;
+    void Define(bool withMipmap = true) const;
+    void Define(GLint format, bool withMipmap = true) const;
 
     static void GenerateMipmap();
     static void SetWrapMethod(GLint param);

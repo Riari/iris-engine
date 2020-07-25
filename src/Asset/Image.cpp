@@ -1,11 +1,8 @@
 #include <string>
-
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
-
+#include <stb_image.h>
 #include "Image.h"
 
-Image::Image(std::string path, unsigned char *data, int *width, int *height, int *channels) :
+Image::Image(std::string path, unsigned char *data, int width, int height, int channels) :
     m_path(std::move(path)),
     m_data(data),
     m_width(width),
@@ -24,14 +21,14 @@ unsigned char *Image::GetData() const {
     return m_data;
 }
 
-int *Image::GetWidth() const {
+int Image::GetWidth() const {
     return m_width;
 }
 
-int *Image::GetHeight() const {
+int Image::GetHeight() const {
     return m_height;
 }
 
-int *Image::GetChannels() const {
+int Image::GetChannels() const {
     return m_channels;
 }

@@ -46,10 +46,10 @@ int main()
 
     float vertices[] = {
         // positions         // colors           // texture coords
-        0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
-        0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
-        -0.5f, -0.5f, 0.0f,  0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // bottom left
-        -0.5f,  0.5f, 0.0f,  1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // top left
+        0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f, // top right
+        0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f, // bottom right
+        -0.5f, -0.5f, 0.0f,  0.0f, 0.0f, 1.0f,   0.0f, 0.0f, // bottom left
+        -0.5f,  0.5f, 0.0f,  1.0f, 1.0f, 0.0f,   0.0f, 1.0f  // top left
     };
     unsigned int indices[] = {
         0, 1, 3,
@@ -61,29 +61,42 @@ int main()
     EBO *ebo = new EBO();
 
     vao->Bind();
+
     vbo->Bind();
-    ebo->Bind();
-
     vbo->SetData(sizeof(vertices), vertices, GL_STATIC_DRAW);
-    VBO::SetVertexAttribute(0, 3, 6 * sizeof(float)); // position
-    VBO::SetVertexAttribute(1, 3, 6 * sizeof(float), (void*)(3 * sizeof(float))); // colour
-    VBO::SetVertexAttribute(2, 2, 8 * sizeof(float), (void*)(6 * sizeof(float))); // texture
-
+    ebo->Bind();
     ebo->SetData(sizeof(indices), indices, GL_STATIC_DRAW);
 
+    VBO::SetVertexAttribute(0, 3, 8 * sizeof(float), (void*)0); // position
+    VBO::SetVertexAttribute(1, 3, 8 * sizeof(float), (void*)(3 * sizeof(float))); // colour
+    VBO::SetVertexAttribute(2, 2, 8 * sizeof(float), (void*)(6 * sizeof(float))); // texture
+
     auto *assetManager = new AssetManager();
-    std::shared_ptr<Image> wallImage = assetManager->GetImage("assets/textures/wall.jpg");
-    auto wallTexture = new Texture(wallImage);
-    wallTexture->Bind();
+    ImageRepository::SetFlipVerticallyOnLoad(true);
+    std::shared_ptr<Image> containerImage = assetManager->GetImage("assets/textures/container.jpg");
+    std::shared_ptr<Image> faceImage = assetManager->GetImage("assets/textures/awesomeface.png");
+
+    auto containerTexture = new Texture(containerImage);
+    containerTexture->Bind(GL_TEXTURE0);
     Texture::SetWrapMethod(GL_REPEAT);
     Texture::SetFilterMethod(GL_LINEAR);
-    wallTexture->Generate();
-    Texture::GenerateMipmap();
-    assetManager->UnloadImage(wallImage->GetPath());
+    containerTexture->Define(true);
+    assetManager->UnloadImage(containerImage->GetPath());
+
+    auto faceTexture = new Texture(faceImage);
+    faceTexture->Bind(GL_TEXTURE1);
+    Texture::SetWrapMethod(GL_REPEAT);
+    Texture::SetFilterMethod(GL_LINEAR);
+    faceTexture->Define(GL_RGBA, true);
+    assetManager->UnloadImage(faceImage->GetPath());
 
     vbo->Unbind();
     VAO::Unbind();
     ebo->Unbind();
+
+    triangleShaderProgram->Use();
+    triangleShaderProgram->SetUniformInt("texture1", 0);
+    triangleShaderProgram->SetUniformInt("texture2", 1);
 
     while (!glfwWindowShouldClose(window))
     {
@@ -92,19 +105,13 @@ int main()
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        wallTexture->Bind();
+        containerTexture->Bind(GL_TEXTURE0);
+        faceTexture->Bind(GL_TEXTURE1);
 
         triangleShaderProgram->Use();
 
-        //float timeValue = glfwGetTime();
-        //float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
-
-        //triangleShaderProgram->SetUniform4f("ourColor", std::vector<float> { 1.0f, greenValue, 0.0f, 1.0f });
-
         vao->Bind();
-        ebo->Bind();
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-        //glDrawArrays(GL_TRIANGLES, 0, 3);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
@@ -114,7 +121,8 @@ int main()
     delete vbo;
     delete ebo;
     delete assetManager;
-    delete wallTexture;
+    delete containerTexture;
+    delete faceTexture;
     delete triangleShaderProgram;
 
     glfwTerminate();
