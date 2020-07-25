@@ -87,7 +87,7 @@ int main()
     faceTexture->Bind(GL_TEXTURE1);
     Texture::SetWrapMethod(GL_REPEAT);
     Texture::SetFilterMethod(GL_LINEAR);
-    faceTexture->Define(GL_RGBA, true);
+    faceTexture->Define(true);
     assetManager->UnloadImage(faceImage->GetPath());
 
     vbo->Unbind();

@@ -10,7 +10,6 @@ public:
     void Bind(GLenum unit) const;
     void Bind() const;
     void Define(bool withMipmap = true) const;
-    void Define(GLint format, bool withMipmap = true) const;
 
     static void GenerateMipmap();
     static void SetWrapMethod(GLint param);
