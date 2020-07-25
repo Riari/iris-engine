@@ -2,10 +2,12 @@
 #include <GLFW/glfw3.h>
 #include <spdlog/spdlog.h>
 
+#include "Asset/AssetManager.h"
 #include "GL/Shader/ShaderProgram.h"
 #include "GL/EBO.h"
 #include "GL/VAO.h"
 #include "GL/VBO.h"
+#include "GL/Texture.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
@@ -43,10 +45,11 @@ int main()
     triangleShaderProgram->DeleteShaders();
 
     float vertices[] = {
-        // positions        // colors
-        0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 0.0f,   // bottom right
-        -0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f,   // bottom left
-        0.0f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f    // top
+        // positions         // colors           // texture coords
+        0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
+        0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
+        -0.5f, -0.5f, 0.0f,  0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // bottom left
+        -0.5f,  0.5f, 0.0f,  1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // top left
     };
     unsigned int indices[] = {
         0, 1, 3,
@@ -55,21 +58,32 @@ int main()
 
     VAO *vao = new VAO();
     VBO *vbo = new VBO();
-    //EBO *ebo = new EBO();
+    EBO *ebo = new EBO();
 
     vao->Bind();
     vbo->Bind();
-    //ebo->Bind();
+    ebo->Bind();
 
     vbo->SetData(sizeof(vertices), vertices, GL_STATIC_DRAW);
     VBO::SetVertexAttribute(0, 3, 6 * sizeof(float)); // position
     VBO::SetVertexAttribute(1, 3, 6 * sizeof(float), (void*)(3 * sizeof(float))); // colour
+    VBO::SetVertexAttribute(2, 2, 8 * sizeof(float), (void*)(6 * sizeof(float))); // texture
 
-    //ebo->SetData(sizeof(indices), indices, GL_STATIC_DRAW);
+    ebo->SetData(sizeof(indices), indices, GL_STATIC_DRAW);
+
+    auto *assetManager = new AssetManager();
+    std::shared_ptr<Image> wallImage = assetManager->GetImage("assets/textures/wall.jpg");
+    auto wallTexture = new Texture(wallImage);
+    wallTexture->Bind();
+    Texture::SetWrapMethod(GL_REPEAT);
+    Texture::SetFilterMethod(GL_LINEAR);
+    wallTexture->Generate();
+    Texture::GenerateMipmap();
+    assetManager->UnloadImage(wallImage->GetPath());
 
     vbo->Unbind();
     VAO::Unbind();
-    //ebo->Unbind();
+    ebo->Unbind();
 
     while (!glfwWindowShouldClose(window))
     {
@@ -77,6 +91,8 @@ int main()
 
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
+
+        wallTexture->Bind();
 
         triangleShaderProgram->Use();
 
@@ -86,9 +102,9 @@ int main()
         //triangleShaderProgram->SetUniform4f("ourColor", std::vector<float> { 1.0f, greenValue, 0.0f, 1.0f });
 
         vao->Bind();
-        //ebo->Bind();
-        //glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0); // used with EBOs
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        ebo->Bind();
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        //glDrawArrays(GL_TRIANGLES, 0, 3);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
@@ -96,7 +112,9 @@ int main()
 
     delete vao;
     delete vbo;
-    //delete ebo;
+    delete ebo;
+    delete assetManager;
+    delete wallTexture;
     delete triangleShaderProgram;
 
     glfwTerminate();

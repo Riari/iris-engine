@@ -2,12 +2,14 @@
 
 #include <map>
 #include <memory>
-#include "AssetRepository.h"
 #include "ImageRepository.h"
 
 class AssetManager {
 public:
-    std::shared_ptr<Image> GetImage(std::string path);
+    AssetManager();
+
+    [[nodiscard]] std::shared_ptr<Image> GetImage(std::string path) const;
+    void UnloadImage(const std::string& path) const;
 private:
     std::unique_ptr<ImageRepository> m_images;
 };

@@ -10,7 +10,6 @@ public:
 
     void Bind() const;
     void SetData(unsigned int size, const void *data, GLenum usage) const;
-    void Release() const;
     void Unbind() const;
 private:
     unsigned int m_vbo{};
