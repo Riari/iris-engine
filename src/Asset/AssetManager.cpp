@@ -1,4 +1,3 @@
-#include <string>
 #include "AssetManager.h"
 
 AssetManager::AssetManager() : m_images(new ImageRepository) {}

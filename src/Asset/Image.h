@@ -1,7 +1,5 @@
 #pragma once
 
-#include <string>
-
 class Image {
 public:
     explicit Image(std::string path, unsigned char *data, int *width, int *height, int *channels);

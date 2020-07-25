@@ -1,5 +1,9 @@
-#include "Image.h"
+#include <string>
+
+#define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
+
+#include "Image.h"
 
 Image::Image(std::string path, unsigned char *data, int *width, int *height, int *channels) :
     m_path(std::move(path)),
