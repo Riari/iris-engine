@@ -7,8 +7,9 @@ set(CMAKE_CXX_FLAGS, "${CXX_FLAGS}")
 
 set(EXT_DIR "${CMAKE_SOURCE_DIR}/external")
 set(GLAD_DIR "${EXT_DIR}/glad")
-set(KHR_DIR "${EXT_DIR}/KHR")
 set(GLFW_DIR "${EXT_DIR}/glfw")
+set(GLM_DIR "${EXT_DIR}/glm")
+set(KHR_DIR "${EXT_DIR}/KHR")
 set(SPDLOG_DIR "${EXT_DIR}/spdlog")
 set(STB_DIR "${EXT_DIR}/stb")
 
@@ -26,6 +27,7 @@ include_directories("${GLAD_DIR}/include")
 include_directories("${STB_DIR}")
 
 add_subdirectory(${GLFW_DIR})
+add_subdirectory(${GLM_DIR})
 add_subdirectory(${SPDLOG_DIR})
 
 set(HEADERS
@@ -68,4 +70,4 @@ add_custom_target(copy-shader-sources ALL COMMAND ${CMAKE_COMMAND} -E copy_direc
 add_dependencies(${PROJECT_NAME} copy-assets copy-shader-sources)
 
 target_include_directories(${PROJECT_NAME} PRIVATE "${SRC_DIR}/GL")
-target_link_libraries(${PROJECT_NAME} PUBLIC glfw glad spdlog)
+target_link_libraries(${PROJECT_NAME} PUBLIC glad glfw glm spdlog)
