@@ -79,6 +79,7 @@ int main()
     ImageRepository::SetFlipVerticallyOnLoad(true);
     std::shared_ptr<Image> containerImage = assetManager->GetImage("assets/textures/container.jpg");
     std::shared_ptr<Image> faceImage = assetManager->GetImage("assets/textures/febby.png");
+    std::shared_ptr<Image> dumbcatImage = assetManager->GetImage("assets/textures/dumbcat.png");
 
     auto containerTexture = new Texture(containerImage);
     containerTexture->Bind(GL_TEXTURE0);
@@ -94,6 +95,13 @@ int main()
     faceTexture->Define(true);
     assetManager->UnloadImage(faceImage->GetPath());
 
+    auto dumbcatTexture = new Texture(dumbcatImage);
+    dumbcatTexture->Bind(GL_TEXTURE2);
+    Texture::SetWrapMethod(GL_REPEAT);
+    Texture::SetFilterMethod(GL_LINEAR);
+    dumbcatTexture->Define(true);
+    assetManager->UnloadImage(dumbcatImage->GetPath());
+
     vbo->Unbind();
     VAO::Unbind();
     ebo->Unbind();
@@ -101,6 +109,7 @@ int main()
     triangleShaderProgram->Use();
     triangleShaderProgram->SetUniformInt("texture1", 0);
     triangleShaderProgram->SetUniformInt("texture2", 1);
+    triangleShaderProgram->SetUniformInt("texture3", 2);
 
     while (!glfwWindowShouldClose(window))
     {
@@ -113,14 +122,27 @@ int main()
         faceTexture->Bind(GL_TEXTURE1);
 
         glm::mat4 trans = glm::mat4(1.0f);
-        trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
-        trans = glm::translate(trans, glm::vec3(0.2f, -0.2f, 0.0f));
 
+        // First container
+        trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
+        trans = glm::translate(trans, glm::vec3(0.5f, -0.5f, 0.0f));
+
+        triangleShaderProgram->SetUniformFloat("blend", 0.0);
         triangleShaderProgram->SetUniformMatrix4fv("transform", glm::value_ptr(trans));
 
-        triangleShaderProgram->Use();
-
         vao->Bind();
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+        // Second container
+        trans = glm::mat4(1.0f);
+        trans = glm::translate(trans, glm::vec3(-0.5f, 0.5f, 0.0f));
+        trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(1.0f, 0.0f, 0.5f));
+        float scaleAmount = sin(glfwGetTime());
+        trans = glm::scale(trans, glm::vec3(scaleAmount, scaleAmount, scaleAmount));
+
+        triangleShaderProgram->SetUniformFloat("blend", 1.0);
+        triangleShaderProgram->SetUniformMatrix4fv("transform", &trans[0][0]);
+
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
         glfwSwapBuffers(window);
