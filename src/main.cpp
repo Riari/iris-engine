@@ -9,6 +9,10 @@
 #include "GL/VBO.h"
 #include "GL/Texture.h"
 
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
 
@@ -74,7 +78,7 @@ int main()
     auto *assetManager = new AssetManager();
     ImageRepository::SetFlipVerticallyOnLoad(true);
     std::shared_ptr<Image> containerImage = assetManager->GetImage("assets/textures/container.jpg");
-    std::shared_ptr<Image> faceImage = assetManager->GetImage("assets/textures/awesomeface.png");
+    std::shared_ptr<Image> faceImage = assetManager->GetImage("assets/textures/febby.png");
 
     auto containerTexture = new Texture(containerImage);
     containerTexture->Bind(GL_TEXTURE0);
@@ -107,6 +111,12 @@ int main()
 
         containerTexture->Bind(GL_TEXTURE0);
         faceTexture->Bind(GL_TEXTURE1);
+
+        glm::mat4 trans = glm::mat4(1.0f);
+        trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
+        trans = glm::translate(trans, glm::vec3(0.2f, -0.2f, 0.0f));
+
+        triangleShaderProgram->SetUniformMatrix4fv("transform", glm::value_ptr(trans));
 
         triangleShaderProgram->Use();
 

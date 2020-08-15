@@ -70,3 +70,7 @@ void ShaderProgram::SetUniformFloat(const std::string &name, float value) const 
 void ShaderProgram::SetUniform4f(const std::string &name, std::vector<float> values) const {
     glUniform4f(GetUniformLocation(name), values[0], values[1], values[2], values[3]);
 }
+
+void ShaderProgram::SetUniformMatrix4fv(const std::string &name, float *value_ptr) const {
+    glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, value_ptr);
+}
