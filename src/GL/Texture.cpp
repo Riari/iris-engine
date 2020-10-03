@@ -20,7 +20,8 @@ void Texture::Bind() const {
 void Texture::Define(bool withMipmap) const {
     GLint format;
 
-    switch (m_image->GetChannels()) {
+    switch (m_image->GetChannels())
+    {
         case 3: format = GL_RGB; break;
         case 4: format = GL_RGBA; break;
         default: throw Exception("Unexpected channel count in image data: " + m_image->GetPath() + "(" + std::to_string(m_image->GetChannels()) + " channels)");
