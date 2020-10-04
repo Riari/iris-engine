@@ -2,7 +2,8 @@
 
 #include "Shader.h"
 
-class VertexShader : public Shader {
+class VertexShader : public Shader
+{
 public:
-    explicit VertexShader(const std::string& name);
+    explicit VertexShader(const std::string &name);
 };

@@ -2,7 +2,8 @@
 
 #include <glm/glm.hpp>
 
-enum class CameraMovement {
+enum class CameraMovement
+{
     FORWARD,
     BACKWARD,
     LEFT,
@@ -22,7 +23,9 @@ const float DEFAULT_FOV = 45.0f;
 class Camera
 {
 public:
-    explicit Camera(glm::vec3 position = DEFAULT_POSITION, glm::vec3 up = DEFAULT_UP, float yaw = DEFAULT_YAW, float pitch = DEFAULT_PITCH, float fov = DEFAULT_FOV);
+    explicit Camera(glm::vec3 position = DEFAULT_POSITION, glm::vec3 up = DEFAULT_UP, float yaw = DEFAULT_YAW,
+                    float pitch = DEFAULT_PITCH, float fov = DEFAULT_FOV);
+
     Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch, float fov);
 
     glm::mat4 GetViewMatrix();

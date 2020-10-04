@@ -2,7 +2,8 @@
 
 #include "BufferObject.h"
 
-class EBO : public BufferObject {
+class EBO : public BufferObject
+{
 public:
     EBO();
 };

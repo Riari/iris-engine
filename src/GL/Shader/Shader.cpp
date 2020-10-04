@@ -4,17 +4,23 @@
 #include "Shader.h"
 #include "../../Exception/Exception.h"
 
-Shader::Shader(GLenum type, const std::string& name, const std::string& suffix) : m_id(glCreateShader(type)), m_name(name + suffix) {}
+Shader::Shader(GLenum type, const std::string &name, const std::string &suffix) :
+        m_id(glCreateShader(type)),
+        m_name(name + suffix)
+{}
 
-Shader::~Shader() {
+Shader::~Shader()
+{
     glDeleteShader(m_id);
 }
 
-unsigned int Shader::GetID() const {
+unsigned int Shader::GetID() const
+{
     return m_id;
 }
 
-void Shader::Compile() const {
+void Shader::Compile() const
+{
     std::string source = LoadSource();
     GLchar const *shader_source = source.c_str();
     GLint const shader_length = source.size();
@@ -38,7 +44,8 @@ void Shader::Compile() const {
     spdlog::info("Shader " + m_name + m_extension + " compiled");
 }
 
-std::string Shader::LoadSource() const {
+std::string Shader::LoadSource() const
+{
     std::string source;
     std::string filepath = m_path + m_name + m_extension;
     std::ifstream fileStream(filepath.c_str(), std::ios::in);
@@ -46,7 +53,8 @@ std::string Shader::LoadSource() const {
     if (!fileStream.is_open()) throw Exception("Failed to open " + filepath);
 
     std::string line;
-    while (!fileStream.eof()) {
+    while (!fileStream.eof())
+    {
         std::getline(fileStream, line);
         source.append(line + "\n");
     }

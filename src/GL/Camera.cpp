@@ -3,18 +3,19 @@
 #include "Camera.h"
 
 Camera::Camera(glm::vec3 position, glm::vec3 worldUp, float yaw, float pitch, float fov) :
-    m_position(position),
-    m_front(DEFAULT_FRONT),
-    m_worldUp(worldUp),
-    m_yaw(yaw),
-    m_pitch(pitch),
-    m_fov(fov)
+        m_position(position),
+        m_front(DEFAULT_FRONT),
+        m_worldUp(worldUp),
+        m_yaw(yaw),
+        m_pitch(pitch),
+        m_fov(fov)
 {
     UpdateVectors();
 }
 
 Camera::Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch, float fov) :
-    Camera(glm::vec3(posX, posY, posZ), glm::vec3(upX, upY, upZ), yaw, pitch, fov) {}
+        Camera(glm::vec3(posX, posY, posZ), glm::vec3(upX, upY, upZ), yaw, pitch, fov)
+{}
 
 glm::mat4 Camera::GetViewMatrix()
 {

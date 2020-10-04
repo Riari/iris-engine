@@ -7,21 +7,25 @@
 #include "../../Exception/Exception.h"
 
 ShaderProgram::ShaderProgram(std::string name) :
-    m_name(std::move(name)),
-    m_program(glCreateProgram()),
-    m_vertexShader(new VertexShader(m_name)),
-    m_fragmentShader(new FragmentShader(m_name)) {}
+        m_name(std::move(name)),
+        m_program(glCreateProgram()),
+        m_vertexShader(new VertexShader(m_name)),
+        m_fragmentShader(new FragmentShader(m_name))
+{}
 
-ShaderProgram::~ShaderProgram() {
+ShaderProgram::~ShaderProgram()
+{
     glDeleteProgram(m_program);
 }
 
-void ShaderProgram::Compile() const {
+void ShaderProgram::Compile() const
+{
     m_vertexShader->Compile();
     m_fragmentShader->Compile();
 }
 
-void ShaderProgram::Link() const {
+void ShaderProgram::Link() const
+{
     glAttachShader(m_program, m_vertexShader->GetID());
     glAttachShader(m_program, m_fragmentShader->GetID());
     glLinkProgram(m_program);
@@ -29,7 +33,8 @@ void ShaderProgram::Link() const {
     GLint success;
     glGetProgramiv(m_program, GL_LINK_STATUS, &success);
 
-    if (success == GL_FALSE) {
+    if (success == GL_FALSE)
+    {
         GLint maxLength = 0;
         glGetProgramiv(m_program, GL_INFO_LOG_LENGTH, &maxLength);
 
@@ -42,35 +47,43 @@ void ShaderProgram::Link() const {
     spdlog::info("Shader program " + m_name + " linked");
 }
 
-void ShaderProgram::DeleteShaders() {
+void ShaderProgram::DeleteShaders()
+{
     delete m_vertexShader;
     delete m_fragmentShader;
 }
 
-void ShaderProgram::Use() const {
+void ShaderProgram::Use() const
+{
     glUseProgram(m_program);
 }
 
-int ShaderProgram::GetUniformLocation(const std::string &name) const {
+int ShaderProgram::GetUniformLocation(const std::string &name) const
+{
     return glGetUniformLocation(m_program, name.c_str());
 }
 
-void ShaderProgram::SetUniformBool(const std::string &name, bool value) const {
-    SetUniformInt(name, (int)value);
+void ShaderProgram::SetUniformBool(const std::string &name, bool value) const
+{
+    SetUniformInt(name, (int) value);
 }
 
-void ShaderProgram::SetUniformInt(const std::string &name, int value) const {
+void ShaderProgram::SetUniformInt(const std::string &name, int value) const
+{
     glUniform1i(GetUniformLocation(name), value);
 }
 
-void ShaderProgram::SetUniformFloat(const std::string &name, float value) const {
+void ShaderProgram::SetUniformFloat(const std::string &name, float value) const
+{
     glUniform1f(GetUniformLocation(name), value);
 }
 
-void ShaderProgram::SetUniform4f(const std::string &name, std::vector<float> values) const {
+void ShaderProgram::SetUniform4f(const std::string &name, std::vector<float> values) const
+{
     glUniform4f(GetUniformLocation(name), values[0], values[1], values[2], values[3]);
 }
 
-void ShaderProgram::SetUniformMatrix4fv(const std::string &name, float *value_ptr) const {
+void ShaderProgram::SetUniformMatrix4fv(const std::string &name, float *value_ptr) const
+{
     glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, value_ptr);
 }

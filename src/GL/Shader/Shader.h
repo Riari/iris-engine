@@ -3,13 +3,17 @@
 #include <iostream>
 #include <glad\glad.h>
 
-class Shader {
+class Shader
+{
 public:
-    Shader(GLenum type, const std::string& name, const std::string& suffix);
+    Shader(GLenum type, const std::string &name, const std::string &suffix);
+
     ~Shader();
 
     [[nodiscard]] unsigned int GetID() const;
+
     void Compile() const;
+
 private:
     const unsigned int m_id;
     const std::string m_name;

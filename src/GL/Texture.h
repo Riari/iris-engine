@@ -3,7 +3,8 @@
 #include <memory>
 #include "../Asset/Image.h"
 
-class Texture {
+class Texture
+{
 public:
     explicit Texture(std::shared_ptr<Image> image);
 
@@ -14,6 +15,7 @@ public:
     static void GenerateMipmap();
     static void SetWrapMethod(GLint param);
     static void SetFilterMethod(GLint param);
+
 private:
     unsigned int m_texture{};
     std::shared_ptr<Image> m_image;
