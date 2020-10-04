@@ -6,6 +6,7 @@ set(CXX_FLAGS "-Wall")
 set(CMAKE_CXX_FLAGS, "${CXX_FLAGS}")
 
 set(EXT_DIR "${CMAKE_SOURCE_DIR}/external")
+set(FMT_DIR "${EXT_DIR}/fmt")
 set(GLAD_DIR "${EXT_DIR}/glad")
 set(GLFW_DIR "${EXT_DIR}/glfw")
 set(GLM_DIR "${EXT_DIR}/glm")
@@ -26,6 +27,7 @@ target_include_directories(glad PUBLIC "${KHR_DIR}/include")
 include_directories("${GLAD_DIR}/include")
 include_directories("${STB_DIR}")
 
+add_subdirectory(${FMT_DIR})
 add_subdirectory(${GLFW_DIR})
 add_subdirectory(${GLM_DIR})
 add_subdirectory(${SPDLOG_DIR})
@@ -35,6 +37,7 @@ set(HEADERS
         "${SRC_DIR}/Asset/AssetRepository.h"
         "${SRC_DIR}/Asset/Image.h"
         "${SRC_DIR}/Asset/ImageRepository.h"
+        "${SRC_DIR}/Controller/CameraController.h"
         "${SRC_DIR}/Exception/Exception.h"
         "${SRC_DIR}/GL/Shader/FragmentShader.h"
         "${SRC_DIR}/GL/Shader/Shader.h"
@@ -45,12 +48,22 @@ set(HEADERS
         "${SRC_DIR}/GL/EBO.h"
         "${SRC_DIR}/GL/Texture.h"
         "${SRC_DIR}/GL/VAO.h"
-        "${SRC_DIR}/GL/VBO.h")
+        "${SRC_DIR}/GL/VBO.h"
+        "${SRC_DIR}/Input/Exception/KeyInUseException.h"
+        "${SRC_DIR}/Input/InputBinding.h"
+        "${SRC_DIR}/Input/InputManager.h"
+        "${SRC_DIR}/Utility/Timer.h"
+        "${SRC_DIR}/Window/Window.h"
+        "${SRC_DIR}/Window/Handler/CursorPosHandler.h"
+        "${SRC_DIR}/Window/Handler/FrameBufferSizeHandler.h"
+        "${SRC_DIR}/Window/Handler/KeyHandler.h"
+        "${SRC_DIR}/Window/Handler/ScrollHandler.h")
 
 set(SOURCES
         "${SRC_DIR}/Asset/AssetManager.cpp"
         "${SRC_DIR}/Asset/Image.cpp"
         "${SRC_DIR}/Asset/ImageRepository.cpp"
+        "${SRC_DIR}/Controller/CameraController.cpp"
         "${SRC_DIR}/Exception/Exception.cpp"
         "${SRC_DIR}/GL/Shader/FragmentShader.cpp"
         "${SRC_DIR}/GL/Shader/Shader.cpp"
@@ -62,6 +75,10 @@ set(SOURCES
         "${SRC_DIR}/GL/Texture.cpp"
         "${SRC_DIR}/GL/VAO.cpp"
         "${SRC_DIR}/GL/VBO.cpp"
+        "${SRC_DIR}/Input/InputBinding.cpp"
+        "${SRC_DIR}/Input/InputManager.cpp"
+        "${SRC_DIR}/Utility/Timer.cpp"
+        "${SRC_DIR}/Window/Window.cpp"
         "${SRC_DIR}/main.cpp")
 
 add_executable(${PROJECT_NAME} ${HEADERS} ${SOURCES})
@@ -72,4 +89,4 @@ add_custom_target(copy-shader-sources ALL COMMAND ${CMAKE_COMMAND} -E copy_direc
 add_dependencies(${PROJECT_NAME} copy-assets copy-shader-sources)
 
 target_include_directories(${PROJECT_NAME} PRIVATE "${SRC_DIR}/GL")
-target_link_libraries(${PROJECT_NAME} PUBLIC glad glfw glm spdlog)
+target_link_libraries(${PROJECT_NAME} PUBLIC fmt glad glfw glm spdlog)

@@ -6,53 +6,29 @@
 #include <spdlog/spdlog.h>
 
 #include "Asset/AssetManager.h"
+#include "Controller/CameraController.h"
 #include "GL/Shader/ShaderProgram.h"
 #include "GL/Camera.h"
 #include "GL/EBO.h"
 #include "GL/VAO.h"
 #include "GL/VBO.h"
 #include "GL/Texture.h"
-
-void processKeyboardInput(GLFWwindow *window);
-
-void framebufferSizeCallback(GLFWwindow *window, int width, int height);
-
-void cursorPosCallback(GLFWwindow *window, double x, double y);
-
-void scrollCallback(GLFWwindow *window, double x, double y);
-
-const int SCREEN_WIDTH = 800;
-const int SCREEN_HEIGHT = 600;
-
-float deltaTime = 0.0f;
-float lastFrame = 0.0f;
-
-Camera camera(glm::vec3(0.0f, 0.0f, -3.0f));
-
-float lastMouseX = SCREEN_WIDTH / 2, lastMouseY = SCREEN_HEIGHT / 2;
-bool firstMouse = true;
+#include "Input/InputManager.h"
+#include "Utility/Timer.h"
+#include "Window/Window.h"
 
 int main()
 {
-    glfwInit();
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    auto camera = std::make_shared<Camera>(glm::vec3(0.0f, 0.0f, -3.0f));
+    auto *window = new Window("LearnOpenGL");
+    auto timer = std::make_shared<Timer>();
 
-    GLFWwindow *window = glfwCreateWindow(800, 600, "GLSandbox", NULL, NULL);
-    if (window == NULL)
-    {
-        spdlog::critical("Failed to create GLFW window");
-        glfwTerminate();
-        return -1;
-    }
-    glfwMakeContextCurrent(window);
-    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-    glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
-    glfwSetCursorPosCallback(window, cursorPosCallback);
-    glfwSetScrollCallback(window, scrollCallback);
+    auto inputManager = std::make_shared<InputManager>();
+    window->RegisterKeyHandler(inputManager.get());
 
-    spdlog::info("Window created");
+    auto *cameraController = new CameraController(camera, inputManager);
+    window->RegisterCursorPosHandler(cameraController);
+    window->RegisterScrollHandler(cameraController);
 
     if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress))
     {
@@ -162,10 +138,8 @@ int main()
 
     glEnable(GL_DEPTH_TEST);
 
-    while (!glfwWindowShouldClose(window))
+    while (!glfwWindowShouldClose(window->GetGLFWWindow()))
     {
-        processKeyboardInput(window);
-
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -174,12 +148,12 @@ int main()
 
         // Projection matrix
         glm::mat4 projection;
-        projection = glm::perspective(glm::radians(camera.GetFOV()), (float) (SCREEN_WIDTH / SCREEN_HEIGHT), 0.1f,
+        projection = glm::perspective(glm::radians(camera->GetFOV()), (float) (window->GetScreenWidth() / window->GetScreenHeight()), 0.1f,
                                       100.0f);
         basicShaderProgram->SetUniformMatrix4fv("projection", glm::value_ptr(projection));
 
         // View matrix
-        glm::mat4 view = camera.GetViewMatrix();
+        glm::mat4 view = camera->GetViewMatrix();
         basicShaderProgram->SetUniformMatrix4fv("view", glm::value_ptr(view));
 
         basicShaderProgram->SetUniformFloat("blend", 0.5);
@@ -199,8 +173,11 @@ int main()
             glDrawArrays(GL_TRIANGLES, 0, 36);
         }
 
-        glfwSwapBuffers(window);
+        glfwSwapBuffers(window->GetGLFWWindow());
         glfwPollEvents();
+
+        timer->Tick();
+        cameraController->Update(timer->GetDeltaTime());
     }
 
     delete vao;
@@ -209,53 +186,9 @@ int main()
     delete containerTexture;
     delete faceTexture;
     delete basicShaderProgram;
+    delete cameraController;
+    delete window;
 
     glfwTerminate();
     return 0;
-}
-
-void processKeyboardInput(GLFWwindow *window)
-{
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) glfwSetWindowShouldClose(window, true);
-
-    float currentFrame = glfwGetTime();
-    deltaTime = currentFrame - lastFrame;
-    lastFrame = currentFrame;
-
-    float speedModifier = 0.0f;
-    if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) speedModifier = 4.0f;
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) camera.Move(CameraMovement::FORWARD, deltaTime, speedModifier);
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) camera.Move(CameraMovement::BACKWARD, deltaTime, speedModifier);
-    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) camera.Move(CameraMovement::LEFT, deltaTime, speedModifier);
-    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) camera.Move(CameraMovement::RIGHT, deltaTime, speedModifier);
-    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) camera.Move(CameraMovement::UP, deltaTime, speedModifier);
-    if (glfwGetKey(window, GLFW_KEY_C) == GLFW_PRESS) camera.Move(CameraMovement::DOWN, deltaTime, speedModifier);
-}
-
-void cursorPosCallback(GLFWwindow *window, double x, double y)
-{
-    if (firstMouse)
-    {
-        lastMouseX = x;
-        lastMouseY = y;
-        firstMouse = false;
-    }
-
-    float xOffset = x - lastMouseX;
-    float yOffset = lastMouseY - y;
-
-    lastMouseX = x;
-    lastMouseY = y;
-
-    camera.Rotate(xOffset, yOffset, deltaTime);
-}
-
-void scrollCallback(GLFWwindow *window, double x, double y)
-{
-    camera.AdjustFOV(y);
-}
-
-void framebufferSizeCallback(GLFWwindow *window, int width, int height)
-{
-    glViewport(0, 0, width, height);
 }
