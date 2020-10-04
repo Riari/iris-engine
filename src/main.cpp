@@ -60,10 +60,10 @@ int main()
 
     spdlog::info("GLAD initialized");
 
-    auto* triangleShaderProgram = new ShaderProgram("Triangle");
-    triangleShaderProgram->Compile();
-    triangleShaderProgram->Link();
-    triangleShaderProgram->DeleteShaders();
+    auto* basicShaderProgram = new ShaderProgram("Basic");
+    basicShaderProgram->Compile();
+    basicShaderProgram->Link();
+    basicShaderProgram->DeleteShaders();
 
     float vertices[] = {
         -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
@@ -154,9 +154,9 @@ int main()
     vbo->Unbind();
     VAO::Unbind();
 
-    triangleShaderProgram->Use();
-    triangleShaderProgram->SetUniformInt("texture1", 0);
-    triangleShaderProgram->SetUniformInt("texture2", 1);
+    basicShaderProgram->Use();
+    basicShaderProgram->SetUniformInt("texture1", 0);
+    basicShaderProgram->SetUniformInt("texture2", 1);
 
     glEnable(GL_DEPTH_TEST);
 
@@ -173,13 +173,13 @@ int main()
         // Projection matrix
         glm::mat4 projection;
         projection = glm::perspective(glm::radians(camera.GetFOV()), (float)(SCREEN_WIDTH / SCREEN_HEIGHT), 0.1f, 100.0f);
-        triangleShaderProgram->SetUniformMatrix4fv("projection", glm::value_ptr(projection));
+        basicShaderProgram->SetUniformMatrix4fv("projection", glm::value_ptr(projection));
 
         // View matrix
         glm::mat4 view = camera.GetViewMatrix();
-        triangleShaderProgram->SetUniformMatrix4fv("view", glm::value_ptr(view));
+        basicShaderProgram->SetUniformMatrix4fv("view", glm::value_ptr(view));
 
-        triangleShaderProgram->SetUniformFloat("blend", 0.5);
+        basicShaderProgram->SetUniformFloat("blend", 0.5);
 
         vao->Bind();
         for (unsigned int i = 0; i < std::size(cubePositions); i++)
@@ -191,7 +191,7 @@ int main()
 
             model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
 
-            triangleShaderProgram->SetUniformMatrix4fv("model", glm::value_ptr(model));
+            basicShaderProgram->SetUniformMatrix4fv("model", glm::value_ptr(model));
 
             glDrawArrays(GL_TRIANGLES, 0, 36);
         }
@@ -205,7 +205,7 @@ int main()
     delete assetManager;
     delete containerTexture;
     delete faceTexture;
-    delete triangleShaderProgram;
+    delete basicShaderProgram;
 
     glfwTerminate();
     return 0;
