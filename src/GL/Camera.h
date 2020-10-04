@@ -4,12 +4,12 @@
 
 enum class CameraMovement
 {
-    FORWARD = 1,
-    BACKWARD = 2,
-    LEFT = 4,
-    RIGHT = 8,
-    UP = 12,
-    DOWN = 16
+    FORWARD,
+    BACKWARD,
+    LEFT,
+    RIGHT,
+    UP,
+    DOWN
 };
 
 const glm::vec3 DEFAULT_POSITION = glm::vec3(0.0f, 0.0f, 0.0f);

@@ -93,7 +93,7 @@ void Camera::Rotate(float xOffset, float yOffset, float deltaTime, float speedMo
     if (m_constrainPitch)
     {
         if (m_pitch > 89.0f) m_pitch = 89.0f;
-        if (m_pitch < -89.0f) m_pitch = 89.0f;
+        if (m_pitch < -89.0f) m_pitch = -89.0f;
     }
 
     UpdateVectors();

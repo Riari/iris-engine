@@ -24,9 +24,9 @@ public:
     bool IsHeld(InputBinding *binding);
     bool IsReleased(InputBinding *binding);
 
-    bool IsCtrlHeld() const;
-    bool IsAltHeld() const;
-    bool IsShiftHeld() const;
+    [[nodiscard]] bool IsCtrlHeld() const;
+    [[nodiscard]] bool IsAltHeld() const;
+    [[nodiscard]] bool IsShiftHeld() const;
 
 private:
     std::vector<InputBinding*> m_bindings;
