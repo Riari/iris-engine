@@ -19,13 +19,13 @@
 
 int main()
 {
-    auto camera = std::make_shared<Camera>(glm::vec3(0.0f, 0.0f, -3.0f));
     auto *window = new Window("LearnOpenGL");
     auto timer = std::make_shared<Timer>();
 
     auto inputManager = std::make_shared<InputManager>();
     window->RegisterKeyHandler(inputManager.get());
 
+    auto camera = std::make_shared<Camera>(glm::vec3(0.0f, 0.0f, 3.0f));
     auto *cameraController = new CameraController(camera, inputManager);
     window->RegisterCursorPosHandler(cameraController);
     window->RegisterScrollHandler(cameraController);
@@ -38,103 +38,84 @@ int main()
 
     spdlog::info("GLAD initialized");
 
-    auto *basicShaderProgram = new ShaderProgram("Basic");
-    basicShaderProgram->Compile();
-    basicShaderProgram->Link();
-    basicShaderProgram->DeleteShaders();
+    float cubeVertices[] = {
+            -0.5f, -0.5f, -0.5f,
+            0.5f, -0.5f, -0.5f,
+            0.5f,  0.5f, -0.5f,
+            0.5f,  0.5f, -0.5f,
+            -0.5f,  0.5f, -0.5f,
+            -0.5f, -0.5f, -0.5f,
 
-    float vertices[] = {
-            -0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
-            0.5f, -0.5f, -0.5f, 1.0f, 0.0f,
-            0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
-            0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
-            -0.5f, 0.5f, -0.5f, 0.0f, 1.0f,
-            -0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
+            -0.5f, -0.5f,  0.5f,
+            0.5f, -0.5f,  0.5f,
+            0.5f,  0.5f,  0.5f,
+            0.5f,  0.5f,  0.5f,
+            -0.5f,  0.5f,  0.5f,
+            -0.5f, -0.5f,  0.5f,
 
-            -0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
-            0.5f, -0.5f, 0.5f, 1.0f, 0.0f,
-            0.5f, 0.5f, 0.5f, 1.0f, 1.0f,
-            0.5f, 0.5f, 0.5f, 1.0f, 1.0f,
-            -0.5f, 0.5f, 0.5f, 0.0f, 1.0f,
-            -0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
+            -0.5f,  0.5f,  0.5f,
+            -0.5f,  0.5f, -0.5f,
+            -0.5f, -0.5f, -0.5f,
+            -0.5f, -0.5f, -0.5f,
+            -0.5f, -0.5f,  0.5f,
+            -0.5f,  0.5f,  0.5f,
 
-            -0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
-            -0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
-            -0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
-            -0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
-            -0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
-            -0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
+            0.5f,  0.5f,  0.5f,
+            0.5f,  0.5f, -0.5f,
+            0.5f, -0.5f, -0.5f,
+            0.5f, -0.5f, -0.5f,
+            0.5f, -0.5f,  0.5f,
+            0.5f,  0.5f,  0.5f,
 
-            0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
-            0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
-            0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
-            0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
-            0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
-            0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
+            -0.5f, -0.5f, -0.5f,
+            0.5f, -0.5f, -0.5f,
+            0.5f, -0.5f,  0.5f,
+            0.5f, -0.5f,  0.5f,
+            -0.5f, -0.5f,  0.5f,
+            -0.5f, -0.5f, -0.5f,
 
-            -0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
-            0.5f, -0.5f, -0.5f, 1.0f, 1.0f,
-            0.5f, -0.5f, 0.5f, 1.0f, 0.0f,
-            0.5f, -0.5f, 0.5f, 1.0f, 0.0f,
-            -0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
-            -0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
-
-            -0.5f, 0.5f, -0.5f, 0.0f, 1.0f,
-            0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
-            0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
-            0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
-            -0.5f, 0.5f, 0.5f, 0.0f, 0.0f,
-            -0.5f, 0.5f, -0.5f, 0.0f, 1.0f
+            -0.5f,  0.5f, -0.5f,
+            0.5f,  0.5f, -0.5f,
+            0.5f,  0.5f,  0.5f,
+            0.5f,  0.5f,  0.5f,
+            -0.5f,  0.5f,  0.5f,
+            -0.5f,  0.5f, -0.5f
     };
 
-    glm::vec3 cubePositions[] = {
-            glm::vec3(0.0f, 0.0f, 0.0f),
-            glm::vec3(2.0f, 5.0f, -15.0f),
-            glm::vec3(-1.5f, -2.2f, -2.5f),
-            glm::vec3(-3.8f, -2.0f, -12.3f),
-            glm::vec3(2.4f, -0.4f, -3.5f),
-            glm::vec3(-1.7f, 3.0f, -7.5f),
-            glm::vec3(1.3f, -2.0f, -2.5f),
-            glm::vec3(1.5f, 2.0f, -2.5f),
-            glm::vec3(1.5f, 0.2f, -1.5f),
-            glm::vec3(-1.3f, 1.0f, -1.5f)
-    };
+    // Cube VBO
 
-    VAO *vao = new VAO();
-    VBO *vbo = new VBO();
+    VBO *cubeVBO = new VBO();
+    cubeVBO->Bind();
+    cubeVBO->SetData(sizeof(cubeVertices), cubeVertices, GL_STATIC_DRAW);
 
-    vao->Bind();
-    vbo->Bind();
-    vbo->SetData(sizeof(vertices), vertices, GL_STATIC_DRAW);
+    // Coloured cube
 
-    VBO::SetVertexAttribute(0, 3, 5 * sizeof(float), (void *) 0); // position
-    VBO::SetVertexAttribute(1, 2, 5 * sizeof(float), (void *) (3 * sizeof(float))); // texture
-
-    auto *assetManager = new AssetManager();
-    ImageRepository::SetFlipVerticallyOnLoad(true);
-    std::shared_ptr<Image> containerImage = assetManager->GetImage("assets/textures/container.jpg");
-    std::shared_ptr<Image> faceImage = assetManager->GetImage("assets/textures/febby.png");
-
-    auto containerTexture = new Texture(containerImage);
-    containerTexture->Bind(GL_TEXTURE0);
-    Texture::SetWrapMethod(GL_REPEAT);
-    Texture::SetFilterMethod(GL_LINEAR);
-    containerTexture->Define(true);
-    assetManager->UnloadImage(containerImage->GetPath());
-
-    auto faceTexture = new Texture(faceImage);
-    faceTexture->Bind(GL_TEXTURE1);
-    Texture::SetWrapMethod(GL_REPEAT);
-    Texture::SetFilterMethod(GL_LINEAR);
-    faceTexture->Define(true);
-    assetManager->UnloadImage(faceImage->GetPath());
-
-    vbo->Unbind();
+    VAO *coloredCubeVAO = new VAO();
+    coloredCubeVAO->Bind();
+    VBO::SetVertexAttribute(0, 3, 3 * sizeof(float), (void*)0);
     VAO::Unbind();
 
-    basicShaderProgram->Use();
-    basicShaderProgram->SetUniformInt("texture1", 0);
-    basicShaderProgram->SetUniformInt("texture2", 1);
+    auto *coloredCubeShaderProgram = new ShaderProgram("ColoredCube");
+    coloredCubeShaderProgram->Compile();
+    coloredCubeShaderProgram->Link();
+    coloredCubeShaderProgram->DeleteShaders();
+    coloredCubeShaderProgram->Use();
+    coloredCubeShaderProgram->SetUniform3f("objectColor", {1.0f, 0.5f, 0.31f});
+    coloredCubeShaderProgram->SetUniform3f("lightColor", {1.0f, 1.0f, 1.0f});
+
+    // Light source cube
+
+    VAO *lightSourceVAO = new VAO();
+    lightSourceVAO->Bind();
+    VBO::SetVertexAttribute(0, 3, 3 * sizeof(float), (void*)0);
+    VAO::Unbind();
+
+    auto *lightSourceShaderProgram = new ShaderProgram("LightSource");
+    lightSourceShaderProgram->Compile();
+    lightSourceShaderProgram->Link();
+    lightSourceShaderProgram->DeleteShaders();
+
+    glm::vec3 lightSourcePosition(1.2f, 1.0f, 2.0f);
 
     glEnable(GL_DEPTH_TEST);
 
@@ -142,38 +123,38 @@ int main()
     {
         timer->Tick();
 
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        containerTexture->Bind(GL_TEXTURE0);
-        faceTexture->Bind(GL_TEXTURE1);
-
         // Projection matrix
-        glm::mat4 projection;
-        projection = glm::perspective(glm::radians(camera->GetFOV()), (float) (window->GetScreenWidth() / window->GetScreenHeight()), 0.1f,
-                                      100.0f);
-        basicShaderProgram->SetUniformMatrix4fv("projection", glm::value_ptr(projection));
+        glm::mat4 projection = glm::perspective(glm::radians(camera->GetFOV()), (float) (window->GetScreenWidth() / window->GetScreenHeight()), 0.1f, 100.0f);
 
         // View matrix
         glm::mat4 view = camera->GetViewMatrix();
-        basicShaderProgram->SetUniformMatrix4fv("view", glm::value_ptr(view));
 
-        basicShaderProgram->SetUniformFloat("blend", 0.5);
+        // Render colored cube
+        coloredCubeShaderProgram->Use();
+        coloredCubeShaderProgram->SetUniformMatrix4fv("projection", glm::value_ptr(projection));
+        coloredCubeShaderProgram->SetUniformMatrix4fv("view", glm::value_ptr(view));
+        glm::mat4 model = glm::mat4(1.0f);
+        coloredCubeShaderProgram->SetUniformMatrix4fv("model", glm::value_ptr(model));
 
-        vao->Bind();
-        for (unsigned int i = 0; i < std::size(cubePositions); i++)
-        {
-            // Model matrix
-            glm::mat4 model = glm::mat4(1.0f);
-            model = glm::translate(model, cubePositions[i]);
-            float angle = (i % 3 == 0) ? glfwGetTime() * 25.0f : i * 20.0f;
+        coloredCubeVAO->Bind();
 
-            model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+        glDrawArrays(GL_TRIANGLES, 0, 36);
 
-            basicShaderProgram->SetUniformMatrix4fv("model", glm::value_ptr(model));
+        // Render light source
+        lightSourceShaderProgram->Use();
+        lightSourceShaderProgram->SetUniformMatrix4fv("projection", glm::value_ptr(projection));
+        lightSourceShaderProgram->SetUniformMatrix4fv("view", glm::value_ptr(view));
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, lightSourcePosition);
+        model = glm::scale(model, glm::vec3(0.2f));
+        lightSourceShaderProgram->SetUniformMatrix4fv("model", glm::value_ptr(model));
 
-            glDrawArrays(GL_TRIANGLES, 0, 36);
-        }
+        lightSourceVAO->Bind();
+
+        glDrawArrays(GL_TRIANGLES, 0, 36);
 
         glfwSwapBuffers(window->GetGLFWWindow());
         glfwPollEvents();
@@ -181,12 +162,8 @@ int main()
         cameraController->Update(timer->GetDeltaTime());
     }
 
-    delete vao;
-    delete vbo;
-    delete assetManager;
-    delete containerTexture;
-    delete faceTexture;
-    delete basicShaderProgram;
+    delete coloredCubeVAO;
+    delete cubeVBO;
     delete cameraController;
     delete window;
 

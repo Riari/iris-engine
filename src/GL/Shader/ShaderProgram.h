@@ -20,6 +20,7 @@ public:
     void SetUniformBool(const std::string &name, bool value) const;
     void SetUniformInt(const std::string &name, int value) const;
     void SetUniformFloat(const std::string &name, float value) const;
+    void SetUniform3f(const std::string &name, std::vector<float> values) const;
     void SetUniform4f(const std::string &name, std::vector<float> values) const;
     void SetUniformMatrix4fv(const std::string &name, float *value_ptr) const;
 

@@ -78,6 +78,11 @@ void ShaderProgram::SetUniformFloat(const std::string &name, float value) const
     glUniform1f(GetUniformLocation(name), value);
 }
 
+void ShaderProgram::SetUniform3f(const std::string &name, std::vector<float> values) const
+{
+    glUniform3f(GetUniformLocation(name), values[0], values[1], values[2]);
+}
+
 void ShaderProgram::SetUniform4f(const std::string &name, std::vector<float> values) const
 {
     glUniform4f(GetUniformLocation(name), values[0], values[1], values[2], values[3]);
