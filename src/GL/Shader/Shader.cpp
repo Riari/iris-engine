@@ -1,6 +1,8 @@
 #include <fstream>
 #include <iostream>
+
 #include <spdlog/spdlog.h>
+
 #include "Shader.h"
 #include "../../Exception/Exception.h"
 
@@ -19,7 +21,12 @@ unsigned int Shader::GetID() const
     return m_id;
 }
 
-void Shader::Compile() const
+bool Shader::GetIsCompiled() const
+{
+    return m_isCompiled;
+}
+
+void Shader::Compile()
 {
     std::string source = LoadSource();
     GLchar const *shader_source = source.c_str();
@@ -38,10 +45,12 @@ void Shader::Compile() const
         std::string info;
         info.resize(static_cast<std::string::size_type>(maxLength - 1));
         glGetShaderInfoLog(m_id, maxLength, &maxLength, info.data());
-        throw Exception("Shader compilation failed: " + info);
+        throw Exception(fmt::format("Shader compilation failed: {0}", info));
     }
 
-    spdlog::info("Shader " + m_name + m_extension + " compiled");
+    m_isCompiled = true;
+
+    spdlog::info(fmt::format("Shader {0}{1} compiled", m_name, m_extension));
 }
 
 std::string Shader::LoadSource() const
@@ -50,7 +59,7 @@ std::string Shader::LoadSource() const
     std::string filepath = m_path + m_name + m_extension;
     std::ifstream fileStream(filepath.c_str(), std::ios::in);
 
-    if (!fileStream.is_open()) throw Exception("Failed to open " + filepath);
+    if (!fileStream.is_open()) throw Exception(fmt::format("Failed to open {0}", filepath));
 
     std::string line;
     while (!fileStream.eof())

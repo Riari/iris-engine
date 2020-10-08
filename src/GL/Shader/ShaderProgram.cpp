@@ -1,6 +1,8 @@
 #include <memory>
-#include <glad\glad.h>
-#include <spdlog\spdlog.h>
+
+#include <glad/glad.h>
+#include <spdlog/spdlog.h>
+
 #include "ShaderProgram.h"
 #include "VertexShader.h"
 #include "FragmentShader.h"
@@ -24,8 +26,11 @@ void ShaderProgram::Compile() const
     m_fragmentShader->Compile();
 }
 
-void ShaderProgram::Link() const
+void ShaderProgram::Link()
 {
+    if (!m_vertexShader->GetIsCompiled()) throw Exception(fmt::format("Attempting to link shader program {0} before vertex shader is compiled", m_name));
+    if (!m_fragmentShader->GetIsCompiled()) throw Exception(fmt::format("Attempting to link shader program {0} before fragment shader is compiled", m_name));
+
     glAttachShader(m_program, m_vertexShader->GetID());
     glAttachShader(m_program, m_fragmentShader->GetID());
     glLinkProgram(m_program);
@@ -41,10 +46,12 @@ void ShaderProgram::Link() const
         std::string info;
         info.resize(static_cast<std::string::size_type>(maxLength - 1));
         glGetProgramInfoLog(m_program, 512, NULL, info.data());
-        throw Exception("Program linking failed: " + info);
+        throw Exception(fmt::format("Program linking failed: {0}", info));
     }
 
-    spdlog::info("Shader program " + m_name + " linked");
+    m_isLinked = true;
+
+    spdlog::info(fmt::format("Shader program {0} linked", m_name));
 }
 
 void ShaderProgram::DeleteShaders()
@@ -55,6 +62,8 @@ void ShaderProgram::DeleteShaders()
 
 void ShaderProgram::Use() const
 {
+    if (!m_isLinked) throw Exception(fmt::format("Attempting to use shader program {0} before linking", m_name));
+
     glUseProgram(m_program);
 }
 

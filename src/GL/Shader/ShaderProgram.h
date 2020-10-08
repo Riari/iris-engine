@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+
 #include "Shader.h"
 
 class ShaderProgram
@@ -11,7 +12,7 @@ public:
     ~ShaderProgram();
 
     void Compile() const;
-    void Link() const;
+    void Link();
     void DeleteShaders();
     void Use() const;
 
@@ -29,4 +30,6 @@ private:
     unsigned int m_program;
     Shader *m_vertexShader;
     Shader *m_fragmentShader;
+
+    bool m_isLinked = false;
 };

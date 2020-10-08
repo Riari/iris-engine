@@ -1,6 +1,8 @@
 #define STB_IMAGE_IMPLEMENTATION
 
+#include <fmt/core.h>
 #include <stb_image.h>
+
 #include "../Exception/Exception.h"
 #include "ImageRepository.h"
 
@@ -19,7 +21,7 @@ std::shared_ptr<Image> ImageRepository::Load(std::string path)
     int width, height, channels;
     unsigned char *data = stbi_load(path.c_str(), &width, &height, &channels, 0);
 
-    if (!data) throw Exception("Loading image failed (path: " + path + ")");
+    if (!data) throw Exception(fmt::format("Loading image failed (path: {0})", path));
 
     return std::make_shared<Image>(path, data, width, height, channels);
 }

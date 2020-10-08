@@ -1,6 +1,8 @@
+#include <utility>
+
+#include <fmt/core.h>
 #include <glad/glad.h>
 
-#include <utility>
 #include "Texture.h"
 #include "../Exception/Exception.h"
 
@@ -33,8 +35,8 @@ void Texture::Define(bool withMipmap) const
             format = GL_RGBA;
             break;
         default:
-            throw Exception("Unexpected channel count in image data: " + m_image->GetPath() + "(" +
-                            std::to_string(m_image->GetChannels()) + " channels)");
+            throw Exception(fmt::format("Unexpected channel count in image data: {0} ({1} channels)",
+                                        m_image->GetPath(), std::to_string(m_image->GetChannels())));
     }
 
     glTexImage2D(GL_TEXTURE_2D, 0, format, m_image->GetWidth(), m_image->GetHeight(), 0, format, GL_UNSIGNED_BYTE,
