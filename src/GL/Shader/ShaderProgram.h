@@ -12,7 +12,7 @@ public:
     ~ShaderProgram();
 
     void Compile() const;
-    void Link();
+    void Link() const;
     void DeleteShaders();
     void Use() const;
 
@@ -30,6 +30,4 @@ private:
     unsigned int m_program;
     Shader *m_vertexShader;
     Shader *m_fragmentShader;
-
-    bool m_isLinked = false;
 };

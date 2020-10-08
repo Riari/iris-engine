@@ -5,20 +5,25 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <spdlog/spdlog.h>
 
-#include "Asset/AssetManager.h"
 #include "Controller/CameraController.h"
 #include "GL/Shader/ShaderProgram.h"
-#include "GL/Camera.h"
+
+#if !defined(NDEBUG)
+#include "GL/Debug.h"
+#endif
+
 #include "GL/EBO.h"
 #include "GL/VAO.h"
 #include "GL/VBO.h"
 #include "GL/Texture.h"
-#include "Input/InputManager.h"
-#include "Utility/Timer.h"
 #include "Window/Window.h"
 
 int main()
 {
+#if !defined(NDEBUG)
+    spdlog::set_level(spdlog::level::debug);
+#endif
+
     auto *window = new Window("LearnOpenGL");
     auto timer = std::make_shared<Timer>();
 
@@ -37,6 +42,10 @@ int main()
     }
 
     spdlog::info("GLAD initialized");
+
+#if !defined(NDEBUG)
+    InitGLDebug();
+#endif
 
     float cubeVertices[] = {
             -0.5f, -0.5f, -0.5f,

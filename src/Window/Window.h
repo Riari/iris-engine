@@ -16,6 +16,8 @@ public:
     explicit Window(const char *title, int screenWidth = DEFAULT_SCREEN_WIDTH, int screenHeight = DEFAULT_SCREEN_HEIGHT);
     ~Window();
 
+    static void ErrorCallback(int error, const char *message);
+
     GLFWwindow* GetGLFWWindow();
 
     int GetScreenWidth() const;

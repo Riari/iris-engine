@@ -11,16 +11,14 @@ public:
     ~Shader();
 
     [[nodiscard]] unsigned int GetID() const;
-    [[nodiscard]] bool GetIsCompiled() const;
 
-    void Compile();
+    void Compile() const;
 
 private:
     const unsigned int m_id;
     const std::string m_name;
     const std::string m_path = "resources\\shaders\\";
     const std::string m_extension = ".glsl";
-    bool m_isCompiled = false;
 
     [[nodiscard]] std::string LoadSource() const;
 };

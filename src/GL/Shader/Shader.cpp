@@ -21,12 +21,7 @@ unsigned int Shader::GetID() const
     return m_id;
 }
 
-bool Shader::GetIsCompiled() const
-{
-    return m_isCompiled;
-}
-
-void Shader::Compile()
+void Shader::Compile() const
 {
     std::string source = LoadSource();
     GLchar const *shader_source = source.c_str();
@@ -45,12 +40,10 @@ void Shader::Compile()
         std::string info;
         info.resize(static_cast<std::string::size_type>(maxLength - 1));
         glGetShaderInfoLog(m_id, maxLength, &maxLength, info.data());
-        throw Exception(fmt::format("Shader compilation failed: {0}", info));
+        throw Exception(fmt::format("Shader: Compilation failed: {0}", info));
     }
 
-    m_isCompiled = true;
-
-    spdlog::info(fmt::format("Shader {0}{1} compiled", m_name, m_extension));
+    spdlog::info(fmt::format("Shader: {0}{1} compiled", m_name, m_extension));
 }
 
 std::string Shader::LoadSource() const

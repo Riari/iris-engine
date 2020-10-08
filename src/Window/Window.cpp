@@ -10,9 +10,14 @@ Window::Window(const char *title, int screenWidth, int screenHeight) :
         m_screenHeight(screenHeight)
 {
     glfwInit();
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+#if !defined(NDEBUG)
+    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
+    glfwSetErrorCallback(ErrorCallback);
+#endif
 
     GLFWwindow *window = glfwCreateWindow(screenWidth, screenHeight, title, NULL, NULL);
     if (window == NULL)
@@ -32,12 +37,17 @@ Window::Window(const char *title, int screenWidth, int screenHeight) :
     glfwSetScrollCallback(window, ScrollCallback);
     glfwSetKeyCallback(window, KeyCallback);
 
-    spdlog::info("Window created");
+    spdlog::info("Window: Created");
 }
 
 Window::~Window()
 {
     glfwDestroyWindow(m_window);
+}
+
+void Window::ErrorCallback(int error, const char *message)
+{
+    spdlog::error(message);
 }
 
 GLFWwindow *Window::GetGLFWWindow()

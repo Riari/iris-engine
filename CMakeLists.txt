@@ -45,6 +45,7 @@ set(HEADERS
         "${SRC_DIR}/GL/Shader/VertexShader.h"
         "${SRC_DIR}/GL/BufferObject.h"
         "${SRC_DIR}/GL/Camera.h"
+        "${SRC_DIR}/GL/Debug.h"
         "${SRC_DIR}/GL/EBO.h"
         "${SRC_DIR}/GL/Texture.h"
         "${SRC_DIR}/GL/VAO.h"
