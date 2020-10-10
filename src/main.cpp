@@ -4,6 +4,9 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <spdlog/spdlog.h>
+#include <spdlog/sinks/stdout_color_sinks.h>
+
+#include "Logging.h"
 
 #include "Controller/CameraController.h"
 #include "GL/Shader/ShaderProgram.h"
@@ -20,11 +23,16 @@
 
 int main()
 {
+    spdlog::set_pattern(LOG_PATTERN);
+    auto loggerWindow = spdlog::stdout_color_mt(LOGGER_WINDOW);
+    auto loggerGL = spdlog::stdout_color_mt(LOGGER_GL);
+    auto loggerMain = spdlog::stdout_color_mt("Main");
+
 #if !defined(NDEBUG)
     spdlog::set_level(spdlog::level::debug);
 #endif
 
-    auto *window = new Window("LearnOpenGL");
+    auto *window = new Window("LearnOpenGL", loggerWindow);
     auto timer = std::make_shared<Timer>();
 
     auto inputManager = std::make_shared<InputManager>();
@@ -37,11 +45,11 @@ int main()
 
     if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress))
     {
-        spdlog::critical("Failed to initialize GLAD");
+        loggerMain->critical("Failed to initialize GLAD");
         return -1;
     }
 
-    spdlog::info("GLAD initialized");
+    loggerMain->info("GLAD initialized");
 
 #if !defined(NDEBUG)
     InitGLDebug();
@@ -104,7 +112,7 @@ int main()
     VBO::SetVertexAttribute(0, 3, 3 * sizeof(float), (void*)0);
     VAO::Unbind();
 
-    auto *coloredCubeShaderProgram = new ShaderProgram("ColoredCube");
+    auto *coloredCubeShaderProgram = new ShaderProgram("ColoredCube", loggerGL);
     coloredCubeShaderProgram->Compile();
     coloredCubeShaderProgram->Link();
     coloredCubeShaderProgram->DeleteShaders();
@@ -119,7 +127,7 @@ int main()
     VBO::SetVertexAttribute(0, 3, 3 * sizeof(float), (void*)0);
     VAO::Unbind();
 
-    auto *lightSourceShaderProgram = new ShaderProgram("LightSource");
+    auto *lightSourceShaderProgram = new ShaderProgram("LightSource", loggerGL);
     lightSourceShaderProgram->Compile();
     lightSourceShaderProgram->Link();
     lightSourceShaderProgram->DeleteShaders();

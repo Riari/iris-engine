@@ -1,14 +1,16 @@
 #include <fstream>
 #include <iostream>
+#include <utility>
 
 #include <spdlog/spdlog.h>
 
 #include "Shader.h"
 #include "../../Exception/Exception.h"
 
-Shader::Shader(GLenum type, const std::string &name, const std::string &suffix) :
+Shader::Shader(GLenum type, const std::string &name, const std::string &suffix, std::shared_ptr<spdlog::logger> logger) :
         m_id(glCreateShader(type)),
-        m_name(name + suffix)
+        m_name(name + suffix),
+        m_logger(std::move(logger))
 {}
 
 Shader::~Shader()
@@ -40,10 +42,10 @@ void Shader::Compile() const
         std::string info;
         info.resize(static_cast<std::string::size_type>(maxLength - 1));
         glGetShaderInfoLog(m_id, maxLength, &maxLength, info.data());
-        throw Exception(fmt::format("Shader: Compilation failed: {0}", info));
+        throw Exception(fmt::format("Shader compilation failed: {0}", info));
     }
 
-    spdlog::info(fmt::format("Shader: {0}{1} compiled", m_name, m_extension));
+    m_logger->info(fmt::format("Shader {0}{1} compiled", m_name, m_extension));
 }
 
 std::string Shader::LoadSource() const

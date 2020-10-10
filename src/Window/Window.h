@@ -2,6 +2,8 @@
 
 #include <string>
 
+#include "../Logging.h"
+
 #include "Handler/CursorPosHandler.h"
 #include "Handler/FrameBufferSizeHandler.h"
 #include "Handler/KeyHandler.h"
@@ -13,15 +15,15 @@ const int DEFAULT_SCREEN_HEIGHT = 600;
 class Window
 {
 public:
-    explicit Window(const char *title, int screenWidth = DEFAULT_SCREEN_WIDTH, int screenHeight = DEFAULT_SCREEN_HEIGHT);
+    explicit Window(const char *title, std::shared_ptr<spdlog::logger> logger, int screenWidth = DEFAULT_SCREEN_WIDTH, int screenHeight = DEFAULT_SCREEN_HEIGHT);
     ~Window();
 
     static void ErrorCallback(int error, const char *message);
 
     GLFWwindow* GetGLFWWindow();
 
-    int GetScreenWidth() const;
-    int GetScreenHeight() const;
+    [[nodiscard]] int GetScreenWidth() const;
+    [[nodiscard]] int GetScreenHeight() const;
 
     void RegisterFrameBufferSizeHandler(FrameBufferSizeHandler *handler);
     void RegisterCursorPosHandler(CursorPosHandler *handler);
@@ -37,6 +39,8 @@ private:
     std::vector<CursorPosHandler*> m_cursorPosHandlers;
     std::vector<KeyHandler*> m_keyHandlers;
     std::vector<ScrollHandler*> m_scrollHandlers;
+
+    std::shared_ptr<spdlog::logger> m_logger;
 
     static Window* GetWindowPointer(GLFWwindow *window);
     static void FrameBufferSizeCallback(GLFWwindow *window, int width, int height);

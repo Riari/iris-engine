@@ -1,5 +1,4 @@
 #include <glm/gtc/matrix_transform.hpp>
-#include <spdlog/spdlog.h>
 
 #include "Camera.h"
 
@@ -33,7 +32,7 @@ void Camera::AdjustFOV(float adjustment)
     m_fov -= adjustment;
 
     if (m_fov < 1.0f) m_fov = 1.0f;
-    if (m_fov > DEFAULT_FOV) m_fov = DEFAULT_FOV;
+    if (m_fov > DEFAULT_CAM_FOV) m_fov = DEFAULT_CAM_FOV;
 }
 
 float Camera::GetFOV() const

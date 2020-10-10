@@ -16,15 +16,15 @@ const glm::vec3 DEFAULT_POSITION = glm::vec3(0.0f, 0.0f, 0.0f);
 const glm::vec3 DEFAULT_FRONT = glm::vec3(0.0f, 0.0f, -1.0f);
 const glm::vec3 DEFAULT_UP = glm::vec3(0.0f, 1.0f, 0.0f);
 
-const float DEFAULT_YAW = -90.0f;
-const float DEFAULT_PITCH = 0.0f;
-const float DEFAULT_FOV = 45.0f;
+const float DEFAULT_CAM_YAW = -90.0f;
+const float DEFAULT_CAM_PITCH = 0.0f;
+const float DEFAULT_CAM_FOV = 45.0f;
 
 class Camera
 {
 public:
-    explicit Camera(glm::vec3 position = DEFAULT_POSITION, glm::vec3 up = DEFAULT_UP, float yaw = DEFAULT_YAW,
-                    float pitch = DEFAULT_PITCH, float fov = DEFAULT_FOV);
+    explicit Camera(glm::vec3 position = DEFAULT_POSITION, glm::vec3 up = DEFAULT_UP, float yaw = DEFAULT_CAM_YAW,
+                    float pitch = DEFAULT_CAM_PITCH, float fov = DEFAULT_CAM_FOV);
 
     Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch, float fov);
 

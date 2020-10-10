@@ -7,7 +7,7 @@
 class ShaderProgram
 {
 public:
-    explicit ShaderProgram(std::string name);
+    explicit ShaderProgram(std::string name, std::shared_ptr<spdlog::logger> logger);
 
     ~ShaderProgram();
 
@@ -30,4 +30,6 @@ private:
     unsigned int m_program;
     Shader *m_vertexShader;
     Shader *m_fragmentShader;
+
+    std::shared_ptr<spdlog::logger> m_logger;
 };

@@ -1,4 +1,5 @@
 #include <memory>
+#include <utility>
 
 #include <glad/glad.h>
 #include <spdlog/spdlog.h>
@@ -8,11 +9,12 @@
 #include "FragmentShader.h"
 #include "../../Exception/Exception.h"
 
-ShaderProgram::ShaderProgram(std::string name) :
+ShaderProgram::ShaderProgram(std::string name, std::shared_ptr<spdlog::logger> logger) :
         m_name(std::move(name)),
         m_program(glCreateProgram()),
-        m_vertexShader(new VertexShader(m_name)),
-        m_fragmentShader(new FragmentShader(m_name))
+        m_vertexShader(new VertexShader(m_name, logger)),
+        m_fragmentShader(new FragmentShader(m_name, logger)),
+        m_logger(std::move(logger))
 {}
 
 ShaderProgram::~ShaderProgram()
@@ -46,7 +48,7 @@ void ShaderProgram::Link() const
         throw Exception(fmt::format("Program linking failed: {0}", info));
     }
 
-    spdlog::info(fmt::format("ShaderProgram: {0} linked", m_name));
+    m_logger->info(fmt::format("ShaderProgram {0} linked", m_name));
 }
 
 void ShaderProgram::DeleteShaders()

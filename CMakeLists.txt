@@ -58,7 +58,8 @@ set(HEADERS
         "${SRC_DIR}/Window/Handler/CursorPosHandler.h"
         "${SRC_DIR}/Window/Handler/FrameBufferSizeHandler.h"
         "${SRC_DIR}/Window/Handler/KeyHandler.h"
-        "${SRC_DIR}/Window/Handler/ScrollHandler.h")
+        "${SRC_DIR}/Window/Handler/ScrollHandler.h"
+        "${SRC_DIR}/Logging.h")
 
 set(SOURCES
         "${SRC_DIR}/Asset/AssetManager.cpp"

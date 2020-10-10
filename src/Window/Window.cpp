@@ -5,7 +5,8 @@
 #include "../Exception/Exception.h"
 #include "Window.h"
 
-Window::Window(const char *title, int screenWidth, int screenHeight) :
+Window::Window(const char *title, std::shared_ptr<spdlog::logger> logger, int screenWidth, int screenHeight) :
+        m_logger(std::move(logger)),
         m_screenWidth(screenWidth),
         m_screenHeight(screenHeight)
 {
@@ -37,7 +38,7 @@ Window::Window(const char *title, int screenWidth, int screenHeight) :
     glfwSetScrollCallback(window, ScrollCallback);
     glfwSetKeyCallback(window, KeyCallback);
 
-    spdlog::info("Window: Created");
+    m_logger->info(fmt::format("{0}x{1} window created", m_screenWidth, m_screenHeight));
 }
 
 Window::~Window()
@@ -47,7 +48,7 @@ Window::~Window()
 
 void Window::ErrorCallback(int error, const char *message)
 {
-    spdlog::error(message);
+    spdlog::get(LOGGER_GL)->error(message);
 }
 
 GLFWwindow *Window::GetGLFWWindow()

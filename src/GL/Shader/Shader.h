@@ -1,12 +1,15 @@
 #pragma once
 
 #include <iostream>
-#include <glad\glad.h>
+#include <memory>
+
+#include <glad/glad.h>
+#include <spdlog/spdlog.h>
 
 class Shader
 {
 public:
-    Shader(GLenum type, const std::string &name, const std::string &suffix);
+    Shader(GLenum type, const std::string &name, const std::string &suffix, std::shared_ptr<spdlog::logger> logger);
 
     ~Shader();
 
@@ -19,6 +22,8 @@ private:
     const std::string m_name;
     const std::string m_path = "resources\\shaders\\";
     const std::string m_extension = ".glsl";
+
+    std::shared_ptr<spdlog::logger> m_logger;
 
     [[nodiscard]] std::string LoadSource() const;
 };
