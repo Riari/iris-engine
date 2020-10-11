@@ -1,7 +1,10 @@
 #pragma once
 
-class ScrollHandler
+namespace OGL::Window
 {
-public:
-    virtual void OnScrollCallback(double x, double y) = 0;
-};
+    class ScrollHandler
+    {
+    public:
+        virtual void OnScrollCallback(double x, double y) = 0;
+    };
+}

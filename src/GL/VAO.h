@@ -1,14 +1,19 @@
 #pragma once
 
-class VAO
+namespace OGL::GL
 {
-public:
-    VAO();
-    ~VAO();
+    class VAO
+    {
+    public:
+        VAO();
 
-    void Bind() const;
-    static void Unbind();
+        ~VAO();
 
-private:
-    unsigned int m_vao{};
-};
+        void Bind() const;
+
+        static void Unbind();
+
+    private:
+        unsigned int m_vao{};
+    };
+}

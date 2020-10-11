@@ -1,7 +1,10 @@
 #pragma once
 
-class CursorPosHandler
+namespace OGL::Window
 {
-public:
-    virtual void OnCursorPosCallback(double x, double y) = 0;
-};
+    class CursorPosHandler
+    {
+    public:
+        virtual void OnCursorPosCallback(double x, double y) = 0;
+    };
+}

@@ -1,7 +1,10 @@
 #pragma once
 
-class FrameBufferSizeHandler
+namespace OGL::Window
 {
-public:
-    virtual void OnFrameBufferSizeCallback(int width, int height) = 0;
-};
+    class FrameBufferSizeHandler
+    {
+    public:
+        virtual void OnFrameBufferSizeCallback(int width, int height) = 0;
+    };
+}

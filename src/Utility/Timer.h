@@ -1,15 +1,17 @@
 #pragma once
 
-class Timer
+namespace OGL::Utility
 {
-public:
-    Timer();
+    class Timer
+    {
+    public:
+        Timer();
 
-    void Tick();
-    [[nodiscard]] float GetDeltaTime() const;
+        void Tick();
 
-private:
-    float m_deltaTime = 0.0f, m_lastFrameTime = 0.0f;
-};
+        [[nodiscard]] float GetDeltaTime() const;
 
-
+    private:
+        float m_deltaTime = 0.0f, m_lastFrameTime = 0.0f;
+    };
+}

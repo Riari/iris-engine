@@ -4,9 +4,12 @@
 
 #include "../../Exception/Exception.h"
 
-class KeyInUseException : public Exception
+namespace OGL::Input::Exception
 {
-public:
-    explicit KeyInUseException(std::string error) : Exception(std::move(error))
-    {}
-};
+    class KeyInUseException : public ::OGL::Exception::Exception
+    {
+    public:
+        explicit KeyInUseException(std::string error) : ::OGL::Exception::Exception(std::move(error))
+        {}
+    };
+}

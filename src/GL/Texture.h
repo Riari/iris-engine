@@ -3,20 +3,27 @@
 #include <memory>
 #include "../Asset/Image.h"
 
-class Texture
+namespace OGL::GL
 {
-public:
-    explicit Texture(std::shared_ptr<Image> image);
+    class Texture
+    {
+    public:
+        explicit Texture(std::shared_ptr<Asset::Image> image);
 
-    void Bind(GLenum unit) const;
-    void Bind() const;
-    void Define(bool withMipmap = true) const;
+        void Bind(GLenum unit) const;
 
-    static void GenerateMipmap();
-    static void SetWrapMethod(GLint param);
-    static void SetFilterMethod(GLint param);
+        void Bind() const;
 
-private:
-    unsigned int m_texture{};
-    std::shared_ptr<Image> m_image;
-};
+        void Define(bool withMipmap = true) const;
+
+        static void GenerateMipmap();
+
+        static void SetWrapMethod(GLint param);
+
+        static void SetFilterMethod(GLint param);
+
+    private:
+        unsigned int m_texture{};
+        std::shared_ptr<Asset::Image> m_image;
+    };
+}

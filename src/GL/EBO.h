@@ -2,8 +2,11 @@
 
 #include "BufferObject.h"
 
-class EBO : public BufferObject
+namespace OGL::GL
 {
-public:
-    EBO();
-};
+    class EBO : public BufferObject
+    {
+    public:
+        EBO();
+    };
+}

@@ -3,20 +3,23 @@
 #include <string>
 #include <vector>
 
-class InputBinding
+namespace OGL::Input
 {
-public:
-    InputBinding(std::string label, int primaryKey, int secondaryKey = -1);
+    class InputBinding
+    {
+    public:
+        InputBinding(std::string label, int primaryKey, int secondaryKey = -1);
 
-    void BindPrimary(int key);
-    void BindSecondary(int key);
+        void BindPrimary(int key);
 
-    std::string GetLabel();
-    std::vector<int> GetKeys();
+        void BindSecondary(int key);
 
-private:
-    std::string m_label;
-    int m_primaryKey, m_secondaryKey;
-};
+        std::string GetLabel();
 
+        std::vector<int> GetKeys();
 
+    private:
+        std::string m_label;
+        int m_primaryKey, m_secondaryKey;
+    };
+}

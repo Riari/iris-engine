@@ -53,13 +53,13 @@ set(HEADERS
         "${SRC_DIR}/Input/Exception/KeyInUseException.h"
         "${SRC_DIR}/Input/InputBinding.h"
         "${SRC_DIR}/Input/InputManager.h"
+        "${SRC_DIR}/Utility/Logger.h"
         "${SRC_DIR}/Utility/Timer.h"
         "${SRC_DIR}/Window/Window.h"
         "${SRC_DIR}/Window/Handler/CursorPosHandler.h"
         "${SRC_DIR}/Window/Handler/FrameBufferSizeHandler.h"
         "${SRC_DIR}/Window/Handler/KeyHandler.h"
-        "${SRC_DIR}/Window/Handler/ScrollHandler.h"
-        "${SRC_DIR}/Logging.h")
+        "${SRC_DIR}/Window/Handler/ScrollHandler.h")
 
 set(SOURCES
         "${SRC_DIR}/Asset/AssetManager.cpp"
@@ -79,6 +79,7 @@ set(SOURCES
         "${SRC_DIR}/GL/VBO.cpp"
         "${SRC_DIR}/Input/InputBinding.cpp"
         "${SRC_DIR}/Input/InputManager.cpp"
+        "${SRC_DIR}/Utility/Logger.cpp"
         "${SRC_DIR}/Utility/Timer.cpp"
         "${SRC_DIR}/Window/Window.cpp"
         "${SRC_DIR}/main.cpp")

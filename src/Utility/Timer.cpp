@@ -2,16 +2,19 @@
 
 #include "Timer.h"
 
-Timer::Timer() = default;
-
-void Timer::Tick()
+namespace OGL::Utility
 {
-    float currentFrame = glfwGetTime();
-    m_deltaTime = currentFrame - m_lastFrameTime;
-    m_lastFrameTime = currentFrame;
-}
+    Timer::Timer() = default;
 
-float Timer::GetDeltaTime() const
-{
-    return m_deltaTime;
+    void Timer::Tick()
+    {
+        float currentFrame = glfwGetTime();
+        m_deltaTime = currentFrame - m_lastFrameTime;
+        m_lastFrameTime = currentFrame;
+    }
+
+    float Timer::GetDeltaTime() const
+    {
+        return m_deltaTime;
+    }
 }

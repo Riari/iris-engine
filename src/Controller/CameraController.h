@@ -9,20 +9,24 @@
 #include "../Window/Handler/KeyHandler.h"
 #include "../Window/Handler/ScrollHandler.h"
 
-class CameraController : public CursorPosHandler, public ScrollHandler
+namespace OGL::Controller
 {
-public:
-    explicit CameraController(std::shared_ptr<Camera> camera, std::shared_ptr<InputManager> input);
+    class CameraController : public OGL::Window::CursorPosHandler, public OGL::Window::ScrollHandler
+    {
+    public:
+        explicit CameraController(std::shared_ptr<OGL::GL::Camera> camera, std::shared_ptr<OGL::Input::InputManager> input);
 
-    void OnCursorPosCallback(double x, double y) override;
-    void OnScrollCallback(double x, double y) override;
+        void OnCursorPosCallback(double x, double y) override;
 
-    void Update(float deltaTime);
+        void OnScrollCallback(double x, double y) override;
 
-private:
-    std::shared_ptr<Camera> m_camera;
-    std::shared_ptr<InputManager> m_input;
+        void Update(float deltaTime);
 
-    bool m_firstCursorPosCallback = true;
-    float m_rotateX, m_rotateY, m_lastCursorX, m_lastCursorY;
-};
+    private:
+        std::shared_ptr<OGL::GL::Camera> m_camera;
+        std::shared_ptr<OGL::Input::InputManager> m_input;
+
+        bool m_firstCursorPosCallback = true;
+        float m_rotateX, m_rotateY, m_lastCursorX, m_lastCursorY;
+    };
+}

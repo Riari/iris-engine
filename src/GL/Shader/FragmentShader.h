@@ -6,8 +6,11 @@
 
 #include "Shader.h"
 
-class FragmentShader : public Shader
+namespace OGL::GL
 {
-public:
-    explicit FragmentShader(const std::string &name, std::shared_ptr<spdlog::logger> logger);
-};
+    class FragmentShader : public Shader
+    {
+    public:
+        explicit FragmentShader(const std::string &name, std::shared_ptr<spdlog::logger> logger);
+    };
+}
