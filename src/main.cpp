@@ -16,7 +16,6 @@
 #include "GL/VAO.h"
 #include "GL/VBO.h"
 #include "GL/Texture.h"
-#include "Utility/Logger.h"
 #include "Window/Window.h"
 
 using namespace OGL;
@@ -106,9 +105,7 @@ int main()
     GL::VAO::Unbind();
 
     auto *coloredCubeShaderProgram = new GL::ShaderProgram("ColoredCube", Utility::Logger::GL);
-    coloredCubeShaderProgram->Compile();
-    coloredCubeShaderProgram->Link();
-    coloredCubeShaderProgram->DeleteShaders();
+    coloredCubeShaderProgram->Build();
     coloredCubeShaderProgram->Use();
     coloredCubeShaderProgram->SetUniform3f("objectColor", {1.0f, 0.5f, 0.31f});
     coloredCubeShaderProgram->SetUniform3f("lightColor", {1.0f, 1.0f, 1.0f});
@@ -121,9 +118,7 @@ int main()
     GL::VAO::Unbind();
 
     auto *lightSourceShaderProgram = new GL::ShaderProgram("LightSource", Utility::Logger::GL);
-    lightSourceShaderProgram->Compile();
-    lightSourceShaderProgram->Link();
-    lightSourceShaderProgram->DeleteShaders();
+    lightSourceShaderProgram->Build();
 
     glm::vec3 lightSourcePosition(1.2f, 1.0f, 2.0f);
 

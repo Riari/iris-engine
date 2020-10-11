@@ -24,39 +24,11 @@ namespace OGL::GL
         glDeleteProgram(m_program);
     }
 
-    void ShaderProgram::Compile() const
+    void ShaderProgram::Build()
     {
-        m_vertexShader->Compile();
-        m_fragmentShader->Compile();
-    }
-
-    void ShaderProgram::Link() const
-    {
-        glAttachShader(m_program, m_vertexShader->GetID());
-        glAttachShader(m_program, m_fragmentShader->GetID());
-        glLinkProgram(m_program);
-
-        GLint success;
-        glGetProgramiv(m_program, GL_LINK_STATUS, &success);
-
-        if (success == GL_FALSE)
-        {
-            GLint maxLength = 0;
-            glGetProgramiv(m_program, GL_INFO_LOG_LENGTH, &maxLength);
-
-            std::string info;
-            info.resize(static_cast<std::string::size_type>(maxLength - 1));
-            glGetProgramInfoLog(m_program, 512, NULL, info.data());
-            throw Exception::Exception(fmt::format("Program linking failed: {0}", info));
-        }
-
-        m_logger->info(fmt::format("ShaderProgram {0} linked", m_name));
-    }
-
-    void ShaderProgram::DeleteShaders()
-    {
-        delete m_vertexShader;
-        delete m_fragmentShader;
+        Compile();
+        Link();
+        DeleteShaders();
     }
 
     void ShaderProgram::Use() const
@@ -97,5 +69,40 @@ namespace OGL::GL
     void ShaderProgram::SetUniformMatrix4fv(const std::string &name, float *value_ptr) const
     {
         glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, value_ptr);
+    }
+
+    void ShaderProgram::Compile() const
+    {
+        m_vertexShader->Compile();
+        m_fragmentShader->Compile();
+    }
+
+    void ShaderProgram::Link() const
+    {
+        glAttachShader(m_program, m_vertexShader->GetID());
+        glAttachShader(m_program, m_fragmentShader->GetID());
+        glLinkProgram(m_program);
+
+        GLint success;
+        glGetProgramiv(m_program, GL_LINK_STATUS, &success);
+
+        if (success == GL_FALSE)
+        {
+            GLint maxLength = 0;
+            glGetProgramiv(m_program, GL_INFO_LOG_LENGTH, &maxLength);
+
+            std::string info;
+            info.resize(static_cast<std::string::size_type>(maxLength - 1));
+            glGetProgramInfoLog(m_program, 512, NULL, info.data());
+            throw Exception::Exception(fmt::format("Program linking failed: {0}", info));
+        }
+
+        m_logger->info(fmt::format("ShaderProgram {0} linked", m_name));
+    }
+
+    void ShaderProgram::DeleteShaders()
+    {
+        delete m_vertexShader;
+        delete m_fragmentShader;
     }
 }

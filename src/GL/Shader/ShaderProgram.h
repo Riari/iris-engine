@@ -13,11 +13,7 @@ namespace OGL::GL
 
         ~ShaderProgram();
 
-        void Compile() const;
-
-        void Link() const;
-
-        void DeleteShaders();
+        void Build();
 
         void Use() const;
 
@@ -42,5 +38,9 @@ namespace OGL::GL
         Shader *m_fragmentShader;
 
         std::shared_ptr<spdlog::logger> m_logger;
+
+        void Compile() const;
+        void Link() const;
+        void DeleteShaders();
     };
 }
