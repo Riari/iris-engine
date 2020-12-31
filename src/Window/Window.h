@@ -25,6 +25,8 @@ namespace OGL::Window
         [[nodiscard]] int GetScreenWidth() const;
         [[nodiscard]] int GetScreenHeight() const;
 
+        void SetTitle(const char *title);
+
         void RegisterFrameBufferSizeHandler(FrameBufferSizeHandler *handler);
         void RegisterCursorPosHandler(CursorPosHandler *handler);
         void RegisterKeyHandler(KeyHandler *handler);

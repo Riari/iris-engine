@@ -3,7 +3,6 @@
 #include <memory>
 
 #include "../GL/Camera.h"
-#include "../Utility/Timer.h"
 #include "../Input/InputManager.h"
 #include "../Window/Handler/CursorPosHandler.h"
 #include "../Window/Handler/KeyHandler.h"
@@ -20,7 +19,7 @@ namespace OGL::Controller
 
         void OnScrollCallback(double x, double y) override;
 
-        void Update(float deltaTime);
+        void Update(double deltaTime);
 
     private:
         std::shared_ptr<OGL::GL::Camera> m_camera;

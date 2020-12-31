@@ -38,15 +38,15 @@ namespace OGL::GL
 
         [[nodiscard]] float GetFOV() const;
 
-        void SetMoveSpeed(float moveSpeed);
+        void SetMoveSpeed(double moveSpeed);
 
-        void SetRotateSpeed(float rotateSpeed);
+        void SetRotateSpeed(double rotateSpeed);
 
         void SetConstrainPitch(bool constrainPitch);
 
-        void Move(CameraMovement direction, float deltaTime, float speedModifier = 0.0f);
+        void Move(CameraMovement direction, double deltaTime, double speedModifier = 0.0);
 
-        void Rotate(float xOffset, float yOffset, float deltaTime, float speedModifier = 0.0f);
+        void Rotate(float xOffset, float yOffset, double deltaTime, double speedModifier = 0.0);
 
     private:
         bool m_constrainPitch = true;
@@ -61,8 +61,8 @@ namespace OGL::GL
         float m_pitch;
         float m_fov;
 
-        float m_moveSpeed = 2.5f;
-        float m_rotateSpeed = 2.5f;
+        double m_moveSpeed = 2.5f;
+        double m_rotateSpeed = 2.5f;
 
         void UpdateVectors();
     };

@@ -71,6 +71,11 @@ namespace OGL::Window
         return m_screenHeight;
     }
 
+    void Window::SetTitle(const char *title)
+    {
+        glfwSetWindowTitle(m_window, title);
+    }
+
     void Window::RegisterFrameBufferSizeHandler(FrameBufferSizeHandler *handler)
     {
         m_frameBufferSizeHandlers.push_back(handler);

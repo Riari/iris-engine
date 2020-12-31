@@ -43,12 +43,12 @@ namespace OGL::GL
         return m_fov;
     }
 
-    void Camera::SetMoveSpeed(float moveSpeed)
+    void Camera::SetMoveSpeed(double moveSpeed)
     {
         m_moveSpeed = moveSpeed;
     }
 
-    void Camera::SetRotateSpeed(float rotateSpeed)
+    void Camera::SetRotateSpeed(double rotateSpeed)
     {
         m_rotateSpeed = rotateSpeed;
     }
@@ -58,7 +58,7 @@ namespace OGL::GL
         m_constrainPitch = constrainPitch;
     }
 
-    void Camera::Move(CameraMovement direction, float deltaTime, float speedModifier)
+    void Camera::Move(CameraMovement direction, double deltaTime, double speedModifier)
     {
         float velocity = (m_moveSpeed + speedModifier) * deltaTime;
 
@@ -85,7 +85,7 @@ namespace OGL::GL
         }
     }
 
-    void Camera::Rotate(float xOffset, float yOffset, float deltaTime, float speedModifier)
+    void Camera::Rotate(float xOffset, float yOffset, double deltaTime, double speedModifier)
     {
         float velocity = (m_rotateSpeed + speedModifier) * deltaTime;
 

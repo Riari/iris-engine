@@ -1,5 +1,10 @@
 #pragma once
 
+#include <string>
+#include <memory>
+
+#include <spdlog/spdlog.h>
+
 namespace OGL::Utility
 {
     class Logger

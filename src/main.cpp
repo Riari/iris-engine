@@ -1,9 +1,12 @@
+#include <string>
+
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <spdlog/spdlog.h>
+#include <cxxopts.hpp>
 
 #include "Controller/CameraController.h"
 #include "GL/Shader/ShaderProgram.h"
@@ -20,17 +23,25 @@
 
 using namespace OGL;
 
-int main()
+int main(int argc, char** argv)
 {
+    cxxopts::Options options("GLSandbox", "GL stuff.");
+
+    options.add_options()
+            ("f,maxfps", "Maximum FPS", cxxopts::value<double>()->default_value("60"))
+    ;
+
+    auto opts = options.parse(argc, argv);
+
     Utility::Logger::Init();
 
-    auto *window = new Window::Window("LearnOpenGL", Utility::Logger::WINDOW);
-    auto timer = std::make_shared<Utility::Timer>();
+    auto *window = new Window::Window("LearnOpenGL", Utility::Logger::WINDOW, 1440, 900);
 
     auto inputManager = std::make_shared<Input::InputManager>();
     window->RegisterKeyHandler(inputManager.get());
 
     auto camera = std::make_shared<GL::Camera>(glm::vec3(0.0f, 0.0f, 3.0f));
+    camera->SetRotateSpeed(100);
     auto *cameraController = new Controller::CameraController(camera, inputManager);
     window->RegisterCursorPosHandler(cameraController);
     window->RegisterScrollHandler(cameraController);
@@ -124,47 +135,70 @@ int main()
 
     glEnable(GL_DEPTH_TEST);
 
+    const double fpsLimit = 1.0 / opts["maxfps"].as<double>();
+    double lastUpdateTime = 0;
+    double lastFrameTime = 0;
+    double fpsTime = 0;
+    int frameCount = 0;
+
     while (!glfwWindowShouldClose(window->GetGLFWWindow()))
     {
-        timer->Tick();
+        double now = glfwGetTime();
+        double deltaTime = now - lastUpdateTime;
+        fpsTime += deltaTime;
 
-        glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        cameraController->Update(deltaTime);
 
-        // Projection matrix
-        glm::mat4 projection = glm::perspective(glm::radians(camera->GetFOV()), (float) (window->GetScreenWidth() / window->GetScreenHeight()), 0.1f, 100.0f);
+        if (fpsTime >= 1.0) {
+            window->SetTitle(("GLSandbox | " + std::to_string(frameCount) + " FPS").c_str());
+            fpsTime -= 1.0;
+            frameCount = 0;
+        }
 
-        // View matrix
-        glm::mat4 view = camera->GetViewMatrix();
+        if ((now - lastFrameTime) >= fpsLimit)
+        {
+            glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        // Render colored cube
-        coloredCubeShaderProgram->Use();
-        coloredCubeShaderProgram->SetUniformMatrix4fv("projection", glm::value_ptr(projection));
-        coloredCubeShaderProgram->SetUniformMatrix4fv("view", glm::value_ptr(view));
-        glm::mat4 model = glm::mat4(1.0f);
-        coloredCubeShaderProgram->SetUniformMatrix4fv("model", glm::value_ptr(model));
+            // Projection matrix
+            glm::mat4 projection = glm::perspective(glm::radians(camera->GetFOV()), (float) (window->GetScreenWidth() / window->GetScreenHeight()), 0.1f, 100.0f);
 
-        coloredCubeVAO->Bind();
+            // View matrix
+            glm::mat4 view = camera->GetViewMatrix();
 
-        glDrawArrays(GL_TRIANGLES, 0, 36);
+            // Render colored cube
+            coloredCubeShaderProgram->Use();
+            coloredCubeShaderProgram->SetUniformMatrix4fv("projection", glm::value_ptr(projection));
+            coloredCubeShaderProgram->SetUniformMatrix4fv("view", glm::value_ptr(view));
+            glm::mat4 model = glm::mat4(1.0f);
+            coloredCubeShaderProgram->SetUniformMatrix4fv("model", glm::value_ptr(model));
 
-        // Render light source
-        lightSourceShaderProgram->Use();
-        lightSourceShaderProgram->SetUniformMatrix4fv("projection", glm::value_ptr(projection));
-        lightSourceShaderProgram->SetUniformMatrix4fv("view", glm::value_ptr(view));
-        model = glm::mat4(1.0f);
-        model = glm::translate(model, lightSourcePosition);
-        model = glm::scale(model, glm::vec3(0.2f));
-        lightSourceShaderProgram->SetUniformMatrix4fv("model", glm::value_ptr(model));
+            coloredCubeVAO->Bind();
 
-        lightSourceVAO->Bind();
+            glDrawArrays(GL_TRIANGLES, 0, 36);
 
-        glDrawArrays(GL_TRIANGLES, 0, 36);
+            // Render light source
+            lightSourceShaderProgram->Use();
+            lightSourceShaderProgram->SetUniformMatrix4fv("projection", glm::value_ptr(projection));
+            lightSourceShaderProgram->SetUniformMatrix4fv("view", glm::value_ptr(view));
+            model = glm::mat4(1.0f);
+            model = glm::translate(model, lightSourcePosition);
+            model = glm::scale(model, glm::vec3(0.2f));
+            lightSourceShaderProgram->SetUniformMatrix4fv("model", glm::value_ptr(model));
 
-        glfwSwapBuffers(window->GetGLFWWindow());
+            lightSourceVAO->Bind();
+
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+
+            glfwSwapBuffers(window->GetGLFWWindow());
+
+            frameCount++;
+            lastFrameTime = now;
+        }
+
         glfwPollEvents();
 
-        cameraController->Update(timer->GetDeltaTime());
+        lastUpdateTime = now;
     }
 
     delete coloredCubeVAO;

@@ -6,6 +6,7 @@ set(CXX_FLAGS "-Wall")
 set(CMAKE_CXX_FLAGS, "${CXX_FLAGS}")
 
 set(EXT_DIR "${CMAKE_SOURCE_DIR}/external")
+set(CXXOPTS_DIR "${EXT_DIR}/cxxopts")
 set(FMT_DIR "${EXT_DIR}/fmt")
 set(GLAD_DIR "${EXT_DIR}/glad")
 set(GLFW_DIR "${EXT_DIR}/glfw")
@@ -24,6 +25,7 @@ set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 add_library(glad "${GLAD_DIR}/include/glad/glad.h" "${GLAD_DIR}/src/glad.c")
 target_include_directories(glad PUBLIC "${KHR_DIR}/include")
 
+include_directories("${CXXOPTS_DIR}")
 include_directories("${GLAD_DIR}/include")
 include_directories("${STB_DIR}")
 
@@ -54,7 +56,6 @@ set(HEADERS
         "${SRC_DIR}/Input/InputBinding.h"
         "${SRC_DIR}/Input/InputManager.h"
         "${SRC_DIR}/Utility/Logger.h"
-        "${SRC_DIR}/Utility/Timer.h"
         "${SRC_DIR}/Window/Window.h"
         "${SRC_DIR}/Window/Handler/CursorPosHandler.h"
         "${SRC_DIR}/Window/Handler/FrameBufferSizeHandler.h"
@@ -80,7 +81,6 @@ set(SOURCES
         "${SRC_DIR}/Input/InputBinding.cpp"
         "${SRC_DIR}/Input/InputManager.cpp"
         "${SRC_DIR}/Utility/Logger.cpp"
-        "${SRC_DIR}/Utility/Timer.cpp"
         "${SRC_DIR}/Window/Window.cpp"
         "${SRC_DIR}/main.cpp")
 

@@ -28,7 +28,7 @@ namespace OGL::Controller
         m_camera->AdjustFOV(y);
     }
 
-    void CameraController::Update(float deltaTime)
+    void CameraController::Update(double deltaTime)
     {
         m_camera->Rotate(m_rotateX, m_rotateY, deltaTime);
         m_rotateX = 0.0f;
