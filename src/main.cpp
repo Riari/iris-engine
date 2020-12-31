@@ -161,7 +161,7 @@ int main(int argc, char** argv)
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
             // Projection matrix
-            glm::mat4 projection = glm::perspective(glm::radians(camera->GetFOV()), (float) (window->GetScreenWidth() / window->GetScreenHeight()), 0.1f, 100.0f);
+            glm::mat4 projection = glm::perspective(glm::radians(camera->GetFOV()), (float) window->GetScreenWidth() / (float) window->GetScreenHeight(), 0.1f, 100.0f);
 
             // View matrix
             glm::mat4 view = camera->GetViewMatrix();
