@@ -59,47 +59,47 @@ int main(int argc, char** argv)
 #endif
 
     float cubeVertices[] = {
-            -0.5f, -0.5f, -0.5f,
-            0.5f, -0.5f, -0.5f,
-            0.5f,  0.5f, -0.5f,
-            0.5f,  0.5f, -0.5f,
-            -0.5f,  0.5f, -0.5f,
-            -0.5f, -0.5f, -0.5f,
+            -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+            0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+            0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+            0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+            -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+            -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
 
-            -0.5f, -0.5f,  0.5f,
-            0.5f, -0.5f,  0.5f,
-            0.5f,  0.5f,  0.5f,
-            0.5f,  0.5f,  0.5f,
-            -0.5f,  0.5f,  0.5f,
-            -0.5f, -0.5f,  0.5f,
+            -0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+            0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+            0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+            0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+            -0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+            -0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
 
-            -0.5f,  0.5f,  0.5f,
-            -0.5f,  0.5f, -0.5f,
-            -0.5f, -0.5f, -0.5f,
-            -0.5f, -0.5f, -0.5f,
-            -0.5f, -0.5f,  0.5f,
-            -0.5f,  0.5f,  0.5f,
+            -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+            -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+            -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+            -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+            -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+            -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
 
-            0.5f,  0.5f,  0.5f,
-            0.5f,  0.5f, -0.5f,
-            0.5f, -0.5f, -0.5f,
-            0.5f, -0.5f, -0.5f,
-            0.5f, -0.5f,  0.5f,
-            0.5f,  0.5f,  0.5f,
+            0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+            0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+            0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+            0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+            0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+            0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
 
-            -0.5f, -0.5f, -0.5f,
-            0.5f, -0.5f, -0.5f,
-            0.5f, -0.5f,  0.5f,
-            0.5f, -0.5f,  0.5f,
-            -0.5f, -0.5f,  0.5f,
-            -0.5f, -0.5f, -0.5f,
+            -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+            0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+            0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+            0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+            -0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+            -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
 
-            -0.5f,  0.5f, -0.5f,
-            0.5f,  0.5f, -0.5f,
-            0.5f,  0.5f,  0.5f,
-            0.5f,  0.5f,  0.5f,
-            -0.5f,  0.5f,  0.5f,
-            -0.5f,  0.5f, -0.5f
+            -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
+            0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
+            0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+            0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+            -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+            -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f
     };
 
     // Cube VBO
@@ -108,11 +108,24 @@ int main(int argc, char** argv)
     cubeVBO->Bind();
     cubeVBO->SetData(sizeof(cubeVertices), cubeVertices, GL_STATIC_DRAW);
 
+    // Light source cube
+
+    auto *lightSourceVAO = new GL::VAO();
+    lightSourceVAO->Bind();
+    GL::VBO::SetVertexAttribute(0, 3, 6 * sizeof(float), (void*)0);
+    GL::VAO::Unbind();
+
+    auto *lightSourceShaderProgram = new GL::ShaderProgram("LightSource", Utility::Logger::GL);
+    lightSourceShaderProgram->Build();
+
+    glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
+
     // Coloured cube
 
     auto *coloredCubeVAO = new GL::VAO();
     coloredCubeVAO->Bind();
-    GL::VBO::SetVertexAttribute(0, 3, 3 * sizeof(float), (void*)0);
+    GL::VBO::SetVertexAttribute(0, 3, 6 * sizeof(float), (void*)0);
+    GL::VBO::SetVertexAttribute(1, 3, 6 * sizeof(float), (void*)(3 * sizeof(float)));
     GL::VAO::Unbind();
 
     auto *coloredCubeShaderProgram = new GL::ShaderProgram("ColoredCube", Utility::Logger::GL);
@@ -120,18 +133,7 @@ int main(int argc, char** argv)
     coloredCubeShaderProgram->Use();
     coloredCubeShaderProgram->SetUniform3f("objectColor", {1.0f, 0.5f, 0.31f});
     coloredCubeShaderProgram->SetUniform3f("lightColor", {1.0f, 1.0f, 1.0f});
-
-    // Light source cube
-
-    auto *lightSourceVAO = new GL::VAO();
-    lightSourceVAO->Bind();
-    GL::VBO::SetVertexAttribute(0, 3, 3 * sizeof(float), (void*)0);
-    GL::VAO::Unbind();
-
-    auto *lightSourceShaderProgram = new GL::ShaderProgram("LightSource", Utility::Logger::GL);
-    lightSourceShaderProgram->Build();
-
-    glm::vec3 lightSourcePosition(1.2f, 1.0f, 2.0f);
+    coloredCubeShaderProgram->SetUniform3f("lightPos", {lightPos[0], lightPos[1], lightPos[2]});
 
     glEnable(GL_DEPTH_TEST);
 
@@ -182,7 +184,7 @@ int main(int argc, char** argv)
             lightSourceShaderProgram->SetUniformMatrix4fv("projection", glm::value_ptr(projection));
             lightSourceShaderProgram->SetUniformMatrix4fv("view", glm::value_ptr(view));
             model = glm::mat4(1.0f);
-            model = glm::translate(model, lightSourcePosition);
+            model = glm::translate(model, lightPos);
             model = glm::scale(model, glm::vec3(0.2f));
             lightSourceShaderProgram->SetUniformMatrix4fv("model", glm::value_ptr(model));
 
