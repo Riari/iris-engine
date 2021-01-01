@@ -4,6 +4,7 @@ project(GLSandbox)
 set(CMAKE_CXX_STANDARD 17)
 set(CXX_FLAGS "-Wall")
 set(CMAKE_CXX_FLAGS, "${CXX_FLAGS}")
+set(CMAKE_EXE_LINKER_FLAGS "-static")
 
 set(EXT_DIR "${CMAKE_SOURCE_DIR}/external")
 set(CXXOPTS_DIR "${EXT_DIR}/cxxopts")

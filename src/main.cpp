@@ -20,6 +20,7 @@
 #include "GL/VBO.h"
 #include "GL/Texture.h"
 #include "Window/Window.h"
+#include "Utility/Logger.h"
 
 using namespace OGL;
 
@@ -41,7 +42,7 @@ int main(int argc, char** argv)
     window->RegisterKeyHandler(inputManager.get());
 
     auto camera = std::make_shared<GL::Camera>(glm::vec3(0.0f, 0.0f, 3.0f));
-    camera->SetRotateSpeed(100);
+    camera->SetRotateSpeed(50);
     auto *cameraController = new Controller::CameraController(camera, inputManager);
     window->RegisterCursorPosHandler(cameraController);
     window->RegisterScrollHandler(cameraController);
@@ -137,19 +138,18 @@ int main(int argc, char** argv)
 
     glEnable(GL_DEPTH_TEST);
 
-    const double fpsLimit = 1.0 / opts["maxfps"].as<double>();
+    const double updateFrequency = 1.0 / 180.0;
+    const double frameFrequency = 1.0 / opts["maxfps"].as<double>();
     double lastUpdateTime = 0;
     double lastFrameTime = 0;
+    double lastLoopTime = 0;
     double fpsTime = 0;
     int frameCount = 0;
 
     while (!glfwWindowShouldClose(window->GetGLFWWindow()))
     {
         double now = glfwGetTime();
-        double deltaTime = now - lastUpdateTime;
-        fpsTime += deltaTime;
-
-        cameraController->Update(deltaTime);
+        fpsTime += now - lastLoopTime;
 
         if (fpsTime >= 1.0) {
             window->SetTitle(("GLSandbox | " + std::to_string(frameCount) + " FPS").c_str());
@@ -157,7 +157,16 @@ int main(int argc, char** argv)
             frameCount = 0;
         }
 
-        if ((now - lastFrameTime) >= fpsLimit)
+        double deltaTime = now - lastUpdateTime;
+        if (deltaTime >= updateFrequency) {
+            cameraController->Update(deltaTime);
+
+            glfwPollEvents();
+
+            lastUpdateTime = now;
+        }
+
+        if ((now - lastFrameTime) >= frameFrequency)
         {
             glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -198,9 +207,7 @@ int main(int argc, char** argv)
             lastFrameTime = now;
         }
 
-        glfwPollEvents();
-
-        lastUpdateTime = now;
+        lastLoopTime = now;
     }
 
     delete coloredCubeVAO;
