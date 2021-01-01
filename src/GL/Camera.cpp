@@ -20,6 +20,11 @@ namespace OGL::GL
             Camera(glm::vec3(posX, posY, posZ), glm::vec3(upX, upY, upZ), yaw, pitch, fov)
     {}
 
+    glm::vec3 Camera::GetPosition()
+    {
+        return m_position;
+    }
+
     glm::mat4 Camera::GetViewMatrix()
     {
         return glm::lookAt(m_position, m_position + m_front, m_up);

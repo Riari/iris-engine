@@ -30,6 +30,8 @@ namespace OGL::GL
 
         Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch, float fov);
 
+        glm::vec3 GetPosition();
+
         glm::mat4 GetViewMatrix();
 
         void SetFOV(float fov);

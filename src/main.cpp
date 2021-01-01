@@ -182,7 +182,11 @@ int main(int argc, char** argv)
             coloredCubeShaderProgram->SetUniformMatrix4fv("projection", glm::value_ptr(projection));
             coloredCubeShaderProgram->SetUniformMatrix4fv("view", glm::value_ptr(view));
             glm::mat4 model = glm::mat4(1.0f);
+            model = glm::rotate(model, glm::radians(135.0f), glm::vec3(1, 1, 1));
+            model = glm::scale(model, glm::vec3(0.8f, 1.0f, 1.2f));
             coloredCubeShaderProgram->SetUniformMatrix4fv("model", glm::value_ptr(model));
+            auto cameraPos = camera->GetPosition();
+            coloredCubeShaderProgram->SetUniform3f("viewPos", {cameraPos[0], cameraPos[1], cameraPos[2]});
 
             coloredCubeVAO->Bind();
 
