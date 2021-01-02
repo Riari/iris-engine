@@ -1,4 +1,5 @@
 #include <string>
+#include <algorithm>
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -42,7 +43,7 @@ int main(int argc, char** argv)
     window->RegisterKeyHandler(inputManager.get());
 
     auto camera = std::make_shared<GL::Camera>(glm::vec3(0.0f, 0.0f, 3.0f));
-    camera->SetRotateSpeed(50);
+    camera->SetRotateSpeed(10);
     auto *cameraController = new Controller::CameraController(camera, inputManager);
     window->RegisterCursorPosHandler(cameraController);
     window->RegisterScrollHandler(cameraController);
@@ -138,8 +139,9 @@ int main(int argc, char** argv)
 
     glEnable(GL_DEPTH_TEST);
 
-    const double updateFrequency = 1.0 / 180.0;
-    const double frameFrequency = 1.0 / opts["maxfps"].as<double>();
+    const double maxFPS = opts["maxfps"].as<double>();
+    const double updateFrequency = 1.0 / std::max(maxFPS, 120.0);
+    const double frameFrequency = 1.0 / maxFPS;
     double lastUpdateTime = 0;
     double lastFrameTime = 0;
     double lastLoopTime = 0;
