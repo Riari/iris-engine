@@ -10,6 +10,7 @@
 #include <cxxopts.hpp>
 
 #include "Controller/CameraController.h"
+#include "Controller/TestController.h"
 #include "GL/Shader/ShaderProgram.h"
 
 #if !defined(NDEBUG)
@@ -24,6 +25,7 @@
 #include "Utility/Logger.h"
 
 using namespace OGL;
+using namespace OGL::Event;
 
 int main(int argc, char** argv)
 {
@@ -40,13 +42,10 @@ int main(int argc, char** argv)
     auto *window = new Window::Window("LearnOpenGL", Utility::Logger::WINDOW, 1440, 900);
 
     auto inputManager = std::make_shared<Input::InputManager>();
-    window->RegisterKeyHandler(inputManager.get());
 
     auto camera = std::make_shared<GL::Camera>(glm::vec3(0.0f, 0.0f, 3.0f));
     camera->SetRotateSpeed(10);
-    auto *cameraController = new Controller::CameraController(camera, inputManager);
-    window->RegisterCursorPosHandler(cameraController);
-    window->RegisterScrollHandler(cameraController);
+    auto *cameraController = new Controller::CameraController(camera);
 
     if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress))
     {
@@ -161,9 +160,9 @@ int main(int argc, char** argv)
 
         double deltaTime = now - lastUpdateTime;
         if (deltaTime >= updateFrequency) {
-            cameraController->Update(deltaTime);
-
             glfwPollEvents();
+
+            cameraController->Update(deltaTime);
 
             lastUpdateTime = now;
         }
@@ -218,7 +217,6 @@ int main(int argc, char** argv)
 
     delete coloredCubeVAO;
     delete cubeVBO;
-    delete cameraController;
     delete window;
 
     glfwTerminate();

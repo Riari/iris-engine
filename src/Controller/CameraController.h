@@ -2,30 +2,36 @@
 
 #include <memory>
 
+#include "../Event/Event.h"
 #include "../GL/Camera.h"
 #include "../Input/InputManager.h"
 #include "../Window/Handler/CursorPosHandler.h"
 #include "../Window/Handler/KeyHandler.h"
 #include "../Window/Handler/ScrollHandler.h"
 
+using namespace OGL::GL;
+using namespace OGL::Event;
+
 namespace OGL::Controller
 {
-    class CameraController : public OGL::Window::CursorPosHandler, public OGL::Window::ScrollHandler
+    class CameraController
     {
     public:
-        explicit CameraController(std::shared_ptr<OGL::GL::Camera> camera, std::shared_ptr<OGL::Input::InputManager> input);
+        explicit CameraController(std::shared_ptr<Camera> camera);
 
-        void OnCursorPosCallback(double x, double y) override;
+        static std::shared_ptr<CameraController> Create(const std::shared_ptr<Camera>& camera);
 
-        void OnScrollCallback(double x, double y) override;
+//        bool HandleEvent(std::shared_ptr<Event::Event>) override;
 
         void Update(double deltaTime);
 
     private:
-        std::shared_ptr<OGL::GL::Camera> m_camera;
-        std::shared_ptr<OGL::Input::InputManager> m_input;
+        std::shared_ptr<Camera> m_camera;
 
-        bool m_firstCursorPosCallback = true;
+//        void OnKeyPress(const std::shared_ptr<KeyPressEvent>&);
+//        void OnMouseMove(const std::shared_ptr<MouseMoveEvent>&);
+
+        bool m_receivedFirstMouseMoveEvent = true;
         float m_rotateX, m_rotateY, m_lastCursorX, m_lastCursorY;
     };
 }

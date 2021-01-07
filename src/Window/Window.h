@@ -27,20 +27,10 @@ namespace OGL::Window
 
         void SetTitle(const char *title);
 
-        void RegisterFrameBufferSizeHandler(FrameBufferSizeHandler *handler);
-        void RegisterCursorPosHandler(CursorPosHandler *handler);
-        void RegisterKeyHandler(KeyHandler *handler);
-        void RegisterScrollHandler(ScrollHandler *handler);
-
     private:
         GLFWwindow *m_window;
 
         int m_screenWidth, m_screenHeight;
-
-        std::vector<FrameBufferSizeHandler*> m_frameBufferSizeHandlers;
-        std::vector<CursorPosHandler*> m_cursorPosHandlers;
-        std::vector<KeyHandler*> m_keyHandlers;
-        std::vector<ScrollHandler*> m_scrollHandlers;
 
         std::shared_ptr<spdlog::logger> m_logger;
 

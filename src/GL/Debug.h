@@ -47,7 +47,7 @@ void APIENTRY glDebugOutput(GLenum source, GLenum type, unsigned int id, GLenum 
         case GL_DEBUG_SEVERITY_NOTIFICATION: strSeverity = "Notification"; break;
     }
 
-    Utility::Logger::GL->error(fmt::format("GL: Error {0} received: {1} (Source: {2}, Type: {3}, Severity: {4})", id, message, strSource, strType, strSeverity));
+    Utility::Logger::GL->error(fmt::format("GL: Error {0} received: {1} (Source: {2}, EventListener: {3}, Severity: {4})", id, message, strSource, strType, strSeverity));
 }
 
 void InitGLDebug()

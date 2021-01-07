@@ -2,11 +2,14 @@
 #include <GLFW/glfw3.h>
 #include <spdlog/spdlog.h>
 
+#include "../Event/EventBus.h"
+#include "../Event/WindowResizedEvent.h"
 #include "../Exception/Exception.h"
 #include "../Utility/Logger.h"
 #include "Window.h"
 
 using namespace OGL;
+using namespace OGL::Event;
 
 namespace OGL::Window
 {
@@ -76,26 +79,6 @@ namespace OGL::Window
         glfwSetWindowTitle(m_window, title);
     }
 
-    void Window::RegisterFrameBufferSizeHandler(FrameBufferSizeHandler *handler)
-    {
-        m_frameBufferSizeHandlers.push_back(handler);
-    }
-
-    void Window::RegisterCursorPosHandler(CursorPosHandler *handler)
-    {
-        m_cursorPosHandlers.push_back(handler);
-    }
-
-    void Window::RegisterKeyHandler(KeyHandler *handler)
-    {
-        m_keyHandlers.push_back(handler);
-    }
-
-    void Window::RegisterScrollHandler(ScrollHandler *handler)
-    {
-        m_scrollHandlers.push_back(handler);
-    }
-
     void Window::FrameBufferSizeCallback(GLFWwindow *window, int width, int height)
     {
         GetWindowPointer(window)->OnFrameBufferSizeCallback(width, height);
@@ -122,36 +105,24 @@ namespace OGL::Window
         m_screenWidth = width;
         m_screenHeight = height;
 
-        for (auto handler : m_frameBufferSizeHandlers)
-        {
-            handler->OnFrameBufferSizeCallback(width, height);
-        }
+        EventBus::Dispatch<WindowResizedEvent>(WindowResizedEvent());
     }
 
     void Window::OnCursorPosCallback(double x, double y)
     {
-        for (auto handler : m_cursorPosHandlers)
-        {
-            handler->OnCursorPosCallback(x, y);
-        }
+        // EventBus::Push(std::make_shared<MouseMoveEvent>(x, y));
     }
 
     void Window::OnKeyCallback(int key, int scancode, int action, int mods)
     {
         if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) glfwSetWindowShouldClose(m_window, true);
 
-        for (auto handler : m_keyHandlers)
-        {
-            handler->OnKeyCallback(key, scancode, action, mods);
-        }
+        // EventBus::Push(std::make_shared<KeyPressEvent>());
     }
 
     void Window::OnScrollCallback(double x, double y)
     {
-        for (auto handler : m_scrollHandlers)
-        {
-            handler->OnScrollCallback(x, y);
-        }
+        // EventBus::Push(std::make_shared<MouseScrollEvent>());
     }
 
     Window *Window::GetWindowPointer(GLFWwindow *window)
