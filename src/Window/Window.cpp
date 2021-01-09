@@ -5,7 +5,10 @@
 
 #include "../Exception/Exception.h"
 #include "../Utility/Logger.h"
+#include "../Input/InputManager.h"
 #include "Window.h"
+
+using namespace OGL::Input;
 
 namespace OGL::Window
 {
@@ -107,7 +110,7 @@ namespace OGL::Window
 
     void Window::DispatchKeyEvent(int key, int scancode, int action, int mods)
     {
-
+        InputManager::OnKeyCallback(key, scancode, action, mods);
     }
 
     Window* Window::GetPointer(GLFWwindow *window)

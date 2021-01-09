@@ -2,29 +2,29 @@
 
 namespace OGL::Input
 {
-    InputBinding::InputBinding(std::string label, int primaryKey, int secondaryKey) :
-            m_label(std::move(label)),
-            m_primaryKey(primaryKey),
-            m_secondaryKey(secondaryKey)
+    InputBinding::InputBinding(std::string name, int primaryKey, int secondaryKey) :
+            m_name(std::move(name)),
+            m_primary(primaryKey),
+            m_secondary(secondaryKey)
     {}
 
     void InputBinding::BindPrimary(int key)
     {
-        m_primaryKey = key;
+        m_primary = key;
     }
 
     void InputBinding::BindSecondary(int key)
     {
-        m_secondaryKey = key;
+        m_secondary = key;
     }
 
-    std::string InputBinding::GetLabel()
+    std::string InputBinding::GetName()
     {
-        return m_label;
+        return m_name;
     }
 
     std::vector<int> InputBinding::GetKeys()
     {
-        return {m_primaryKey, m_secondaryKey};
+        return {m_primary, m_secondary};
     }
 }

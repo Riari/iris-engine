@@ -7,35 +7,31 @@ using namespace OGL::Input;
 
 namespace OGL::Controller
 {
-    CameraController::CameraController(std::shared_ptr<Camera> camera) : m_camera(std::move(camera))
-    {}
+    CameraController::CameraController(std::shared_ptr<Camera> camera) : m_camera(std::move(camera)) {}
 
     std::shared_ptr<CameraController> CameraController::Create(const std::shared_ptr<Camera>& camera)
     {
         auto controller = std::make_shared<CameraController>(camera);
-//        EventBus::Subscribe(EventType::KeyPress, controller);
-//        EventBus::Subscribe(EventType::MouseMove, controller);
         return controller;
     }
 
-//    bool CameraController::HandleEvent(std::shared_ptr<Event::Event> event)
-//    {
-//        switch (event->GetType())
-//        {
-//            case KeyPress:
-//                OnKeyPress(std::static_pointer_cast<KeyPressEvent>(event));
-//                return true;
-//            case MouseMove:
-//                OnMouseMove(std::static_pointer_cast<MouseMoveEvent>(event));
-//                return true;
-//            default: return false;
-//        }
-//    }
-//
-//    void CameraController::OnKeyPress(const std::shared_ptr<KeyPressEvent>& event)
-//    {
-//
-//    }
+    void CameraController::Handle(KeyPress event)
+    {
+        m_moveX, m_moveY, m_moveZ = 0;
+
+        if (event.GetAction() != Action::Hold) return;
+
+        auto binding = event.GetBinding();
+        if (binding == nullptr) return;
+
+        if (binding->GetName() == "MoveForward") m_moveZ = Positive;
+        if (binding->GetName() == "MoveBackward") m_moveZ = Negative;
+        if (binding->GetName() == "StrafeRight") m_moveX = Positive;
+        if (binding->GetName() == "StrafeLeft") m_moveX = Negative;
+        if (binding->GetName() == "Ascend") m_moveY = Positive;
+        if (binding->GetName() == "Descend") m_moveY = Negative;
+    }
+
 //
 //    void CameraController::OnMouseMove(const std::shared_ptr<MouseMoveEvent>& event)
 //    {
@@ -80,13 +76,24 @@ namespace OGL::Controller
         m_rotateX = 0.0f;
         m_rotateY = 0.0f;
 
-//        float speedModifier = m_input->IsShiftHeld() ? 4.0f : 0.0f;
-//
-//        if (m_input->IsHeld(m_input->MoveForward)) m_camera->Move(CameraMovement::FORWARD, deltaTime, speedModifier);
-//        if (m_input->IsHeld(m_input->MoveBackward)) m_camera->Move(CameraMovement::BACKWARD, deltaTime, speedModifier);
-//        if (m_input->IsHeld(m_input->StrafeLeft)) m_camera->Move(CameraMovement::LEFT, deltaTime, speedModifier);
-//        if (m_input->IsHeld(m_input->StrafeRight)) m_camera->Move(CameraMovement::RIGHT, deltaTime, speedModifier);
-//        if (m_input->IsHeld(m_input->GoUp)) m_camera->Move(CameraMovement::UP, deltaTime, speedModifier);
-//        if (m_input->IsHeld(m_input->GoDown)) m_camera->Move(CameraMovement::DOWN, deltaTime, speedModifier);
+        float speedModifier = InputManager::IsShiftHeld() ? 4.0f : 1.0f;
+
+        switch (m_moveX)
+        {
+            case Positive: m_camera->Move(CameraMovement::RIGHT, deltaTime, speedModifier); break;
+            case Negative: m_camera->Move(CameraMovement::LEFT, deltaTime, speedModifier); break;
+        }
+
+        switch (m_moveY)
+        {
+            case Positive: m_camera->Move(CameraMovement::UP, deltaTime, speedModifier); break;
+            case Negative: m_camera->Move(CameraMovement::DOWN, deltaTime, speedModifier); break;
+        }
+
+        switch (m_moveZ)
+        {
+            case Positive: m_camera->Move(CameraMovement::FORWARD, deltaTime, speedModifier); break;
+            case Negative: m_camera->Move(CameraMovement::BACKWARD, deltaTime, speedModifier); break;
+        }
     }
 }

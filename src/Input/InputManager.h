@@ -1,49 +1,54 @@
 #pragma once
 
+#include <functional>
 #include <map>
+#include <vector>
 
 #include "InputBinding.h"
+#include "KeyPress.h"
+#include "MouseButtonPress.h"
+#include "MouseMove.h"
+#include "MouseScroll.h"
 
 namespace OGL::Input
 {
     class InputManager
     {
     public:
-        InputManager();
+        static void RegisterBinding(std::string name, int primaryKey, int secondaryKey = GLFW_KEY_UNKNOWN, bool force = false);
 
-        InputBinding *MoveForward;
-        InputBinding *MoveBackward;
-        InputBinding *StrafeLeft;
-        InputBinding *StrafeRight;
-        InputBinding *GoUp;
-        InputBinding *GoDown;
+        template<typename T>
+        static void RegisterHandler(std::function<void(const T&)> handler)
+        {
+            GetHandlers<T>().push_back(handler);
+        }
 
-//        void OnKeyCallback(int key, int scancode, int action, int mods) override;
+        static void OnKeyCallback(int key, int scancode, int action, int mods);
 
-        void OnKeybindChange(InputBinding *targetBinding, int key, bool isPrimary = true);
-
-        bool IsPressed(InputBinding *binding);
-
-        bool IsHeld(InputBinding *binding);
-
-        bool IsReleased(InputBinding *binding);
-
-        [[nodiscard]] bool IsCtrlHeld() const;
-
-        [[nodiscard]] bool IsAltHeld() const;
-
-        [[nodiscard]] bool IsShiftHeld() const;
+        [[nodiscard]] static bool IsCtrlHeld();
+        [[nodiscard]] static bool IsAltHeld();
+        [[nodiscard]] static bool IsShiftHeld();
 
     private:
-        std::vector<InputBinding *> m_bindings;
-        std::vector<int> m_keysPressed;
-        std::vector<int> m_keysReleased;
-        std::vector<int> m_keysHeld;
+        InputManager() = default;
 
-        bool m_isCtrlHeld = false;
-        bool m_isShiftHeld = false;
-        bool m_isAltHeld = false;
+        static inline std::map<int, std::shared_ptr<InputBinding>> m_bindings;
 
-        void Setup();
+        template<typename T>
+        static std::vector<std::function<void(const T&)>>& GetHandlers()
+        {
+            static std::vector<std::function<void(const T&)>> handlers;
+            return handlers;
+        }
+
+        static inline std::vector<int> m_keysPressed;
+        static inline std::vector<int> m_keysReleased;
+        static inline std::vector<int> m_keysHeld;
+
+        static inline bool m_isCtrlHeld = false;
+        static inline bool m_isShiftHeld = false;
+        static inline bool m_isAltHeld = false;
+
+        static void ValidateKeyAvailable(int key);
     };
 }

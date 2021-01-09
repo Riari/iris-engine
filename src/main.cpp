@@ -20,11 +20,13 @@
 #include "GL/VAO.h"
 #include "GL/VBO.h"
 #include "GL/Texture.h"
+#include "Input/InputManager.h"
 #include "Window/WindowManager.h"
 #include "Utility/Logger.h"
 
 using namespace OGL;
 using namespace OGL::Event;
+using namespace OGL::Input;
 using namespace OGL::Window;
 
 int main(int argc, char** argv)
@@ -42,11 +44,16 @@ int main(int argc, char** argv)
     glfwInit();
     glfwSetErrorCallback([](int error_code, const char* description) { Utility::Logger::GL->error(description); });
 
+    InputManager::RegisterBinding("MoveForward", GLFW_KEY_W);
+    InputManager::RegisterBinding("MoveBackward", GLFW_KEY_S);
+    InputManager::RegisterBinding("StrafeLeft", GLFW_KEY_A);
+    InputManager::RegisterBinding("StrafeRight", GLFW_KEY_D);
+    InputManager::RegisterBinding("Ascend", GLFW_KEY_SPACE);
+    InputManager::RegisterBinding("Descend", GLFW_KEY_C);
+
     WindowManager& windowManager = WindowManager::GetInstance();
     OGL::Window::Window& mainWindow = windowManager.Create("Main", 1440, 900);
     mainWindow.MakeCurrent();
-
-    auto inputManager = std::make_shared<Input::InputManager>();
 
     auto camera = std::make_shared<GL::Camera>(glm::vec3(0.0f, 0.0f, 3.0f));
     camera->SetRotateSpeed(10);

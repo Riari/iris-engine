@@ -3,23 +3,25 @@
 #include <string>
 #include <vector>
 
+#include <GLFW/glfw3.h>
+
 namespace OGL::Input
 {
     class InputBinding
     {
     public:
-        InputBinding(std::string label, int primaryKey, int secondaryKey = -1);
+        InputBinding(std::string name, int primaryKey, int secondaryKey = GLFW_KEY_UNKNOWN);
 
         void BindPrimary(int key);
 
         void BindSecondary(int key);
 
-        std::string GetLabel();
+        std::string GetName();
 
         std::vector<int> GetKeys();
 
     private:
-        std::string m_label;
-        int m_primaryKey, m_secondaryKey;
+        std::string m_name;
+        int m_primary, m_secondary;
     };
 }
