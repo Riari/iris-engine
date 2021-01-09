@@ -7,19 +7,14 @@
 
 namespace OGL::Window
 {
-    struct Size {
-        int x;
-        int y;
-    };
-
     class Window
     {
     public:
         Window(const char *id, int width, int height);
         ~Window();
 
-        Size GetSize();
-        Size GetFramebufferSize();
+        int* GetSize();
+        int* GetFramebufferSize();
 
         void MakeCurrent();
         void SwapBuffers();

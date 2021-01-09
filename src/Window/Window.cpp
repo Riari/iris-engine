@@ -46,18 +46,18 @@ namespace OGL::Window
         glfwDestroyWindow(m_window);
     }
 
-    Size Window::GetSize()
+    int* Window::GetSize()
     {
         int width, height;
         glfwGetWindowSize(m_window, &width, &height);
-        return Size { width, height };
+        return new int[2] { width, height };
     }
 
-    Size Window::GetFramebufferSize()
+    int* Window::GetFramebufferSize()
     {
         int width, height;
         glfwGetFramebufferSize(m_window, &width, &height);
-        return Size { width, height };
+        return new int[2] { width, height };
     }
 
     void Window::MakeCurrent()

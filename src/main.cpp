@@ -174,12 +174,14 @@ int main(int argc, char** argv)
 
         if ((now - lastFrameTime) >= frameFrequency)
         {
+            int *pBufferSize = mainWindow.GetFramebufferSize();
+            glViewport(0, 0, pBufferSize[0], pBufferSize[1]);
+
             glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
             // Projection matrix
-            Size bufferSize = mainWindow.GetFramebufferSize();
-            glm::mat4 projection = glm::perspective(glm::radians(camera->GetFOV()), (float) bufferSize.x / (float) bufferSize.y, 0.1f, 100.0f);
+            glm::mat4 projection = glm::perspective(glm::radians(camera->GetFOV()), (float) pBufferSize[0] / (float) pBufferSize[1], 0.1f, 100.0f);
 
             // View matrix
             glm::mat4 view = camera->GetViewMatrix();
