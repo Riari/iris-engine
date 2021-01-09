@@ -11,10 +11,10 @@ namespace OGL::Utility
     {
     public:
         static const std::string PATTERN;
-        static const std::shared_ptr<spdlog::logger> WINDOW;
         static const std::shared_ptr<spdlog::logger> GL;
         static const std::shared_ptr<spdlog::logger> MAIN;
 
         static void Init();
+        static std::shared_ptr<spdlog::logger> Create(const char* name);
     };
 }

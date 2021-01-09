@@ -1,48 +1,45 @@
 #pragma once
 
-#include <string>
+#include <GLFW/glfw3.h>
+#include <spdlog/spdlog.h>
 
-#include "Handler/CursorPosHandler.h"
-#include "Handler/FrameBufferSizeHandler.h"
-#include "Handler/KeyHandler.h"
-#include "Handler/ScrollHandler.h"
+#include <memory>
 
 namespace OGL::Window
 {
-    const int DEFAULT_SCREEN_WIDTH = 800;
-    const int DEFAULT_SCREEN_HEIGHT = 600;
+    struct Size {
+        int x;
+        int y;
+    };
 
     class Window
     {
     public:
-        explicit Window(const char *title, std::shared_ptr<spdlog::logger> logger, int screenWidth = DEFAULT_SCREEN_WIDTH, int screenHeight = DEFAULT_SCREEN_HEIGHT);
+        Window(const char *id, int width, int height);
         ~Window();
 
-        static void ErrorCallback(int error, const char *message);
+        Size GetSize();
+        Size GetFramebufferSize();
 
-        GLFWwindow* GetGLFWWindow();
+        void MakeCurrent();
+        void SwapBuffers();
 
-        [[nodiscard]] int GetScreenWidth() const;
-        [[nodiscard]] int GetScreenHeight() const;
+        void SetInputMode(int mode, int value);
+        void SetTitle(const char* title);
+        void SetShouldClose(bool);
 
-        void SetTitle(const char *title);
+        bool ShouldClose();
+
+        void DispatchMouseButtonEvent(int button, int action, int mods);
+        void DispatchCursorPosEvent(int x, int y);
+        void DispatchScrollEvent(int x, int y);
+        void DispatchKeyEvent(int key, int scancode, int action, int mods);
 
     private:
+        const char *m_id;
         GLFWwindow *m_window;
-
-        int m_screenWidth, m_screenHeight;
-
         std::shared_ptr<spdlog::logger> m_logger;
 
-        static Window* GetWindowPointer(GLFWwindow *window);
-        static void FrameBufferSizeCallback(GLFWwindow *window, int width, int height);
-        static void CursorPosCallback(GLFWwindow *window, double x, double y);
-        static void KeyCallback(GLFWwindow *window, int key, int scancode, int action, int mods);
-        static void ScrollCallback(GLFWwindow *window, double x, double y);
-
-        void OnFrameBufferSizeCallback(int width, int height);
-        void OnCursorPosCallback(double x, double y);
-        void OnKeyCallback(int key, int scancode, int action, int mods);
-        void OnScrollCallback(double x, double y);
+        static Window* GetPointer(GLFWwindow *window);
     };
 }

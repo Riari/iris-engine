@@ -17,7 +17,7 @@ void APIENTRY glDebugOutput(GLenum source, GLenum type, unsigned int id, GLenum 
     switch (source)
     {
         case GL_DEBUG_SOURCE_API:             strSource = "API"; break;
-        case GL_DEBUG_SOURCE_WINDOW_SYSTEM:   strSource = "Window System"; break;
+        case GL_DEBUG_SOURCE_WINDOW_SYSTEM:   strSource = "WindowManager System"; break;
         case GL_DEBUG_SOURCE_SHADER_COMPILER: strSource = "Shader Compiler"; break;
         case GL_DEBUG_SOURCE_THIRD_PARTY:     strSource = "Third Party"; break;
         case GL_DEBUG_SOURCE_APPLICATION:     strSource = "Application"; break;

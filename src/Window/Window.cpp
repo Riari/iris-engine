@@ -1,52 +1,44 @@
-#include <glad/glad.h>
+#include <sstream>
+
 #include <GLFW/glfw3.h>
 #include <spdlog/spdlog.h>
 
-#include "../Event/EventBus.h"
-#include "../Event/WindowResizedEvent.h"
 #include "../Exception/Exception.h"
 #include "../Utility/Logger.h"
 #include "Window.h"
 
-using namespace OGL;
-using namespace OGL::Event;
-
 namespace OGL::Window
 {
-    Window::Window(const char *title, std::shared_ptr<spdlog::logger> logger, int screenWidth, int screenHeight) :
-            m_logger(std::move(logger)),
-            m_screenWidth(screenWidth),
-            m_screenHeight(screenHeight)
+    Window::Window(const char *id, int width, int height) : m_id(id)
     {
-        glfwInit();
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 #if !defined(NDEBUG)
         glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
-        glfwSetErrorCallback(ErrorCallback);
 #endif
 
-        GLFWwindow *window = glfwCreateWindow(screenWidth, screenHeight, title, NULL, NULL);
+        GLFWwindow *window = glfwCreateWindow(width, height, id, NULL, NULL);
         if (window == NULL)
         {
             glfwTerminate();
             throw Exception::Exception("Failed to create GLFW window");
         }
-        glfwMakeContextCurrent(window);
-        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
         m_window = window;
+        std::stringstream ss;
+        ss << "Window::" << id;
+        m_logger = Utility::Logger::Create(ss.str().c_str());
 
         // Callbacks
         glfwSetWindowUserPointer(window, this);
-        glfwSetFramebufferSizeCallback(window, FrameBufferSizeCallback);
-        glfwSetCursorPosCallback(window, CursorPosCallback);
-        glfwSetScrollCallback(window, ScrollCallback);
-        glfwSetKeyCallback(window, KeyCallback);
+        glfwSetMouseButtonCallback(window, [](GLFWwindow* window, int button, int action, int mods) { GetPointer(window)->DispatchMouseButtonEvent(button, action, mods); });
+        glfwSetCursorPosCallback(window, [](GLFWwindow* window, double x, double y) { GetPointer(window)->DispatchCursorPosEvent(x, y); });
+        glfwSetScrollCallback(window, [](GLFWwindow* window, double x, double y) { GetPointer(window)->DispatchScrollEvent(x, y); });
+        glfwSetKeyCallback(window, [](GLFWwindow* window, int key, int scancode, int action, int mods) { GetPointer(window)->DispatchKeyEvent(key, scancode, action, mods); });
 
-        m_logger->info(fmt::format("{0}x{1} window created", m_screenWidth, m_screenHeight));
+        m_logger->info(fmt::format("{0}x{1} window created", width, height));
     }
 
     Window::~Window()
@@ -54,24 +46,33 @@ namespace OGL::Window
         glfwDestroyWindow(m_window);
     }
 
-    void Window::ErrorCallback(int error, const char *message)
+    Size Window::GetSize()
     {
-        Utility::Logger::GL->error(message);
+        int width, height;
+        glfwGetWindowSize(m_window, &width, &height);
+        return Size { width, height };
     }
 
-    GLFWwindow *Window::GetGLFWWindow()
+    Size Window::GetFramebufferSize()
     {
-        return m_window;
+        int width, height;
+        glfwGetFramebufferSize(m_window, &width, &height);
+        return Size { width, height };
     }
 
-    int Window::GetScreenWidth() const
+    void Window::MakeCurrent()
     {
-        return m_screenWidth;
+        glfwMakeContextCurrent(m_window);
     }
 
-    int Window::GetScreenHeight() const
+    void Window::SwapBuffers()
     {
-        return m_screenHeight;
+        glfwSwapBuffers(m_window);
+    }
+
+    void Window::SetInputMode(int mode, int value)
+    {
+        glfwSetInputMode(m_window, mode, value);
     }
 
     void Window::SetTitle(const char *title)
@@ -79,58 +80,42 @@ namespace OGL::Window
         glfwSetWindowTitle(m_window, title);
     }
 
-    void Window::FrameBufferSizeCallback(GLFWwindow *window, int width, int height)
+    void Window::SetShouldClose(bool state)
     {
-        GetWindowPointer(window)->OnFrameBufferSizeCallback(width, height);
+        glfwSetWindowShouldClose(m_window, state);
     }
 
-    void Window::CursorPosCallback(GLFWwindow *window, double x, double y)
+    bool Window::ShouldClose()
     {
-        GetWindowPointer(window)->OnCursorPosCallback(x, y);
+        return glfwWindowShouldClose(m_window);
     }
 
-    void Window::KeyCallback(GLFWwindow *window, int key, int scancode, int action, int mods)
+    void Window::DispatchMouseButtonEvent(int button, int action, int mods)
     {
-        GetWindowPointer(window)->OnKeyCallback(key, scancode, action, mods);
+
     }
 
-    void Window::ScrollCallback(GLFWwindow *window, double x, double y)
+    void Window::DispatchCursorPosEvent(int x, int y)
     {
-        GetWindowPointer(window)->OnScrollCallback(x, y);
+
     }
 
-    void Window::OnFrameBufferSizeCallback(int width, int height)
+    void Window::DispatchScrollEvent(int x, int y)
     {
-        glViewport(0, 0, width, height);
-        m_screenWidth = width;
-        m_screenHeight = height;
 
-        EventBus::Dispatch<WindowResizedEvent>(WindowResizedEvent());
     }
 
-    void Window::OnCursorPosCallback(double x, double y)
+    void Window::DispatchKeyEvent(int key, int scancode, int action, int mods)
     {
-        // EventBus::Push(std::make_shared<MouseMoveEvent>(x, y));
+
     }
 
-    void Window::OnKeyCallback(int key, int scancode, int action, int mods)
+    Window* Window::GetPointer(GLFWwindow *window)
     {
-        if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) glfwSetWindowShouldClose(m_window, true);
+        auto *ptr = reinterpret_cast<Window *>(glfwGetWindowUserPointer(window));
 
-        // EventBus::Push(std::make_shared<KeyPressEvent>());
-    }
+        if (!ptr) throw Exception::Exception("Failed to get pointer for window");
 
-    void Window::OnScrollCallback(double x, double y)
-    {
-        // EventBus::Push(std::make_shared<MouseScrollEvent>());
-    }
-
-    Window *Window::GetWindowPointer(GLFWwindow *window)
-    {
-        auto *handler = reinterpret_cast<Window *>(glfwGetWindowUserPointer(window));
-
-        if (!handler) throw Exception::Exception("Failed to get handler for window");
-
-        return handler;
+        return ptr;
     }
 }

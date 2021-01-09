@@ -10,7 +10,6 @@
 #include <cxxopts.hpp>
 
 #include "Controller/CameraController.h"
-#include "Controller/TestController.h"
 #include "GL/Shader/ShaderProgram.h"
 
 #if !defined(NDEBUG)
@@ -21,11 +20,12 @@
 #include "GL/VAO.h"
 #include "GL/VBO.h"
 #include "GL/Texture.h"
-#include "Window/Window.h"
+#include "Window/WindowManager.h"
 #include "Utility/Logger.h"
 
 using namespace OGL;
 using namespace OGL::Event;
+using namespace OGL::Window;
 
 int main(int argc, char** argv)
 {
@@ -39,7 +39,12 @@ int main(int argc, char** argv)
 
     Utility::Logger::Init();
 
-    auto *window = new Window::Window("LearnOpenGL", Utility::Logger::WINDOW, 1440, 900);
+    glfwInit();
+    glfwSetErrorCallback([](int error_code, const char* description) { Utility::Logger::GL->error(description); });
+
+    WindowManager& windowManager = WindowManager::GetInstance();
+    OGL::Window::Window& mainWindow = windowManager.Create("Main", 1440, 900);
+    mainWindow.MakeCurrent();
 
     auto inputManager = std::make_shared<Input::InputManager>();
 
@@ -147,13 +152,13 @@ int main(int argc, char** argv)
     double fpsTime = 0;
     int frameCount = 0;
 
-    while (!glfwWindowShouldClose(window->GetGLFWWindow()))
+    while (!mainWindow.ShouldClose())
     {
         double now = glfwGetTime();
         fpsTime += now - lastLoopTime;
 
         if (fpsTime >= 1.0) {
-            window->SetTitle(("GLSandbox | " + std::to_string(frameCount) + " FPS").c_str());
+            mainWindow.SetTitle(("GLSandbox | " + std::to_string(frameCount) + " FPS").c_str());
             fpsTime -= 1.0;
             frameCount = 0;
         }
@@ -173,7 +178,8 @@ int main(int argc, char** argv)
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
             // Projection matrix
-            glm::mat4 projection = glm::perspective(glm::radians(camera->GetFOV()), (float) window->GetScreenWidth() / (float) window->GetScreenHeight(), 0.1f, 100.0f);
+            Size bufferSize = mainWindow.GetFramebufferSize();
+            glm::mat4 projection = glm::perspective(glm::radians(camera->GetFOV()), (float) bufferSize.x / (float) bufferSize.y, 0.1f, 100.0f);
 
             // View matrix
             glm::mat4 view = camera->GetViewMatrix();
@@ -206,7 +212,7 @@ int main(int argc, char** argv)
 
             glDrawArrays(GL_TRIANGLES, 0, 36);
 
-            glfwSwapBuffers(window->GetGLFWWindow());
+            mainWindow.SwapBuffers();
 
             frameCount++;
             lastFrameTime = now;
@@ -217,8 +223,6 @@ int main(int argc, char** argv)
 
     delete coloredCubeVAO;
     delete cubeVBO;
-    delete window;
 
-    glfwTerminate();
     return 0;
 }

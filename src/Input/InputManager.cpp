@@ -33,27 +33,27 @@ namespace OGL::Input
         };
     }
 
-    void InputManager::OnKeyCallback(int key, int scancode, int action, int mods)
-    {
-        m_keysPressed.clear();
-        m_keysReleased.clear();
-
-        m_isCtrlHeld = (mods & GLFW_MOD_CONTROL) != 0;
-        m_isAltHeld = (mods & GLFW_MOD_ALT) != 0;
-        m_isShiftHeld = (mods & GLFW_MOD_SHIFT) != 0;
-
-        if (action == GLFW_PRESS)
-        {
-            m_keysPressed.push_back(key);
-            m_keysHeld.push_back(key);
-        }
-        else if (action == GLFW_RELEASE)
-        {
-            m_keysPressed.erase(std::remove(m_keysPressed.begin(), m_keysPressed.end(), key), m_keysPressed.end());
-            m_keysHeld.erase(std::remove(m_keysHeld.begin(), m_keysHeld.end(), key), m_keysHeld.end());
-            m_keysReleased.push_back(key);
-        }
-    }
+//    void InputManager::OnKeyCallback(int key, int scancode, int action, int mods)
+//    {
+//        m_keysPressed.clear();
+//        m_keysReleased.clear();
+//
+//        m_isCtrlHeld = (mods & GLFW_MOD_CONTROL) != 0;
+//        m_isAltHeld = (mods & GLFW_MOD_ALT) != 0;
+//        m_isShiftHeld = (mods & GLFW_MOD_SHIFT) != 0;
+//
+//        if (action == GLFW_PRESS)
+//        {
+//            m_keysPressed.push_back(key);
+//            m_keysHeld.push_back(key);
+//        }
+//        else if (action == GLFW_RELEASE)
+//        {
+//            m_keysPressed.erase(std::remove(m_keysPressed.begin(), m_keysPressed.end(), key), m_keysPressed.end());
+//            m_keysHeld.erase(std::remove(m_keysHeld.begin(), m_keysHeld.end(), key), m_keysHeld.end());
+//            m_keysReleased.push_back(key);
+//        }
+//    }
 
     void InputManager::OnKeybindChange(InputBinding *targetBinding, int key, bool isPrimary)
     {

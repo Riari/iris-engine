@@ -5,9 +5,6 @@
 #include "../Event/Event.h"
 #include "../GL/Camera.h"
 #include "../Input/InputManager.h"
-#include "../Window/Handler/CursorPosHandler.h"
-#include "../Window/Handler/KeyHandler.h"
-#include "../Window/Handler/ScrollHandler.h"
 
 using namespace OGL::GL;
 using namespace OGL::Event;

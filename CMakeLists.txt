@@ -44,7 +44,6 @@ set(HEADERS
         "${SRC_DIR}/Event/Event.h"
         "${SRC_DIR}/Event/EventBus.h"
         "${SRC_DIR}/Event/EventHandler.h"
-        "${SRC_DIR}/Event/WindowResizedEvent.h"
         "${SRC_DIR}/Exception/Exception.h"
         "${SRC_DIR}/GL/Shader/FragmentShader.h"
         "${SRC_DIR}/GL/Shader/Shader.h"
@@ -62,10 +61,7 @@ set(HEADERS
         "${SRC_DIR}/Input/InputManager.h"
         "${SRC_DIR}/Utility/Logger.h"
         "${SRC_DIR}/Window/Window.h"
-        "${SRC_DIR}/Window/Handler/CursorPosHandler.h"
-        "${SRC_DIR}/Window/Handler/FrameBufferSizeHandler.h"
-        "${SRC_DIR}/Window/Handler/KeyHandler.h"
-        "${SRC_DIR}/Window/Handler/ScrollHandler.h")
+        "${SRC_DIR}/Window/WindowManager.h")
 
 set(SOURCES
         "${SRC_DIR}/Asset/AssetManager.cpp"
@@ -73,7 +69,6 @@ set(SOURCES
         "${SRC_DIR}/Asset/ImageRepository.cpp"
         "${SRC_DIR}/Controller/CameraController.cpp"
         "${SRC_DIR}/Event/Event.cpp"
-        "${SRC_DIR}/Event/WindowResizedEvent.cpp"
         "${SRC_DIR}/Exception/Exception.cpp"
         "${SRC_DIR}/GL/Shader/FragmentShader.cpp"
         "${SRC_DIR}/GL/Shader/Shader.cpp"
@@ -89,6 +84,7 @@ set(SOURCES
         "${SRC_DIR}/Input/InputManager.cpp"
         "${SRC_DIR}/Utility/Logger.cpp"
         "${SRC_DIR}/Window/Window.cpp"
+        "${SRC_DIR}/Window/WindowManager.cpp"
         "${SRC_DIR}/main.cpp")
 
 add_executable(${PROJECT_NAME} ${HEADERS} ${SOURCES})

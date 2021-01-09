@@ -3,11 +3,10 @@
 #include <map>
 
 #include "InputBinding.h"
-#include "../Window/Handler/KeyHandler.h"
 
 namespace OGL::Input
 {
-    class InputManager : public OGL::Window::KeyHandler
+    class InputManager
     {
     public:
         InputManager();
@@ -19,7 +18,7 @@ namespace OGL::Input
         InputBinding *GoUp;
         InputBinding *GoDown;
 
-        void OnKeyCallback(int key, int scancode, int action, int mods) override;
+//        void OnKeyCallback(int key, int scancode, int action, int mods) override;
 
         void OnKeybindChange(InputBinding *targetBinding, int key, bool isPrimary = true);
 
