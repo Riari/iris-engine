@@ -16,9 +16,9 @@ set(KHR_DIR "${EXT_DIR}/KHR")
 set(SPDLOG_DIR "${EXT_DIR}/spdlog")
 set(STB_DIR "${EXT_DIR}/stb")
 
-set(PROJ_ASSETS_DIR "${CMAKE_SOURCE_DIR}/assets")
-set(PROJ_INC_DIR "${CMAKE_SOURCE_DIR}/include")
-set(PROJ_SRC_DIR "${CMAKE_SOURCE_DIR}/src")
+set(ASSETS_DIR "${CMAKE_SOURCE_DIR}/assets")
+set(INC_DIR "${CMAKE_SOURCE_DIR}/include")
+set(SRC_DIR "${CMAKE_SOURCE_DIR}/src")
 
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
@@ -29,23 +29,25 @@ find_package(glm CONFIG PATHS "${GLM_DIR}/cmake/glm/" REQUIRED)
 add_library(glad "${GLAD_DIR}/include/glad/glad.h" "${GLAD_DIR}/src/glad.c")
 target_include_directories(glad PUBLIC "${KHR_DIR}/include")
 
-include_directories("${CXXOPTS_DIR}")
-include_directories("${GLAD_DIR}/include")
-include_directories("${STB_DIR}")
+include_directories(
+        "${CXXOPTS_DIR}"
+        "${GLAD_DIR}/include"
+        "${GLM_INCLUDE_DIRS}"
+        "${INC_DIR}"
+        "${STB_DIR}"
+)
 
 add_subdirectory(${FMT_DIR})
 add_subdirectory(${GLFW_DIR})
-add_subdirectory(${GLM_DIR})
 add_subdirectory(${SPDLOG_DIR})
 
-file(GLOB_RECURSE SOURCES "${PROJ_SRC_DIR}" "*.cpp")
+file(GLOB_RECURSE SOURCES "${SRC_DIR}/*.cpp")
 
 add_executable(${PROJECT_NAME} ${SOURCES})
 
-target_include_directories(${PROJECT_NAME} PRIVATE "${PROJ_INC_DIR}")
-target_link_libraries(${PROJECT_NAME} PUBLIC fmt glad glfw glm::glm spdlog)
-
-add_custom_target(copy-assets ALL COMMAND ${CMAKE_COMMAND} -E copy_directory "${PROJ_ASSETS_DIR}" "${CMAKE_BINARY_DIR}/assets")
-add_custom_target(copy-shader-sources ALL COMMAND ${CMAKE_COMMAND} -E copy_directory "${PROJ_SRC_DIR}/GL/Shader/Source" "${CMAKE_BINARY_DIR}/resources/shaders")
+add_custom_target(copy-assets ALL COMMAND ${CMAKE_COMMAND} -E copy_directory "${ASSETS_DIR}" "${CMAKE_BINARY_DIR}/assets")
+add_custom_target(copy-shader-sources ALL COMMAND ${CMAKE_COMMAND} -E copy_directory "${SRC_DIR}/GL/Shader/Source" "${CMAKE_BINARY_DIR}/resources/shaders")
 
 add_dependencies(${PROJECT_NAME} copy-assets copy-shader-sources)
+
+target_link_libraries(${PROJECT_NAME} PUBLIC fmt glad glfw spdlog)

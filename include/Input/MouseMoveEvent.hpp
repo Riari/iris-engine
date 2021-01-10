@@ -2,7 +2,7 @@
 
 #include <utility>
 
-#include <Input/InputBinding.hpp>
+#include "InputBinding.hpp"
 
 namespace OGL::Input
 {

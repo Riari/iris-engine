@@ -2,7 +2,7 @@
 
 #include <glad/glad.h>
 
-#include <GL/Shader/VertexShader.hpp>
+#include "GL/Shader/VertexShader.hpp"
 
 namespace OGL::GL
 {

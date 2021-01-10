@@ -2,7 +2,7 @@
 
 #include <glad/glad.h>
 
-#include <GL/Shader/FragmentShader.hpp>
+#include "GL/Shader/FragmentShader.hpp"
 
 namespace OGL::GL
 {

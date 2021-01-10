@@ -1,6 +1,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 
-#include <GL/Camera.hpp>
+#include "GL/Camera.hpp"
 
 namespace OGL::GL
 {

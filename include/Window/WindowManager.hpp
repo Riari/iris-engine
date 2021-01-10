@@ -3,7 +3,7 @@
 #include <map>
 #include <string>
 
-#include <Window/Window.hpp>
+#include "Window.hpp"
 
 namespace OGL::Window
 {

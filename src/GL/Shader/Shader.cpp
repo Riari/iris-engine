@@ -4,8 +4,8 @@
 
 #include <spdlog/spdlog.h>
 
-#include <GL/Shader/Shader.hpp>
-#include <Exception/Exception.hpp>
+#include "GL/Shader/Shader.hpp"
+#include "Exception/Exception.hpp"
 
 namespace OGL::GL
 {

@@ -1,4 +1,4 @@
-#include <GL/BufferObject.hpp>
+#include "GL/BufferObject.hpp"
 
 namespace OGL::GL
 {

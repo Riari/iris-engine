@@ -2,7 +2,7 @@
 
 #include <stb_image.h>
 
-#include <Asset/Image.hpp>
+#include "Asset/Image.hpp"
 
 namespace OGL::Asset
 {

@@ -1,4 +1,4 @@
-#include <GL/EBO.hpp>
+#include "GL/EBO.hpp"
 
 namespace OGL::GL
 {

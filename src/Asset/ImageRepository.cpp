@@ -3,8 +3,8 @@
 #include <fmt/core.h>
 #include <stb_image.h>
 
-#include <Exception/Exception.hpp>
-#include <Asset/ImageRepository.hpp>
+#include "Exception/Exception.hpp"
+#include "Asset/ImageRepository.hpp"
 
 namespace OGL::Asset
 {

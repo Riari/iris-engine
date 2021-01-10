@@ -1,4 +1,4 @@
-#include <Input/InputBinding.hpp>
+#include "Input/InputBinding.hpp"
 
 namespace OGL::Input
 {

@@ -1,7 +1,7 @@
 #pragma once
 
-#include <Asset/AssetRepository.hpp>
-#include <Asset/Image.hpp>
+#include "AssetRepository.hpp"
+#include "Image.hpp"
 
 namespace OGL::Asset
 {

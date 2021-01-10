@@ -2,11 +2,11 @@
 
 #include <memory>
 
-#include <Event/Event.hpp>
-#include <GL/Camera.hpp>
-#include <Input/InputManager.hpp>
-#include <Input/InputHandler.hpp>
-#include <Input/KeyEvent.hpp>
+#include "Event/Event.hpp"
+#include "GL/Camera.hpp"
+#include "Input/InputManager.hpp"
+#include "Input/InputHandler.hpp"
+#include "Input/KeyEvent.hpp"
 
 using namespace OGL::GL;
 using namespace OGL::Event;

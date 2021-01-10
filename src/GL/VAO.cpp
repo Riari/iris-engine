@@ -1,6 +1,6 @@
 #include <glad/glad.h>
 
-#include <GL/VAO.hpp>
+#include "GL/VAO.hpp"
 
 namespace OGL::GL
 {

@@ -1,6 +1,6 @@
 #include <utility>
 
-#include <Exception/Exception.hpp>
+#include "Exception/Exception.hpp"
 
 namespace OGL::Exception
 {

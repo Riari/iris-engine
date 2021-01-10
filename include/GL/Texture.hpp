@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#include <Asset/Image.hpp>
+#include "Asset/Image.hpp"
 
 namespace OGL::GL
 {

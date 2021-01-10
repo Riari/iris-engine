@@ -4,11 +4,11 @@
 #include <map>
 #include <vector>
 
-#include <Input/InputBinding.hpp>
-#include <Input/KeyEvent.hpp>
-#include <Input/MouseButtonEvent.hpp>
-#include <Input/MouseMoveEvent.hpp>
-#include <Input/MouseScrollEvent.hpp>
+#include "InputBinding.hpp"
+#include "KeyEvent.hpp"
+#include "MouseButtonEvent.hpp"
+#include "MouseMoveEvent.hpp"
+#include "MouseScrollEvent.hpp"
 
 namespace OGL::Input
 {

@@ -4,10 +4,10 @@
 #include <glad/glad.h>
 #include <spdlog/spdlog.h>
 
-#include <GL/Shader/ShaderProgram.hpp>
-#include <GL/Shader/VertexShader.hpp>
-#include <GL/Shader/FragmentShader.hpp>
-#include <Exception/Exception.hpp>
+#include "GL/Shader/ShaderProgram.hpp"
+#include "GL/Shader/VertexShader.hpp"
+#include "GL/Shader/FragmentShader.hpp"
+#include "Exception/Exception.hpp"
 
 namespace OGL::GL
 {

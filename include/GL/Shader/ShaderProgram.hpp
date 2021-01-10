@@ -6,7 +6,7 @@
 #include <glm/vec3.hpp>
 #include <spdlog/spdlog.h>
 
-#include <GL/Shader/Shader.hpp>
+#include "Shader.hpp"
 
 namespace OGL::GL
 {
