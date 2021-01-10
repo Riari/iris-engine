@@ -1,5 +1,5 @@
-#include "CameraController.h"
-#include "../Event/EventBus.h"
+#include <Controller/CameraController.hpp>
+#include <Event/EventBus.hpp>
 
 using namespace OGL::Event;
 using namespace OGL::GL;

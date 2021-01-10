@@ -1,9 +1,12 @@
 #pragma once
 
 #include <memory>
-#include <glm/vec3.hpp>
+#include <string>
 
-#include "Shader.h"
+#include <glm/vec3.hpp>
+#include <spdlog/spdlog.h>
+
+#include <GL/Shader/Shader.hpp>
 
 namespace OGL::GL
 {

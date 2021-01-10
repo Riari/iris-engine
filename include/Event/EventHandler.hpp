@@ -1,6 +1,6 @@
 #pragma once
 
-#include "EventBus.h"
+#include <EventBus.h>
 
 namespace OGL::Event
 {

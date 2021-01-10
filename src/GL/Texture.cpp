@@ -3,8 +3,8 @@
 #include <fmt/core.h>
 #include <glad/glad.h>
 
-#include "Texture.h"
-#include "../Exception/Exception.h"
+#include <GL/Texture.hpp>
+#include <Exception/Exception.hpp>
 
 namespace OGL::GL
 {

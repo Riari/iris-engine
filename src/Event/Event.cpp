@@ -1,4 +1,4 @@
-#include "Event.h"
+#include <Event/Event.hpp>
 
 namespace OGL::Event
 {

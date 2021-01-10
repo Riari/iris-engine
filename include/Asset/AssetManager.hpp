@@ -2,7 +2,7 @@
 
 #include <map>
 #include <memory>
-#include "ImageRepository.h"
+#include "ImageRepository.hpp"
 
 namespace OGL::Asset
 {

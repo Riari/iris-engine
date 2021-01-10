@@ -9,20 +9,20 @@
 #include <spdlog/spdlog.h>
 #include <cxxopts.hpp>
 
-#include "Controller/CameraController.h"
-#include "GL/Shader/ShaderProgram.h"
+#include <Controller/CameraController.hpp>
+#include <GL/Shader/ShaderProgram.hpp>
 
 #if !defined(NDEBUG)
-#include "GL/Debug.h"
+#include <GL/Debug.hpp>
 #endif
 
-#include "GL/EBO.h"
-#include "GL/VAO.h"
-#include "GL/VBO.h"
-#include "GL/Texture.h"
-#include "Input/InputManager.h"
-#include "Window/WindowManager.h"
-#include "Utility/Logger.h"
+#include <GL/EBO.hpp>
+#include <GL/Texture.hpp>
+#include <GL/VAO.hpp>
+#include <GL/VBO.hpp>
+#include <Input/InputManager.hpp>
+#include <Window/WindowManager.hpp>
+#include <Utility/Logger.hpp>
 
 using namespace OGL;
 using namespace OGL::Event;

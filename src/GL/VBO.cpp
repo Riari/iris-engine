@@ -1,4 +1,4 @@
-#include "VBO.h"
+#include <GL/VBO.hpp>
 
 namespace OGL::GL
 {

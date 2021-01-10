@@ -4,7 +4,7 @@
 
 #include <spdlog/spdlog.h>
 
-#include "Shader.h"
+#include <Shader.hpp>
 
 namespace OGL::GL
 {

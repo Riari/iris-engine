@@ -1,7 +1,7 @@
 #include <spdlog/spdlog.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
 
-#include "Logger.h"
+#include <Utility/Logger.hpp>
 
 namespace OGL::Utility
 {

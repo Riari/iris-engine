@@ -4,10 +4,10 @@
 #include <fmt/core.h>
 #include <GLFW/glfw3.h>
 
-#include "Exception/KeyInUseException.h"
-#include "InputBinding.h"
-#include "InputManager.h"
-#include "Exception/PrimaryKeyMissingException.h"
+#include <Input/Exception/KeyInUseException.hpp>
+#include <Input/Exception/PrimaryKeyMissingException.hpp>
+#include <Input/InputBinding.hpp>
+#include <Input/InputManager.hpp>
 
 namespace OGL::Input
 {

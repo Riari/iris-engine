@@ -1,6 +1,8 @@
 #include <utility>
 
-#include "FragmentShader.h"
+#include <glad/glad.h>
+
+#include <GL/Shader/FragmentShader.hpp>
 
 namespace OGL::GL
 {

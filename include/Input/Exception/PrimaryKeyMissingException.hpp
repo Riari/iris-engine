@@ -2,7 +2,7 @@
 
 #include <utility>
 
-#include "../../Exception/Exception.h"
+#include <Exception/Exception.hpp>
 
 namespace OGL::Input::Exception
 {

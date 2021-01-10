@@ -1,6 +1,8 @@
 #include <string>
+
 #include <stb_image.h>
-#include "Image.h"
+
+#include <Asset/Image.hpp>
 
 namespace OGL::Asset
 {

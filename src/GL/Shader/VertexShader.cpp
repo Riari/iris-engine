@@ -1,5 +1,8 @@
 #include <utility>
-#include "VertexShader.h"
+
+#include <glad/glad.h>
+
+#include <GL/Shader/VertexShader.hpp>
 
 namespace OGL::GL
 {

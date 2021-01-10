@@ -3,10 +3,10 @@
 #include <GLFW/glfw3.h>
 #include <spdlog/spdlog.h>
 
-#include "../Exception/Exception.h"
-#include "../Utility/Logger.h"
-#include "../Input/InputManager.h"
-#include "Window.h"
+#include <Exception/Exception.hpp>
+#include <Input/InputManager.hpp>
+#include <Utility/Logger.hpp>
+#include <Window/Window.hpp>
 
 using namespace OGL::Input;
 

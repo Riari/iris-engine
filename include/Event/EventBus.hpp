@@ -4,7 +4,7 @@
 #include <memory>
 #include <vector>
 
-#include "Event.h"
+#include <Event.h>
 
 namespace OGL::Event
 {

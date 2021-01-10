@@ -1,6 +1,6 @@
 #pragma once
 
-#include "InputManager.h"
+#include <Input/InputManager.hpp>
 
 namespace OGL::Input
 {

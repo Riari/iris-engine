@@ -1,7 +1,8 @@
 #pragma once
 
 #include <memory>
-#include "../Asset/Image.h"
+
+#include <Asset/Image.hpp>
 
 namespace OGL::GL
 {

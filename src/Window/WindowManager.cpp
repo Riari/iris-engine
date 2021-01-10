@@ -1,8 +1,8 @@
 #include <GLFW/glfw3.h>
 #include <spdlog/spdlog.h>
 
-#include "Window.h"
-#include "WindowManager.h"
+#include <Window/Window.hpp>
+#include <Window/WindowManager.hpp>
 
 using namespace OGL;
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "BufferObject.h"
+#include <GL/BufferObject.hpp>
 
 namespace OGL::GL
 {

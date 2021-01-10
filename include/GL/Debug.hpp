@@ -4,7 +4,7 @@
 
 #include <glad/glad.h>
 
-#include "../Utility/Logger.h"
+#include <Utility/Logger.hpp>
 
 using namespace OGL;
 

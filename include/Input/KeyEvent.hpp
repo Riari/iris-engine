@@ -3,7 +3,7 @@
 #include <memory>
 #include <utility>
 
-#include "InputBinding.h"
+#include <Input/InputBinding.hpp>
 
 namespace OGL::Input
 {
