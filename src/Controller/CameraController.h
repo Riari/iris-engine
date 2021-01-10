@@ -6,7 +6,7 @@
 #include "../GL/Camera.h"
 #include "../Input/InputManager.h"
 #include "../Input/InputHandler.h"
-#include "../Input/KeyPress.h"
+#include "../Input/KeyEvent.h"
 
 using namespace OGL::GL;
 using namespace OGL::Event;
@@ -14,24 +14,26 @@ using namespace OGL::Input;
 
 namespace OGL::Controller
 {
-    class CameraController : public InputHandler<KeyPress>
+    class CameraController : public InputHandler<KeyEvent>
     {
     public:
         explicit CameraController(std::shared_ptr<Camera> camera);
 
         static std::shared_ptr<CameraController> Create(const std::shared_ptr<Camera>& camera);
 
-        void Handle(KeyPress) override;
+        void Handle(KeyEvent) override;
 
         void Update(double deltaTime);
 
     private:
-        static constexpr int Positive = 1;
-        static constexpr int Negative = -1;
-
         std::shared_ptr<Camera> m_camera;
 
-        int m_moveX, m_moveZ, m_moveY = 0;
+        bool m_moveForward = false;
+        bool m_moveBackward = false;
+        bool m_strafeLeft = false;
+        bool m_strafeRight = false;
+        bool m_ascend = false;
+        bool m_descend = false;
 
         bool m_receivedFirstMouseMoveEvent = true;
         float m_rotateX, m_rotateY, m_lastCursorX, m_lastCursorY;

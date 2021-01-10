@@ -5,7 +5,6 @@
 #include <GLFW/glfw3.h>
 
 #include "Exception/KeyInUseException.h"
-#include "Action.h"
 #include "InputBinding.h"
 #include "InputManager.h"
 #include "Exception/PrimaryKeyMissingException.h"
@@ -33,10 +32,6 @@ namespace OGL::Input
 
     void InputManager::OnKeyCallback(int key, int scancode, int action, int mods)
     {
-        auto handlers = GetHandlers<KeyPress>();
-        if (handlers.empty()) return;
-
-        m_keysPressed.clear();
         m_keysReleased.clear();
 
         m_isCtrlHeld = (mods & GLFW_MOD_CONTROL) != 0;
@@ -46,50 +41,15 @@ namespace OGL::Input
         if (action == GLFW_PRESS)
         {
             m_keysPressed.push_back(key);
-            m_keysHeld.push_back(key);
         }
         else if (action == GLFW_RELEASE)
         {
             m_keysPressed.erase(std::remove(m_keysPressed.begin(), m_keysPressed.end(), key), m_keysPressed.end());
-            m_keysHeld.erase(std::remove(m_keysHeld.begin(), m_keysHeld.end(), key), m_keysHeld.end());
             m_keysReleased.push_back(key);
         }
 
-        std::vector<int> seen;
-
-        for (auto k : m_keysHeld)
-        {
-            auto binding = m_bindings[k];
-
-            for (const auto& handler : handlers)
-            {
-                handler(KeyPress(k, Action::Hold, binding));
-            }
-
-            seen.push_back(k);
-        }
-
-        for (auto k : m_keysPressed)
-        {
-            if (std::find(seen.begin(), seen.end(), k) != seen.end()) continue;
-
-            auto binding = m_bindings[k];
-
-            for (const auto& handler : handlers)
-            {
-                handler(KeyPress(k, Action::Press, binding));
-            }
-        }
-
-        for (auto k : m_keysReleased)
-        {
-            auto binding = m_bindings[k];
-
-            for (const auto& handler : handlers)
-            {
-                handler(KeyPress(k, Action::Release, binding));
-            }
-        }
+        for (auto k : m_keysPressed) DispatchKeyEvent(k, GLFW_PRESS);
+        for (auto k : m_keysReleased) DispatchKeyEvent(k, GLFW_RELEASE);
     }
 
     bool InputManager::IsCtrlHeld()
@@ -112,6 +72,19 @@ namespace OGL::Input
         if (m_bindings.count(key) == 1)
         {
             throw Exception::KeyInUseException(fmt::format("Key {0} is already bound to {1}.", key, m_bindings[key]->GetName()));
+        }
+    }
+
+    void InputManager::DispatchKeyEvent(int key, int action)
+    {
+        auto handlers = GetHandlers<KeyEvent>();
+        if (handlers.empty()) return;
+
+        auto binding = m_bindings[key];
+
+        for (const auto& handler : handlers)
+        {
+            handler(KeyEvent(key, action, m_isCtrlHeld, m_isAltHeld, m_isShiftHeld, binding));
         }
     }
 }

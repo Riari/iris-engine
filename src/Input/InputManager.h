@@ -5,10 +5,10 @@
 #include <vector>
 
 #include "InputBinding.h"
-#include "KeyPress.h"
-#include "MouseButtonPress.h"
-#include "MouseMove.h"
-#include "MouseScroll.h"
+#include "KeyEvent.h"
+#include "MouseButtonEvent.h"
+#include "MouseMoveEvent.h"
+#include "MouseScrollEvent.h"
 
 namespace OGL::Input
 {
@@ -34,6 +34,13 @@ namespace OGL::Input
 
         static inline std::map<int, std::shared_ptr<InputBinding>> m_bindings;
 
+        static inline std::vector<int> m_keysPressed;
+        static inline std::vector<int> m_keysReleased;
+
+        static inline bool m_isCtrlHeld = false;
+        static inline bool m_isShiftHeld = false;
+        static inline bool m_isAltHeld = false;
+
         template<typename T>
         static std::vector<std::function<void(const T&)>>& GetHandlers()
         {
@@ -41,14 +48,8 @@ namespace OGL::Input
             return handlers;
         }
 
-        static inline std::vector<int> m_keysPressed;
-        static inline std::vector<int> m_keysReleased;
-        static inline std::vector<int> m_keysHeld;
-
-        static inline bool m_isCtrlHeld = false;
-        static inline bool m_isShiftHeld = false;
-        static inline bool m_isAltHeld = false;
-
         static void ValidateKeyAvailable(int key);
+
+        static void DispatchKeyEvent(int key, int action);
     };
 }

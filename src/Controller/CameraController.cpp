@@ -15,21 +15,20 @@ namespace OGL::Controller
         return controller;
     }
 
-    void CameraController::Handle(KeyPress event)
+    void CameraController::Handle(KeyEvent event)
     {
-        m_moveX, m_moveY, m_moveZ = 0;
-
-        if (event.GetAction() != Action::Hold) return;
-
         auto binding = event.GetBinding();
         if (binding == nullptr) return;
 
-        if (binding->GetName() == "MoveForward") m_moveZ = Positive;
-        if (binding->GetName() == "MoveBackward") m_moveZ = Negative;
-        if (binding->GetName() == "StrafeRight") m_moveX = Positive;
-        if (binding->GetName() == "StrafeLeft") m_moveX = Negative;
-        if (binding->GetName() == "Ascend") m_moveY = Positive;
-        if (binding->GetName() == "Descend") m_moveY = Negative;
+        auto name = binding->GetName();
+        bool pressed = event.GetAction() == GLFW_PRESS;
+
+        if (name == "MoveForward") m_moveForward = pressed;
+        if (name == "MoveBackward") m_moveBackward = pressed;
+        if (name == "StrafeRight") m_strafeRight = pressed;
+        if (name == "StrafeLeft") m_strafeLeft = pressed;
+        if (name == "Ascend") m_ascend = pressed;
+        if (name == "Descend") m_descend = pressed;
     }
 
 //
@@ -76,24 +75,13 @@ namespace OGL::Controller
         m_rotateX = 0.0f;
         m_rotateY = 0.0f;
 
-        float speedModifier = InputManager::IsShiftHeld() ? 4.0f : 1.0f;
+        float speedModifier = InputManager::IsShiftHeld() ? 4.0f : 0.0f;
 
-        switch (m_moveX)
-        {
-            case Positive: m_camera->Move(CameraMovement::RIGHT, deltaTime, speedModifier); break;
-            case Negative: m_camera->Move(CameraMovement::LEFT, deltaTime, speedModifier); break;
-        }
-
-        switch (m_moveY)
-        {
-            case Positive: m_camera->Move(CameraMovement::UP, deltaTime, speedModifier); break;
-            case Negative: m_camera->Move(CameraMovement::DOWN, deltaTime, speedModifier); break;
-        }
-
-        switch (m_moveZ)
-        {
-            case Positive: m_camera->Move(CameraMovement::FORWARD, deltaTime, speedModifier); break;
-            case Negative: m_camera->Move(CameraMovement::BACKWARD, deltaTime, speedModifier); break;
-        }
+        if (m_moveForward) m_camera->Move(CameraMovement::FORWARD, deltaTime, speedModifier);
+        if (m_moveBackward) m_camera->Move(CameraMovement::BACKWARD, deltaTime, speedModifier);
+        if (m_strafeRight) m_camera->Move(CameraMovement::RIGHT, deltaTime, speedModifier);
+        if (m_strafeLeft) m_camera->Move(CameraMovement::LEFT, deltaTime, speedModifier);
+        if (m_ascend) m_camera->Move(CameraMovement::UP, deltaTime, speedModifier);
+        if (m_descend) m_camera->Move(CameraMovement::DOWN, deltaTime, speedModifier);
     }
 }

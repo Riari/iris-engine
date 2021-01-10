@@ -6,10 +6,10 @@
 
 namespace OGL::Input
 {
-    class MouseScroll
+    class MouseMoveEvent
     {
     public:
-        MouseScroll(double x, double y) : m_x(x), m_y(y) {}
+        MouseMoveEvent(double x, double y) : m_x(x), m_y(y) {}
 
         [[nodiscard]] double GetX() const { return m_x; }
         [[nodiscard]] double GetY() const { return m_y; }
