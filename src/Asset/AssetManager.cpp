@@ -1,17 +1,16 @@
 #include "Asset/AssetManager.hpp"
 
-namespace OGL::Asset
+using namespace OGL;
+
+AssetManager::AssetManager() : m_images(new ImageRepository)
+{}
+
+std::shared_ptr<Image> AssetManager::GetImage(std::string path) const
 {
-    AssetManager::AssetManager() : m_images(new ImageRepository)
-    {}
+    return m_images->Get(std::move(path));
+}
 
-    std::shared_ptr<Image> AssetManager::GetImage(std::string path) const
-    {
-        return m_images->Get(std::move(path));
-    }
-
-    void AssetManager::UnloadImage(const std::string &path) const
-    {
-        m_images->Unload(path);
-    }
+void AssetManager::UnloadImage(const std::string &path) const
+{
+    m_images->Unload(path);
 }

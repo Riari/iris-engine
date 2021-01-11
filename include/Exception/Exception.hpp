@@ -3,7 +3,7 @@
 #include <string>
 #include <exception>
 
-namespace OGL::Exception
+namespace OGL
 {
     class Exception : public std::exception
     {

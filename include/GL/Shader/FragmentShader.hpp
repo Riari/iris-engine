@@ -6,7 +6,7 @@
 
 #include "Shader.hpp"
 
-namespace OGL::GL
+namespace OGL
 {
     class FragmentShader : public Shader
     {

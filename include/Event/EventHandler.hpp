@@ -2,7 +2,7 @@
 
 #include "EventBus.h"
 
-namespace OGL::Event
+namespace OGL
 {
     template<typename T>
     class EventHandler

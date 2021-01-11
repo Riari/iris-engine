@@ -2,7 +2,7 @@
 
 #include <typeindex>
 
-namespace OGL::Event
+namespace OGL
 {
     class Event
     {

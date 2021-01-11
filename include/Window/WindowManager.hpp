@@ -5,7 +5,7 @@
 
 #include "Window.hpp"
 
-namespace OGL::Window
+namespace OGL
 {
     const int DEFAULT_SCREEN_WIDTH = 800;
     const int DEFAULT_SCREEN_HEIGHT = 600;

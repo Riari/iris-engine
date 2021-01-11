@@ -1,35 +1,31 @@
 #include "Controller/CameraController.hpp"
 #include "Event/EventBus.hpp"
 
-using namespace OGL::Event;
-using namespace OGL::GL;
-using namespace OGL::Input;
+using namespace OGL;
 
-namespace OGL::Controller
+CameraController::CameraController(std::shared_ptr<Camera> camera) : m_camera(std::move(camera)) {}
+
+std::shared_ptr<CameraController> CameraController::Create(const std::shared_ptr<Camera>& camera)
 {
-    CameraController::CameraController(std::shared_ptr<Camera> camera) : m_camera(std::move(camera)) {}
+    auto controller = std::make_shared<CameraController>(camera);
+    return controller;
+}
 
-    std::shared_ptr<CameraController> CameraController::Create(const std::shared_ptr<Camera>& camera)
-    {
-        auto controller = std::make_shared<CameraController>(camera);
-        return controller;
-    }
+void CameraController::Handle(KeyEvent event)
+{
+    auto binding = event.GetBinding();
+    if (binding == nullptr) return;
 
-    void CameraController::Handle(KeyEvent event)
-    {
-        auto binding = event.GetBinding();
-        if (binding == nullptr) return;
+    auto name = binding->GetName();
+    bool pressed = event.GetAction() == GLFW_PRESS;
 
-        auto name = binding->GetName();
-        bool pressed = event.GetAction() == GLFW_PRESS;
-
-        if (name == "MoveForward") m_moveForward = pressed;
-        if (name == "MoveBackward") m_moveBackward = pressed;
-        if (name == "StrafeRight") m_strafeRight = pressed;
-        if (name == "StrafeLeft") m_strafeLeft = pressed;
-        if (name == "Ascend") m_ascend = pressed;
-        if (name == "Descend") m_descend = pressed;
-    }
+    if (name == "MoveForward") m_moveForward = pressed;
+    if (name == "MoveBackward") m_moveBackward = pressed;
+    if (name == "StrafeRight") m_strafeRight = pressed;
+    if (name == "StrafeLeft") m_strafeLeft = pressed;
+    if (name == "Ascend") m_ascend = pressed;
+    if (name == "Descend") m_descend = pressed;
+}
 
 //
 //    void CameraController::OnMouseMove(const std::shared_ptr<MouseMoveEvent>& event)
@@ -69,19 +65,18 @@ namespace OGL::Controller
 //        m_camera->AdjustFOV(y);
 //    }
 
-    void CameraController::Update(double deltaTime)
-    {
-        m_camera->Rotate(m_rotateX, m_rotateY, deltaTime);
-        m_rotateX = 0.0f;
-        m_rotateY = 0.0f;
+void CameraController::Update(double deltaTime)
+{
+    m_camera->Rotate(m_rotateX, m_rotateY, deltaTime);
+    m_rotateX = 0.0f;
+    m_rotateY = 0.0f;
 
-        float speedModifier = InputManager::IsShiftHeld() ? 4.0f : 0.0f;
+    float speedModifier = InputManager::IsShiftHeld() ? 4.0f : 0.0f;
 
-        if (m_moveForward) m_camera->Move(CameraMovement::FORWARD, deltaTime, speedModifier);
-        if (m_moveBackward) m_camera->Move(CameraMovement::BACKWARD, deltaTime, speedModifier);
-        if (m_strafeRight) m_camera->Move(CameraMovement::RIGHT, deltaTime, speedModifier);
-        if (m_strafeLeft) m_camera->Move(CameraMovement::LEFT, deltaTime, speedModifier);
-        if (m_ascend) m_camera->Move(CameraMovement::UP, deltaTime, speedModifier);
-        if (m_descend) m_camera->Move(CameraMovement::DOWN, deltaTime, speedModifier);
-    }
+    if (m_moveForward) m_camera->Move(CameraMovement::FORWARD, deltaTime, speedModifier);
+    if (m_moveBackward) m_camera->Move(CameraMovement::BACKWARD, deltaTime, speedModifier);
+    if (m_strafeRight) m_camera->Move(CameraMovement::RIGHT, deltaTime, speedModifier);
+    if (m_strafeLeft) m_camera->Move(CameraMovement::LEFT, deltaTime, speedModifier);
+    if (m_ascend) m_camera->Move(CameraMovement::UP, deltaTime, speedModifier);
+    if (m_descend) m_camera->Move(CameraMovement::DOWN, deltaTime, speedModifier);
 }

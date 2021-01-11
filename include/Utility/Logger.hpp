@@ -5,7 +5,7 @@
 
 #include <spdlog/spdlog.h>
 
-namespace OGL::Utility
+namespace OGL
 {
     class Logger
     {

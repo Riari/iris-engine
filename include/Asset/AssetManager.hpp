@@ -5,7 +5,7 @@
 
 #include "ImageRepository.hpp"
 
-namespace OGL::Asset
+namespace OGL
 {
     class AssetManager
     {

@@ -6,30 +6,27 @@
 
 using namespace OGL;
 
-namespace OGL::Window
+WindowManager& WindowManager::GetInstance()
 {
-    WindowManager& WindowManager::GetInstance()
-    {
-        static WindowManager instance;
-        return instance;
-    }
+    static WindowManager instance;
+    return instance;
+}
 
-    Window& WindowManager::Create(const char *id, int width, int height)
-    {
-        auto window = std::make_unique<Window>(id, width, height);
-        m_windows.insert(std::pair<const char*, std::unique_ptr<Window>>(id, std::move(window)));
-        return Get(id);
-    }
+Window& WindowManager::Create(const char *id, int width, int height)
+{
+    auto window = std::make_unique<Window>(id, width, height);
+    m_windows.insert(std::pair<const char*, std::unique_ptr<Window>>(id, std::move(window)));
+    return Get(id);
+}
 
-    Window& WindowManager::Get(const char *id)
-    {
-        return *m_windows[id];
-    }
+Window& WindowManager::Get(const char *id)
+{
+    return *m_windows[id];
+}
 
-    void WindowManager::Destroy(const char *id)
-    {
-        auto *pWindow = m_windows[id].release();
-        delete pWindow;
-        m_windows.erase(id);
-    }
+void WindowManager::Destroy(const char *id)
+{
+    auto *pWindow = m_windows[id].release();
+    delete pWindow;
+    m_windows.erase(id);
 }

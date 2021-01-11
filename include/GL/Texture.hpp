@@ -4,12 +4,12 @@
 
 #include "Asset/Image.hpp"
 
-namespace OGL::GL
+namespace OGL
 {
     class Texture
     {
     public:
-        explicit Texture(std::shared_ptr<Asset::Image> image);
+        explicit Texture(std::shared_ptr<Image> image);
 
         void Bind(GLenum unit) const;
 
@@ -25,6 +25,6 @@ namespace OGL::GL
 
     private:
         unsigned int m_texture{};
-        std::shared_ptr<Asset::Image> m_image;
+        std::shared_ptr<Image> m_image;
     };
 }

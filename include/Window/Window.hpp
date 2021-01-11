@@ -5,7 +5,7 @@
 
 #include <memory>
 
-namespace OGL::Window
+namespace OGL
 {
     class Window
     {

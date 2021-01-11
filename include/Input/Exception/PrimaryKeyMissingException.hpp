@@ -4,7 +4,7 @@
 
 #include "Exception/Exception.hpp"
 
-namespace OGL::Input::Exception
+namespace OGL
 {
     class PrimaryKeyMissingException : public ::OGL::Exception::Exception
     {

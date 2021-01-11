@@ -2,7 +2,7 @@
 
 #include "BufferObject.hpp"
 
-namespace OGL::GL
+namespace OGL
 {
     class VBO : public BufferObject
     {

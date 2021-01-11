@@ -6,7 +6,7 @@
 
 #include "Event.hpp"
 
-namespace OGL::Event
+namespace OGL
 {
     class EventBus
     {

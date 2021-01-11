@@ -10,7 +10,7 @@
 #include "MouseMoveEvent.hpp"
 #include "MouseScrollEvent.hpp"
 
-namespace OGL::Input
+namespace OGL
 {
     class InputManager
     {

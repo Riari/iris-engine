@@ -5,7 +5,7 @@
 
 #include "InputBinding.hpp"
 
-namespace OGL::Input
+namespace OGL
 {
     class MouseButtonEvent
     {

@@ -3,7 +3,7 @@
 #include <glad/glad.h>
 #include <memory>
 
-namespace OGL::GL
+namespace OGL
 {
     class BufferObject
     {

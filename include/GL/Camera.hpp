@@ -2,7 +2,7 @@
 
 #include <glm/glm.hpp>
 
-namespace OGL::GL
+namespace OGL
 {
     enum class CameraMovement
     {

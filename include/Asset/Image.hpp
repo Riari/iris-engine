@@ -1,6 +1,6 @@
 #pragma once
 
-namespace OGL::Asset
+namespace OGL
 {
     class Image
     {

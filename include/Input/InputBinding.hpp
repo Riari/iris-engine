@@ -5,7 +5,7 @@
 
 #include <GLFW/glfw3.h>
 
-namespace OGL::Input
+namespace OGL
 {
     class InputBinding
     {

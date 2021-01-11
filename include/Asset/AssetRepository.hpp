@@ -4,7 +4,7 @@
 #include <map>
 #include <memory>
 
-namespace OGL::Asset
+namespace OGL
 {
     template<typename T>
     class AssetRepository

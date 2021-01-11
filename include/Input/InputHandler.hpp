@@ -2,7 +2,7 @@
 
 #include "InputManager.hpp"
 
-namespace OGL::Input
+namespace OGL
 {
     template<typename T>
     class InputHandler

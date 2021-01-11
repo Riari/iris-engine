@@ -6,7 +6,7 @@
 #include <glad/glad.h>
 #include <spdlog/spdlog.h>
 
-namespace OGL::GL
+namespace OGL
 {
     class Shader
     {

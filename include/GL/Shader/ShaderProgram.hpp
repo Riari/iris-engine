@@ -8,7 +8,7 @@
 
 #include "Shader.hpp"
 
-namespace OGL::GL
+namespace OGL
 {
     class ShaderProgram
     {

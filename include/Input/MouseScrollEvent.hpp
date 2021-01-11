@@ -2,7 +2,7 @@
 
 #include <utility>
 
-namespace OGL::Input
+namespace OGL
 {
     class MouseScrollEvent
     {

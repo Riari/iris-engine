@@ -8,11 +8,7 @@
 #include "Input/InputHandler.hpp"
 #include "Input/KeyEvent.hpp"
 
-using namespace OGL::GL;
-using namespace OGL::Event;
-using namespace OGL::Input;
-
-namespace OGL::Controller
+namespace OGL
 {
     class CameraController : public InputHandler<KeyEvent>
     {

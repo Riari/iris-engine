@@ -1,6 +1,6 @@
 #pragma once
 
-namespace OGL::GL
+namespace OGL
 {
     class VAO
     {

@@ -8,117 +8,114 @@
 #include "Utility/Logger.hpp"
 #include "Window/Window.hpp"
 
-using namespace OGL::Input;
+using namespace OGL;
 
-namespace OGL::Window
+Window::Window(const char *id, int width, int height) : m_id(id)
 {
-    Window::Window(const char *id, int width, int height) : m_id(id)
-    {
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 #if !defined(NDEBUG)
-        glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
+    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
 #endif
 
-        GLFWwindow *window = glfwCreateWindow(width, height, id, NULL, NULL);
-        if (window == NULL)
-        {
-            glfwTerminate();
-            throw Exception::Exception("Failed to create GLFW window");
-        }
-
-        m_window = window;
-        std::stringstream ss;
-        ss << "Window::" << id;
-        m_logger = Utility::Logger::Create(ss.str().c_str());
-
-        // Callbacks
-        glfwSetWindowUserPointer(window, this);
-        glfwSetMouseButtonCallback(window, [](GLFWwindow* window, int button, int action, int mods) { GetPointer(window)->DispatchMouseButtonEvent(button, action, mods); });
-        glfwSetCursorPosCallback(window, [](GLFWwindow* window, double x, double y) { GetPointer(window)->DispatchCursorPosEvent(x, y); });
-        glfwSetScrollCallback(window, [](GLFWwindow* window, double x, double y) { GetPointer(window)->DispatchScrollEvent(x, y); });
-        glfwSetKeyCallback(window, [](GLFWwindow* window, int key, int scancode, int action, int mods) { GetPointer(window)->DispatchKeyEvent(key, scancode, action, mods); });
-
-        m_logger->info(fmt::format("{0}x{1} window created", width, height));
-    }
-
-    Window::~Window()
+    GLFWwindow *window = glfwCreateWindow(width, height, id, NULL, NULL);
+    if (window == NULL)
     {
-        glfwDestroyWindow(m_window);
+        glfwTerminate();
+        throw Exception("Failed to create GLFW window");
     }
 
-    int* Window::GetSize()
-    {
-        int width, height;
-        glfwGetWindowSize(m_window, &width, &height);
-        return new int[2] { width, height };
-    }
+    m_window = window;
+    std::stringstream ss;
+    ss << "Window::" << id;
+    m_logger = Logger::Create(ss.str().c_str());
 
-    int* Window::GetFramebufferSize()
-    {
-        int width, height;
-        glfwGetFramebufferSize(m_window, &width, &height);
-        return new int[2] { width, height };
-    }
+    // Callbacks
+    glfwSetWindowUserPointer(window, this);
+    glfwSetMouseButtonCallback(window, [](GLFWwindow* window, int button, int action, int mods) { GetPointer(window)->DispatchMouseButtonEvent(button, action, mods); });
+    glfwSetCursorPosCallback(window, [](GLFWwindow* window, double x, double y) { GetPointer(window)->DispatchCursorPosEvent(x, y); });
+    glfwSetScrollCallback(window, [](GLFWwindow* window, double x, double y) { GetPointer(window)->DispatchScrollEvent(x, y); });
+    glfwSetKeyCallback(window, [](GLFWwindow* window, int key, int scancode, int action, int mods) { GetPointer(window)->DispatchKeyEvent(key, scancode, action, mods); });
 
-    void Window::MakeCurrent()
-    {
-        glfwMakeContextCurrent(m_window);
-    }
+    m_logger->info(fmt::format("{0}x{1} window created", width, height));
+}
 
-    void Window::SwapBuffers()
-    {
-        glfwSwapBuffers(m_window);
-    }
+Window::~Window()
+{
+    glfwDestroyWindow(m_window);
+}
 
-    void Window::SetInputMode(int mode, int value)
-    {
-        glfwSetInputMode(m_window, mode, value);
-    }
+int* Window::GetSize()
+{
+    int width, height;
+    glfwGetWindowSize(m_window, &width, &height);
+    return new int[2] { width, height };
+}
 
-    void Window::SetTitle(const char *title)
-    {
-        glfwSetWindowTitle(m_window, title);
-    }
+int* Window::GetFramebufferSize()
+{
+    int width, height;
+    glfwGetFramebufferSize(m_window, &width, &height);
+    return new int[2] { width, height };
+}
 
-    void Window::SetShouldClose(bool state)
-    {
-        glfwSetWindowShouldClose(m_window, state);
-    }
+void Window::MakeCurrent()
+{
+    glfwMakeContextCurrent(m_window);
+}
 
-    bool Window::ShouldClose()
-    {
-        return glfwWindowShouldClose(m_window);
-    }
+void Window::SwapBuffers()
+{
+    glfwSwapBuffers(m_window);
+}
 
-    void Window::DispatchMouseButtonEvent(int button, int action, int mods)
-    {
+void Window::SetInputMode(int mode, int value)
+{
+    glfwSetInputMode(m_window, mode, value);
+}
 
-    }
+void Window::SetTitle(const char *title)
+{
+    glfwSetWindowTitle(m_window, title);
+}
 
-    void Window::DispatchCursorPosEvent(int x, int y)
-    {
+void Window::SetShouldClose(bool state)
+{
+    glfwSetWindowShouldClose(m_window, state);
+}
 
-    }
+bool Window::ShouldClose()
+{
+    return glfwWindowShouldClose(m_window);
+}
 
-    void Window::DispatchScrollEvent(int x, int y)
-    {
+void Window::DispatchMouseButtonEvent(int button, int action, int mods)
+{
 
-    }
+}
 
-    void Window::DispatchKeyEvent(int key, int scancode, int action, int mods)
-    {
-        InputManager::OnKeyCallback(key, scancode, action, mods);
-    }
+void Window::DispatchCursorPosEvent(int x, int y)
+{
 
-    Window* Window::GetPointer(GLFWwindow *window)
-    {
-        auto *ptr = reinterpret_cast<Window *>(glfwGetWindowUserPointer(window));
+}
 
-        if (!ptr) throw Exception::Exception("Failed to get pointer for window");
+void Window::DispatchScrollEvent(int x, int y)
+{
 
-        return ptr;
-    }
+}
+
+void Window::DispatchKeyEvent(int key, int scancode, int action, int mods)
+{
+    InputManager::OnKeyCallback(key, scancode, action, mods);
+}
+
+Window* Window::GetPointer(GLFWwindow *window)
+{
+    auto *ptr = reinterpret_cast<Window *>(glfwGetWindowUserPointer(window));
+
+    if (!ptr) throw Exception("Failed to get pointer for window");
+
+    return ptr;
 }

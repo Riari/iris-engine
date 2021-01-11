@@ -25,9 +25,6 @@
 #include "Utility/Logger.hpp"
 
 using namespace OGL;
-using namespace OGL::Event;
-using namespace OGL::Input;
-using namespace OGL::Window;
 
 int main(int argc, char** argv)
 {
@@ -39,10 +36,10 @@ int main(int argc, char** argv)
 
     auto opts = options.parse(argc, argv);
 
-    Utility::Logger::Init();
+    Logger::Init();
 
     glfwInit();
-    glfwSetErrorCallback([](int error_code, const char* description) { Utility::Logger::GL->error(description); });
+    glfwSetErrorCallback([](int error_code, const char* description) { Logger::GL->error(description); });
 
     InputManager::RegisterBinding("MoveForward", GLFW_KEY_W);
     InputManager::RegisterBinding("MoveBackward", GLFW_KEY_S);
@@ -52,20 +49,20 @@ int main(int argc, char** argv)
     InputManager::RegisterBinding("Descend", GLFW_KEY_C);
 
     WindowManager& windowManager = WindowManager::GetInstance();
-    OGL::Window::Window& mainWindow = windowManager.Create("Main", 1440, 900);
+    Window& mainWindow = windowManager.Create("Main", 1440, 900);
     mainWindow.MakeCurrent();
 
-    auto camera = std::make_shared<GL::Camera>(glm::vec3(0.0f, 0.0f, 3.0f));
+    auto camera = std::make_shared<Camera>(glm::vec3(0.0f, 0.0f, 3.0f));
     camera->SetRotateSpeed(10);
-    auto *cameraController = new Controller::CameraController(camera);
+    auto *cameraController = new CameraController(camera);
 
     if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress))
     {
-        Utility::Logger::MAIN->critical("Failed to initialize GLAD");
+        Logger::MAIN->critical("Failed to initialize GLAD");
         return -1;
     }
 
-    Utility::Logger::MAIN->info("GLAD initialized");
+    Logger::MAIN->info("GLAD initialized");
 
 #if !defined(NDEBUG)
     InitGLDebug();
@@ -117,31 +114,31 @@ int main(int argc, char** argv)
 
     // Cube VBO
 
-    auto *cubeVBO = new GL::VBO();
+    auto *cubeVBO = new VBO();
     cubeVBO->Bind();
     cubeVBO->SetData(sizeof(cubeVertices), cubeVertices, GL_STATIC_DRAW);
 
     // Light source cube
 
-    auto *lightSourceVAO = new GL::VAO();
+    auto *lightSourceVAO = new VAO();
     lightSourceVAO->Bind();
-    GL::VBO::SetVertexAttribute(0, 3, 6 * sizeof(float), (void*)0);
-    GL::VAO::Unbind();
+    VBO::SetVertexAttribute(0, 3, 6 * sizeof(float), (void*)0);
+    VAO::Unbind();
 
-    auto *lightSourceShaderProgram = new GL::ShaderProgram("LightSource", Utility::Logger::GL);
+    auto *lightSourceShaderProgram = new ShaderProgram("LightSource", Logger::GL);
     lightSourceShaderProgram->Build();
 
     glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
 
     // Coloured cube
 
-    auto *coloredCubeVAO = new GL::VAO();
+    auto *coloredCubeVAO = new VAO();
     coloredCubeVAO->Bind();
-    GL::VBO::SetVertexAttribute(0, 3, 6 * sizeof(float), (void*)0);
-    GL::VBO::SetVertexAttribute(1, 3, 6 * sizeof(float), (void*)(3 * sizeof(float)));
-    GL::VAO::Unbind();
+    VBO::SetVertexAttribute(0, 3, 6 * sizeof(float), (void*)0);
+    VBO::SetVertexAttribute(1, 3, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+    VAO::Unbind();
 
-    auto *coloredCubeShaderProgram = new GL::ShaderProgram("ColoredCube", Utility::Logger::GL);
+    auto *coloredCubeShaderProgram = new ShaderProgram("ColoredCube", Logger::GL);
     coloredCubeShaderProgram->Build();
     coloredCubeShaderProgram->Use();
     coloredCubeShaderProgram->SetUniform3f("objectColor", {1.0f, 0.5f, 0.31f});
