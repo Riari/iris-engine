@@ -8,21 +8,21 @@
 #include "Input/InputHandler.hpp"
 #include "Input/KeyEvent.hpp"
 
-namespace OGL
+namespace OGLDemo
 {
-    class CameraController : public InputHandler<KeyEvent>
+    class CameraController : public OGL::InputHandler<OGL::KeyEvent>
     {
     public:
-        explicit CameraController(std::shared_ptr<Camera> camera);
+        explicit CameraController(std::shared_ptr<OGL::Camera> camera);
 
-        static std::shared_ptr<CameraController> Create(const std::shared_ptr<Camera>& camera);
+        static std::shared_ptr<CameraController> Create(const std::shared_ptr<OGL::Camera>& camera);
 
-        void Handle(KeyEvent) override;
+        void Handle(OGL::KeyEvent) override;
 
         void Update(double deltaTime);
 
     private:
-        std::shared_ptr<Camera> m_camera;
+        std::shared_ptr<OGL::Camera> m_camera;
 
         bool m_moveForward = false;
         bool m_moveBackward = false;

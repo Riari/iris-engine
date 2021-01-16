@@ -9,7 +9,8 @@
 #include <spdlog/spdlog.h>
 #include <cxxopts.hpp>
 
-#include "Controller/CameraController.hpp"
+#include "Demo/CameraController.hpp"
+#include "Demo/Keys.hpp"
 #include "GL/Shader/ShaderProgram.hpp"
 
 #if !defined(NDEBUG)
@@ -24,7 +25,7 @@
 #include "Window/WindowManager.hpp"
 #include "Utility/Logger.hpp"
 
-using namespace OGL;
+using namespace OGLDemo;
 
 int main(int argc, char** argv)
 {
@@ -36,33 +37,33 @@ int main(int argc, char** argv)
 
     auto opts = options.parse(argc, argv);
 
-    Logger::Init();
+    OGL::Logger::Init();
 
     glfwInit();
-    glfwSetErrorCallback([](int error_code, const char* description) { Logger::GL->error(description); });
+    glfwSetErrorCallback([](int error_code, const char* description) { OGL::Logger::GL->error(description); });
 
-    InputManager::RegisterBinding("MoveForward", GLFW_KEY_W);
-    InputManager::RegisterBinding("MoveBackward", GLFW_KEY_S);
-    InputManager::RegisterBinding("StrafeLeft", GLFW_KEY_A);
-    InputManager::RegisterBinding("StrafeRight", GLFW_KEY_D);
-    InputManager::RegisterBinding("Ascend", GLFW_KEY_SPACE);
-    InputManager::RegisterBinding("Descend", GLFW_KEY_C);
+    OGL::InputManager::RegisterBinding(Keys::MoveForward, GLFW_KEY_W);
+    OGL::InputManager::RegisterBinding(Keys::MoveBackward, GLFW_KEY_S);
+    OGL::InputManager::RegisterBinding(Keys::StrafeLeft, GLFW_KEY_A);
+    OGL::InputManager::RegisterBinding(Keys::StrafeRight, GLFW_KEY_D);
+    OGL::InputManager::RegisterBinding(Keys::Ascend, GLFW_KEY_SPACE);
+    OGL::InputManager::RegisterBinding(Keys::Descend, GLFW_KEY_C);
 
-    WindowManager& windowManager = WindowManager::GetInstance();
-    Window& mainWindow = windowManager.Create("Main", 1440, 900);
+    OGL::WindowManager& windowManager = OGL::WindowManager::GetInstance();
+    OGL::Window& mainWindow = windowManager.Create("Main", 1440, 900);
     mainWindow.MakeCurrent();
 
-    auto camera = std::make_shared<Camera>(glm::vec3(0.0f, 0.0f, 3.0f));
+    auto camera = std::make_shared<OGL::Camera>(glm::vec3(0.0f, 0.0f, 3.0f));
     camera->SetRotateSpeed(10);
     auto *cameraController = new CameraController(camera);
 
     if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress))
     {
-        Logger::MAIN->critical("Failed to initialize GLAD");
+        OGL::Logger::MAIN->critical("Failed to initialize GLAD");
         return -1;
     }
 
-    Logger::MAIN->info("GLAD initialized");
+    OGL::Logger::MAIN->info("GLAD initialized");
 
 #if !defined(NDEBUG)
     InitGLDebug();
@@ -122,10 +123,10 @@ int main(int argc, char** argv)
 
     auto *lightSourceVAO = new VAO();
     lightSourceVAO->Bind();
-    VBO::SetVertexAttribute(0, 3, 6 * sizeof(float), (void*)0);
-    VAO::Unbind();
+    OGL::VBO::SetVertexAttribute(0, 3, 6 * sizeof(float), (void*)0);
+    OGL::VAO::Unbind();
 
-    auto *lightSourceShaderProgram = new ShaderProgram("LightSource", Logger::GL);
+    auto *lightSourceShaderProgram = new ShaderProgram("LightSource", OGL::Logger::GL);
     lightSourceShaderProgram->Build();
 
     glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
@@ -134,11 +135,11 @@ int main(int argc, char** argv)
 
     auto *coloredCubeVAO = new VAO();
     coloredCubeVAO->Bind();
-    VBO::SetVertexAttribute(0, 3, 6 * sizeof(float), (void*)0);
-    VBO::SetVertexAttribute(1, 3, 6 * sizeof(float), (void*)(3 * sizeof(float)));
-    VAO::Unbind();
+    OGL::VBO::SetVertexAttribute(0, 3, 6 * sizeof(float), (void*)0);
+    OGL::VBO::SetVertexAttribute(1, 3, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+    OGL::VAO::Unbind();
 
-    auto *coloredCubeShaderProgram = new ShaderProgram("ColoredCube", Logger::GL);
+    auto *coloredCubeShaderProgram = new ShaderProgram("ColoredCube", OGL::Logger::GL);
     coloredCubeShaderProgram->Build();
     coloredCubeShaderProgram->Use();
     coloredCubeShaderProgram->SetUniform3f("objectColor", {1.0f, 0.5f, 0.31f});

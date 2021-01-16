@@ -11,7 +11,7 @@
 
 using namespace OGL;
 
-void InputManager::RegisterBinding(std::string name, int primaryKey, int secondaryKey, bool force)
+void InputManager::RegisterBinding(int id, int primaryKey, int secondaryKey, bool force)
 {
     if (primaryKey == GLFW_KEY_UNKNOWN) throw PrimaryKeyMissingException();
 
@@ -21,7 +21,7 @@ void InputManager::RegisterBinding(std::string name, int primaryKey, int seconda
         ValidateKeyAvailable(secondaryKey);
     }
 
-    auto pBinding = std::make_shared<InputBinding>(std::move(name), primaryKey, secondaryKey);
+    auto pBinding = std::make_shared<InputBinding>(id, primaryKey, secondaryKey);
     m_bindings[primaryKey] = pBinding;
 
     if (secondaryKey != GLFW_KEY_UNKNOWN)
@@ -71,7 +71,7 @@ void InputManager::ValidateKeyAvailable(int key)
 {
     if (m_bindings.count(key) == 1)
     {
-        throw KeyInUseException(fmt::format("Key {0} is already bound to {1}.", key, m_bindings[key]->GetName()));
+        throw KeyInUseException(fmt::format("Key {0} is already bound to ID {1}.", key, m_bindings[key]->GetID()));
     }
 }
 

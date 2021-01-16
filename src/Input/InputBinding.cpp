@@ -2,8 +2,8 @@
 
 using namespace OGL;
 
-InputBinding::InputBinding(std::string name, int primaryKey, int secondaryKey) :
-        m_name(std::move(name)),
+InputBinding::InputBinding(int id, int primaryKey, int secondaryKey) :
+        m_id(id),
         m_primary(primaryKey),
         m_secondary(secondaryKey)
 {}
@@ -18,9 +18,9 @@ void InputBinding::BindSecondary(int key)
     m_secondary = key;
 }
 
-std::string InputBinding::GetName()
+int InputBinding::GetID()
 {
-    return m_name;
+    return m_id;
 }
 
 std::vector<int> InputBinding::GetKeys()

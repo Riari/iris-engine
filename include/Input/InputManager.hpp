@@ -15,7 +15,7 @@ namespace OGL
     class InputManager
     {
     public:
-        static void RegisterBinding(std::string name, int primaryKey, int secondaryKey = GLFW_KEY_UNKNOWN, bool force = false);
+        static void RegisterBinding(int id, int primaryKey, int secondaryKey = GLFW_KEY_UNKNOWN, bool force = false);
 
         template<typename T>
         static void RegisterHandler(std::function<void(const T&)> handler)
