@@ -49,8 +49,10 @@ int main(int argc, char** argv)
     OGL::InputManager::RegisterBinding(Keys::Ascend, GLFW_KEY_SPACE);
     OGL::InputManager::RegisterBinding(Keys::Descend, GLFW_KEY_C);
 
+    const int WINDOW_MAIN = 0;
+
     OGL::WindowManager& windowManager = OGL::WindowManager::GetInstance();
-    OGL::Window& mainWindow = windowManager.Create("Main", 1440, 900);
+    OGL::Window& mainWindow = windowManager.Create(WINDOW_MAIN, "", 1440, 900);
     mainWindow.MakeCurrent();
 
     auto camera = std::make_shared<OGL::Camera>(glm::vec3(0.0f, 0.0f, 3.0f));

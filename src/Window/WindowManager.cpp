@@ -11,19 +11,19 @@ WindowManager& WindowManager::GetInstance()
     return instance;
 }
 
-Window& WindowManager::Create(const char *id, int width, int height)
+Window& WindowManager::Create(const int id, const char *title, int width, int height)
 {
-    auto window = std::make_unique<Window>(id, width, height);
-    m_windows.insert(std::pair<const char*, std::unique_ptr<Window>>(id, std::move(window)));
+    auto window = std::make_unique<Window>(id, title, width, height);
+    m_windows.insert(std::pair<int, std::unique_ptr<Window>>(id, std::move(window)));
     return Get(id);
 }
 
-Window& WindowManager::Get(const char *id)
+Window& WindowManager::Get(const int id)
 {
     return *m_windows[id];
 }
 
-void WindowManager::Destroy(const char *id)
+void WindowManager::Destroy(const int id)
 {
     auto *pWindow = m_windows[id].release();
     delete pWindow;

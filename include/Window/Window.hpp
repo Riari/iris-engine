@@ -10,8 +10,10 @@ namespace OGL
     class Window
     {
     public:
-        Window(const char *id, int width, int height);
+        Window(int id, const char *title, int width, int height);
         ~Window();
+
+        int GetID();
 
         int* GetSize();
         int* GetFramebufferSize();
@@ -31,7 +33,7 @@ namespace OGL
         void DispatchKeyEvent(int key, int scancode, int action, int mods);
 
     private:
-        const char *m_id;
+        const int m_id;
         GLFWwindow *m_window;
         std::shared_ptr<spdlog::logger> m_logger;
 

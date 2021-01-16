@@ -18,12 +18,12 @@ namespace OGL
 
         static WindowManager& GetInstance();
 
-        Window& Create(const char *id, int width = DEFAULT_SCREEN_WIDTH, int height = DEFAULT_SCREEN_HEIGHT);
-        Window& Get(const char *id);
-        void Destroy(const char *id);
+        Window& Create(int id, const char *title, int width = DEFAULT_SCREEN_WIDTH, int height = DEFAULT_SCREEN_HEIGHT);
+        Window& Get(int id);
+        void Destroy(int id);
 
     private:
-        std::map<const char*, std::unique_ptr<Window>> m_windows;
+        std::map<int, std::unique_ptr<Window>> m_windows;
 
         WindowManager() = default;
     };

@@ -10,7 +10,7 @@
 
 using namespace OGL;
 
-Window::Window(const char *id, int width, int height) : m_id(id)
+Window::Window(const int id, const char *title, int width, int height) : m_id(id)
 {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -20,7 +20,7 @@ Window::Window(const char *id, int width, int height) : m_id(id)
     glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
 #endif
 
-    GLFWwindow *window = glfwCreateWindow(width, height, id, NULL, NULL);
+    GLFWwindow *window = glfwCreateWindow(width, height, title, NULL, NULL);
     if (window == NULL)
     {
         glfwTerminate();
@@ -45,6 +45,11 @@ Window::Window(const char *id, int width, int height) : m_id(id)
 Window::~Window()
 {
     glfwDestroyWindow(m_window);
+}
+
+int Window::GetID()
+{
+    return m_id;
 }
 
 int* Window::GetSize()
