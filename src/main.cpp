@@ -54,6 +54,7 @@ int main(int argc, char** argv)
     OGL::WindowManager& windowManager = OGL::WindowManager::GetInstance();
     OGL::Window& mainWindow = windowManager.Create(WINDOW_MAIN, "", 1440, 900);
     mainWindow.MakeCurrent();
+    mainWindow.SetInputMode(GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     auto camera = std::make_shared<OGL::Camera>(glm::vec3(0.0f, 0.0f, 3.0f));
     camera->SetRotateSpeed(10);

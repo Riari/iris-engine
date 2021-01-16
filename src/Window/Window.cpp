@@ -96,22 +96,22 @@ bool Window::ShouldClose()
     return glfwWindowShouldClose(m_window);
 }
 
-void Window::DispatchMouseButtonEvent(int button, int action, int mods)
+void Window::DispatchMouseButtonEvent(int button, int action, int mods) const
 {
-
+    InputManager::OnMouseButtonCallback(*this, button, action, mods);
 }
 
-void Window::DispatchCursorPosEvent(int x, int y)
+void Window::DispatchCursorPosEvent(double x, double y) const
 {
-
+    InputManager::OnCursorPosCallback(*this, x, y);
 }
 
-void Window::DispatchScrollEvent(int x, int y)
+void Window::DispatchScrollEvent(double x, double y) const
 {
-
+    InputManager::OnScrollCallback(*this, x, y);
 }
 
-void Window::DispatchKeyEvent(int key, int scancode, int action, int mods)
+void Window::DispatchKeyEvent(int key, int scancode, int action, int mods) const
 {
     InputManager::OnKeyCallback(*this, key, scancode, action, mods);
 }

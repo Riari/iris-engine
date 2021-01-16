@@ -31,43 +31,29 @@ void CameraController::Handle(OGL::KeyEvent event)
     }
 }
 
-//
-//    void CameraController::OnMouseMove(const std::shared_ptr<MouseMoveEvent>& event)
-//    {
-//        if (!m_receivedFirstMouseMoveEvent)
-//        {
-//            m_lastCursorX = event->x;
-//            m_lastCursorY = event->y;
-//            m_receivedFirstMouseMoveEvent = true;
-//        }
-//
-//        m_rotateX += event->x - m_lastCursorX;
-//        m_rotateY += m_lastCursorY - event->y;
-//
-//        m_lastCursorX = event->x;
-//        m_lastCursorY = event->y;
-//    }
+void CameraController::Handle(OGL::MouseMoveEvent event)
+{
+    auto x = event.GetX();
+    auto y = event.GetY();
 
-//    void CameraController::OnCursorPosCallback(double x, double y)
-//    {
-//        if (m_firstMouseMoveEvent)
-//        {
-//            m_lastCursorX = x;
-//            m_lastCursorY = y;
-//            m_firstMouseMoveEvent = false;
-//        }
-//
-//        m_rotateX += x - m_lastCursorX;
-//        m_rotateY += m_lastCursorY - y;
-//
-//        m_lastCursorX = x;
-//        m_lastCursorY = y;
-//    }
-//
-//    void CameraController::OnScrollCallback(double x, double y)
-//    {
-//        m_camera->AdjustFOV(y);
-//    }
+    if (!m_receivedFirstMouseMoveEvent)
+    {
+        m_lastCursorX = x;
+        m_lastCursorY = y;
+        m_receivedFirstMouseMoveEvent = true;
+    }
+
+    m_rotateX += x - m_lastCursorX;
+    m_rotateY += m_lastCursorY - y;
+
+    m_lastCursorX = x;
+    m_lastCursorY = y;
+}
+
+void CameraController::Handle(OGL::MouseScrollEvent event)
+{
+    m_camera->AdjustFOV(event.GetY());
+}
 
 void CameraController::Update(double deltaTime)
 {
@@ -75,7 +61,7 @@ void CameraController::Update(double deltaTime)
     m_rotateX = 0.0f;
     m_rotateY = 0.0f;
 
-    float speedModifier = OGL::InputManager::IsShiftHeld() ? 4.0f : 0.0f;
+    float speedModifier = OGL::InputManager::IsAltDown() ? 4.0f : 0.0f;
 
     if (m_moveForward) m_camera->Move(OGL::CameraMovement::FORWARD, deltaTime, speedModifier);
     if (m_moveBackward) m_camera->Move(OGL::CameraMovement::BACKWARD, deltaTime, speedModifier);

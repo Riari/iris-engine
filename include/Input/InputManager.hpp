@@ -23,11 +23,17 @@ namespace OGL
             GetHandlers<T>().push_back(handler);
         }
 
+        static void OnMouseButtonCallback(const Window &window, int button, int action, int mods);
+        static void OnCursorPosCallback(const Window &window, double x, double y);
+        static void OnScrollCallback(const Window &window, double x, double y);
         static void OnKeyCallback(const Window &window, int key, int scancode, int action, int mods);
 
-        [[nodiscard]] static bool IsCtrlHeld();
-        [[nodiscard]] static bool IsAltHeld();
-        [[nodiscard]] static bool IsShiftHeld();
+        [[nodiscard]] static bool IsCtrlDown();
+        [[nodiscard]] static bool IsShiftDown();
+        [[nodiscard]] static bool IsAltDown();
+        [[nodiscard]] static bool IsSuperDown();
+        [[nodiscard]] static bool IsCapsLockOn();
+        [[nodiscard]] static bool IsNumLockOn();
 
     private:
         InputManager() = default;
@@ -37,9 +43,12 @@ namespace OGL
         static inline std::vector<int> m_keysPressed;
         static inline std::vector<int> m_keysReleased;
 
-        static inline bool m_isCtrlHeld = false;
-        static inline bool m_isShiftHeld = false;
+        static inline bool m_isCtrlDown = false;
+        static inline bool m_isShiftDown = false;
         static inline bool m_isAltHeld = false;
+        static inline bool m_isSuperDown = false;
+        static inline bool m_isCapsLockOn = false;
+        static inline bool m_isNumLockOn = false;
 
         template<typename T>
         static std::vector<std::function<void(const T&)>>& GetHandlers()
@@ -50,6 +59,11 @@ namespace OGL
 
         static void ValidateKeyAvailable(int key);
 
+        static void UpdateModifierKeys(int mods);
+
+        static void DispatchMouseButtonEvent(const Window &window, int button, int action);
+        static void DispatchMouseMoveEvent(const Window &window, double x, double y);
+        static void DispatchMouseScrollEvent(const Window &window, double x, double y);
         static void DispatchKeyEvent(const Window &window, int key, int action);
     };
 }

@@ -10,7 +10,10 @@
 
 namespace OGLDemo
 {
-    class CameraController : public OGL::InputHandler<OGL::KeyEvent>
+    class CameraController :
+            public OGL::InputHandler<OGL::KeyEvent>,
+            public OGL::InputHandler<OGL::MouseMoveEvent>,
+            public OGL::InputHandler<OGL::MouseScrollEvent>
     {
     public:
         explicit CameraController(std::shared_ptr<OGL::Camera> camera);
@@ -18,6 +21,8 @@ namespace OGLDemo
         static std::shared_ptr<CameraController> Create(const std::shared_ptr<OGL::Camera>& camera);
 
         void Handle(OGL::KeyEvent) override;
+        void Handle(OGL::MouseMoveEvent) override;
+        void Handle(OGL::MouseScrollEvent) override;
 
         void Update(double deltaTime);
 

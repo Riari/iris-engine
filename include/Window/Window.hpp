@@ -27,10 +27,10 @@ namespace OGL
 
         bool ShouldClose();
 
-        void DispatchMouseButtonEvent(int button, int action, int mods);
-        void DispatchCursorPosEvent(int x, int y);
-        void DispatchScrollEvent(int x, int y);
-        void DispatchKeyEvent(int key, int scancode, int action, int mods);
+        void DispatchMouseButtonEvent(int button, int action, int mods) const;
+        void DispatchCursorPosEvent(double x, double y) const;
+        void DispatchScrollEvent(double x, double y) const;
+        void DispatchKeyEvent(int key, int scancode, int action, int mods) const;
 
     private:
         const int m_id;
