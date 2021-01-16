@@ -1,9 +1,9 @@
 #pragma once
 
+#include <memory>
+
 #include <GLFW/glfw3.h>
 #include <spdlog/spdlog.h>
-
-#include <memory>
 
 namespace OGL
 {

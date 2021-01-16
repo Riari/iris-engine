@@ -30,7 +30,7 @@ void InputManager::RegisterBinding(std::string name, int primaryKey, int seconda
     }
 }
 
-void InputManager::OnKeyCallback(int key, int scancode, int action, int mods)
+void InputManager::OnKeyCallback(const Window &window, int key, int scancode, int action, int mods)
 {
     m_keysReleased.clear();
 
@@ -48,8 +48,8 @@ void InputManager::OnKeyCallback(int key, int scancode, int action, int mods)
         m_keysReleased.push_back(key);
     }
 
-    for (auto k : m_keysPressed) DispatchKeyEvent(k, GLFW_PRESS);
-    for (auto k : m_keysReleased) DispatchKeyEvent(k, GLFW_RELEASE);
+    for (auto k : m_keysPressed) DispatchKeyEvent(window, k, GLFW_PRESS);
+    for (auto k : m_keysReleased) DispatchKeyEvent(window, k, GLFW_RELEASE);
 }
 
 bool InputManager::IsCtrlHeld()
@@ -75,7 +75,7 @@ void InputManager::ValidateKeyAvailable(int key)
     }
 }
 
-void InputManager::DispatchKeyEvent(int key, int action)
+void InputManager::DispatchKeyEvent(const Window &window, int key, int action)
 {
     auto handlers = GetHandlers<KeyEvent>();
     if (handlers.empty()) return;
@@ -84,6 +84,6 @@ void InputManager::DispatchKeyEvent(int key, int action)
 
     for (const auto& handler : handlers)
     {
-        handler(KeyEvent(key, action, m_isCtrlHeld, m_isAltHeld, m_isShiftHeld, binding));
+        handler(KeyEvent(window, key, action, m_isCtrlHeld, m_isAltHeld, m_isShiftHeld, binding));
     }
 }

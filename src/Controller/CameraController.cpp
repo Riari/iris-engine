@@ -1,5 +1,6 @@
 #include "Controller/CameraController.hpp"
 #include "Event/EventBus.hpp"
+#include "Window/Window.hpp"
 
 using namespace OGL;
 

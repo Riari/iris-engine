@@ -23,7 +23,7 @@ namespace OGL
             GetHandlers<T>().push_back(handler);
         }
 
-        static void OnKeyCallback(int key, int scancode, int action, int mods);
+        static void OnKeyCallback(const Window &window, int key, int scancode, int action, int mods);
 
         [[nodiscard]] static bool IsCtrlHeld();
         [[nodiscard]] static bool IsAltHeld();
@@ -50,6 +50,6 @@ namespace OGL
 
         static void ValidateKeyAvailable(int key);
 
-        static void DispatchKeyEvent(int key, int action);
+        static void DispatchKeyEvent(const Window &window, int key, int action);
     };
 }

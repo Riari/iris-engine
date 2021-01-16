@@ -108,7 +108,7 @@ void Window::DispatchScrollEvent(int x, int y)
 
 void Window::DispatchKeyEvent(int key, int scancode, int action, int mods)
 {
-    InputManager::OnKeyCallback(key, scancode, action, mods);
+    InputManager::OnKeyCallback(*this, key, scancode, action, mods);
 }
 
 Window* Window::GetPointer(GLFWwindow *window)
