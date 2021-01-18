@@ -9,9 +9,6 @@ namespace OGL
 {
     class Window;
 
-    const int DEFAULT_SCREEN_WIDTH = 800;
-    const int DEFAULT_SCREEN_HEIGHT = 600;
-
     class WindowManager
     {
     public:
@@ -22,7 +19,7 @@ namespace OGL
 
         std::map<int, std::shared_ptr<Window>> GetWindows();
 
-        Window& Create(int id, const char *title, double fpsCap, int width = DEFAULT_SCREEN_WIDTH, int height = DEFAULT_SCREEN_HEIGHT);
+        Window& Create(int id, const char *title, int monitor, int width, int height, double fpsCap);
         Window& Get(int id);
         void Destroy(int id);
 
@@ -47,5 +44,7 @@ namespace OGL
         }
 
         static void DispatchFrameBufferEvent(const Window &window, int w, int h);
+
+        static GLFWmonitor* GetMonitor(int monitor);
     };
 }

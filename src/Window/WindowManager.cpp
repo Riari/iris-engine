@@ -1,3 +1,4 @@
+#include "Window/Exception/MonitorNotFoundException.hpp"
 #include "Window/FrameBufferEvent.hpp"
 #include "Window/Window.hpp"
 #include "Window/WindowManager.hpp"
@@ -15,9 +16,9 @@ std::map<int, std::shared_ptr<Window>> WindowManager::GetWindows()
     return m_windows;
 }
 
-Window& WindowManager::Create(const int id, const char *title, double fpsCap, int width, int height)
+Window& WindowManager::Create(const int id, const char *title, int monitor, int width, int height, double fpsCap)
 {
-    auto window = std::make_unique<Window>(id, title, fpsCap, width, height);
+    auto window = std::make_unique<Window>(id, title, GetMonitor(monitor), width, height, fpsCap);
     m_windows.insert(std::pair<int, std::shared_ptr<Window>>(id, std::move(window)));
     return Get(id);
 }
@@ -46,4 +47,16 @@ void WindowManager::DispatchFrameBufferEvent(const Window &window, int w, int h)
     {
         handler(FrameBufferEvent(window, w, h));
     }
+}
+
+GLFWmonitor *WindowManager::GetMonitor(int monitor)
+{
+    if (monitor < 0) return NULL;
+
+    int count;
+    GLFWmonitor** monitors = glfwGetMonitors(&count);
+
+    if (monitor > count) throw MonitorNotFoundException(monitor, count);
+
+    return monitors[monitor];
 }

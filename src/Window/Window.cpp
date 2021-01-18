@@ -1,9 +1,12 @@
+#include <chrono>
 #include <sstream>
+#include <thread>
 #include <utility>
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <spdlog/spdlog.h>
+#include <Window/Window.hpp>
 
 #include "Exception/Exception.hpp"
 #include "Input/InputManager.hpp"
@@ -12,7 +15,7 @@
 
 using namespace OGL;
 
-Window::Window(const int id, const char *title, double fpsCap, int width, int height) :
+Window::Window(int id, const char *title, GLFWmonitor* monitor, int width, int height, double fpsCap) :
     m_id(id),
     m_title(title),
     m_updateFrequency(1.0 / std::max(fpsCap, 120.0)),
@@ -21,12 +24,13 @@ Window::Window(const int id, const char *title, double fpsCap, int width, int he
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_SAMPLES, 4);
 
 #if !defined(NDEBUG)
     glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
 #endif
 
-    GLFWwindow *window = glfwCreateWindow(width, height, title, NULL, NULL);
+    GLFWwindow *window = glfwCreateWindow(width, height, title, monitor, NULL);
     if (window == NULL)
     {
         glfwTerminate();
@@ -84,6 +88,11 @@ void Window::MakeCurrent()
     glfwMakeContextCurrent(m_window);
 }
 
+void Window::EnableVsync()
+{
+    glfwSwapInterval(1);
+}
+
 void Window::Update()
 {
     if (m_scene == nullptr) return;
@@ -102,19 +111,15 @@ void Window::Update()
         m_frameCount = 0;
     }
 
-    while (m_updateTime >= m_updateFrequency)
+    if (m_updateTime >= m_updateFrequency)
     {
-        glfwWaitEvents();
+        glfwPollEvents();
         m_scene->Update(*this);
-        m_updateTime -= m_updateFrequency;
+        m_updateTime = 0;
     }
 
-    if ((m_lastLoopTime - m_lastFrameTime) >= m_frameFrequency)
-    {
-        m_scene->Render(*this);
-        m_frameCount++;
-        m_lastFrameTime = m_lastLoopTime;
-    }
+    m_scene->Render(*this);
+    m_frameCount++;
 }
 
 void Window::SwapBuffers()

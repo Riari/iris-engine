@@ -12,7 +12,7 @@ namespace OGL
     class Window
     {
     public:
-        Window(int id, const char *title, double fpsCap, int width, int height);
+        Window(int id, const char *title, GLFWmonitor* monitor, int width, int height, double fpsCap);
         ~Window();
 
         [[nodiscard]] int GetID() const;
@@ -24,6 +24,7 @@ namespace OGL
         [[nodiscard]] double GetDeltaTime() const;
 
         void MakeCurrent();
+        void EnableVsync();
         void Update();
         void SwapBuffers();
 

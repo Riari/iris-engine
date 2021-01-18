@@ -22,7 +22,10 @@ int main(int argc, char** argv)
     cxxopts::Options options("GLSandbox", "GL stuff.");
 
     options.add_options()
-            ("f,maxfps", "Maximum FPS", cxxopts::value<double>()->default_value("60"))
+            ("d,display", "Display # to use (launches as window if unspecified)", cxxopts::value<int>()->default_value("-1"))
+            ("h,hres", "Horizontal screen resolution", cxxopts::value<int>()->default_value("1920"))
+            ("v,vres", "Vertical screen resolution", cxxopts::value<int>()->default_value("1080"))
+            ("f,fpscap", "FPS cap", cxxopts::value<double>()->default_value("60"))
     ;
 
     auto opts = options.parse(argc, argv);
@@ -32,10 +35,13 @@ int main(int argc, char** argv)
     glfwInit();
     glfwSetErrorCallback([](int error_code, const char* description) { OGL::Logger::GL->error(description); });
 
-    const double maxFPS = opts["maxfps"].as<double>();
+    const int display = opts["display"].as<int>();
+    const int horizontalRes = opts["hres"].as<int>();
+    const int verticalRes = opts["vres"].as<int>();
+    const double fpsCap = opts["fpscap"].as<double>();
 
     OGL::WindowManager& windowManager = OGL::WindowManager::GetInstance();
-    OGL::Window& mainWindow = windowManager.Create(0, "Untitled Engine", maxFPS, 1440, 900);
+    OGL::Window& mainWindow = windowManager.Create(0, "Untitled Engine", display, horizontalRes, verticalRes, fpsCap);
     mainWindow.MakeCurrent();
 
     if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress))
@@ -62,7 +68,7 @@ int main(int argc, char** argv)
     auto bufferSize = mainWindow.GetFramebufferSize();
     Renderer::SetViewport(bufferSize[0], bufferSize[1]);
 
-    auto pCamera = std::make_shared<OGL::Camera>(mainWindow.GetAspectRatio(), glm::vec3(0.0f, 0.0f, 3.0f));
+    auto pCamera = std::make_shared<OGL::Camera>(mainWindow.GetAspectRatio(), glm::vec3(-0.8f, 0.0f, 4.2f));
     pCamera->SetRotateSpeed(10);
     auto pCameraController = std::make_shared<CameraController>(0, pCamera);
 
@@ -145,6 +151,7 @@ int main(int argc, char** argv)
         for (auto const& [id, window] : windowManager.GetWindows())
         {
             window->MakeCurrent();
+            window->EnableVsync();
             window->Update();
 
             if (window->ShouldClose()) windowManager.Destroy(id);
