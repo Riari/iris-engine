@@ -5,12 +5,11 @@
 
 using namespace OGLDemo;
 
-CameraController::CameraController(std::shared_ptr<OGL::Camera> camera) : m_camera(std::move(camera)) {}
+CameraController::CameraController(int id, OGL::Scene::CameraPtr camera) : Controller(id), m_camera(std::move(camera)) {}
 
-std::shared_ptr<CameraController> CameraController::Create(const std::shared_ptr<OGL::Camera>& camera)
+void CameraController::Handle(OGL::FrameBufferEvent event)
 {
-    auto controller = std::make_shared<CameraController>(camera);
-    return controller;
+    m_camera->SetAspectRatio((float) event.GetWidth() / (float) event.GetHeight());
 }
 
 void CameraController::Handle(OGL::KeyEvent event)
@@ -55,18 +54,18 @@ void CameraController::Handle(OGL::MouseScrollEvent event)
     m_camera->AdjustFOV(event.GetY());
 }
 
-void CameraController::Update(double deltaTime)
+void CameraController::Update(OGL::Window &window)
 {
-    m_camera->Rotate(m_rotateX, m_rotateY, deltaTime);
+    m_camera->Rotate(m_rotateX, m_rotateY, window.GetDeltaTime());
     m_rotateX = 0.0f;
     m_rotateY = 0.0f;
 
     float speedModifier = OGL::InputManager::IsAltDown() ? 4.0f : 0.0f;
 
-    if (m_moveForward) m_camera->Move(OGL::CameraMovement::FORWARD, deltaTime, speedModifier);
-    if (m_moveBackward) m_camera->Move(OGL::CameraMovement::BACKWARD, deltaTime, speedModifier);
-    if (m_strafeRight) m_camera->Move(OGL::CameraMovement::RIGHT, deltaTime, speedModifier);
-    if (m_strafeLeft) m_camera->Move(OGL::CameraMovement::LEFT, deltaTime, speedModifier);
-    if (m_ascend) m_camera->Move(OGL::CameraMovement::UP, deltaTime, speedModifier);
-    if (m_descend) m_camera->Move(OGL::CameraMovement::DOWN, deltaTime, speedModifier);
+    if (m_moveForward) m_camera->Move(OGL::CameraMovement::FORWARD, window.GetDeltaTime(), speedModifier);
+    if (m_moveBackward) m_camera->Move(OGL::CameraMovement::BACKWARD, window.GetDeltaTime(), speedModifier);
+    if (m_strafeRight) m_camera->Move(OGL::CameraMovement::RIGHT, window.GetDeltaTime(), speedModifier);
+    if (m_strafeLeft) m_camera->Move(OGL::CameraMovement::LEFT, window.GetDeltaTime(), speedModifier);
+    if (m_ascend) m_camera->Move(OGL::CameraMovement::UP, window.GetDeltaTime(), speedModifier);
+    if (m_descend) m_camera->Move(OGL::CameraMovement::DOWN, window.GetDeltaTime(), speedModifier);
 }

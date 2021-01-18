@@ -3,14 +3,14 @@
 #include <utility>
 
 #include "InputBinding.hpp"
-#include "InputEvent.hpp"
+#include "InputEventHandler.hpp"
 
 namespace OGL
 {
-    class MouseMoveEvent : public InputEvent
+    class MouseMoveEvent : public InputEventHandler
     {
     public:
-        MouseMoveEvent(const Window &window, double x, double y) : InputEvent(window), m_x(x), m_y(y) {}
+        MouseMoveEvent(const Window &window, double x, double y) : InputEventHandler(window), m_x(x), m_y(y) {}
 
         [[nodiscard]] double GetX() const { return m_x; }
         [[nodiscard]] double GetY() const { return m_y; }

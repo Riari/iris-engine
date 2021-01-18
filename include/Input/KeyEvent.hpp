@@ -4,15 +4,15 @@
 #include <utility>
 
 #include "InputBinding.hpp"
-#include "InputEvent.hpp"
+#include "InputEventHandler.hpp"
 
 namespace OGL
 {
-    class KeyEvent : public InputEvent
+    class KeyEvent : public InputEventHandler
     {
     public:
         KeyEvent(const Window &window, int key, int action, bool isCtrlHeld, bool isShiftHeld, bool isAltHeld, std::shared_ptr<InputBinding> binding = nullptr)
-            : InputEvent(window), m_key(key), m_action(action), m_binding(std::move(binding)) {}
+            : InputEventHandler(window), m_key(key), m_action(action), m_binding(std::move(binding)) {}
 
         [[nodiscard]] int GetKey() const { return m_key; }
         [[nodiscard]] int GetAction() const { return m_action; }

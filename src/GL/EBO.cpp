@@ -1,3 +1,5 @@
+#include <glad/glad.h>
+
 #include "GL/EBO.hpp"
 
 using namespace OGL;

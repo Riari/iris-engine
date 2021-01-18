@@ -2,14 +2,14 @@
 
 #include <utility>
 
-#include "InputEvent.hpp"
+#include "InputEventHandler.hpp"
 
 namespace OGL
 {
-    class MouseScrollEvent : public InputEvent
+    class MouseScrollEvent : public InputEventHandler
     {
     public:
-        MouseScrollEvent(const Window &window, double x, double y) : InputEvent(window), m_x(x), m_y(y) {}
+        MouseScrollEvent(const Window &window, double x, double y) : InputEventHandler(window), m_x(x), m_y(y) {}
 
         [[nodiscard]] double GetX() const { return m_x; }
         [[nodiscard]] double GetY() const { return m_y; }

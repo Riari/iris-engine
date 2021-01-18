@@ -1,29 +1,19 @@
-#include <string>
-#include <algorithm>
+#include <memory>
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
 #include <spdlog/spdlog.h>
 #include <cxxopts.hpp>
 
 #include "Demo/CameraController.hpp"
+#include "Demo/ColoredCube.hpp"
 #include "Demo/Keys.hpp"
-#include "GL/Shader/ShaderProgram.hpp"
+#include "Demo/LightCube.hpp"
 
 #if !defined(NDEBUG)
 #include "GL/Debug.hpp"
 #endif
-
-#include "GL/EBO.hpp"
-#include "GL/Texture.hpp"
-#include "GL/VAO.hpp"
-#include "GL/VBO.hpp"
-#include "Input/InputManager.hpp"
-#include "Window/WindowManager.hpp"
-#include "Utility/Logger.hpp"
 
 using namespace OGLDemo;
 
@@ -42,23 +32,11 @@ int main(int argc, char** argv)
     glfwInit();
     glfwSetErrorCallback([](int error_code, const char* description) { OGL::Logger::GL->error(description); });
 
-    OGL::InputManager::RegisterBinding(Keys::MoveForward, GLFW_KEY_W);
-    OGL::InputManager::RegisterBinding(Keys::MoveBackward, GLFW_KEY_S);
-    OGL::InputManager::RegisterBinding(Keys::StrafeLeft, GLFW_KEY_A);
-    OGL::InputManager::RegisterBinding(Keys::StrafeRight, GLFW_KEY_D);
-    OGL::InputManager::RegisterBinding(Keys::Ascend, GLFW_KEY_SPACE);
-    OGL::InputManager::RegisterBinding(Keys::Descend, GLFW_KEY_C);
-
-    const int WINDOW_MAIN = 0;
+    const double maxFPS = opts["maxfps"].as<double>();
 
     OGL::WindowManager& windowManager = OGL::WindowManager::GetInstance();
-    OGL::Window& mainWindow = windowManager.Create(WINDOW_MAIN, "", 1440, 900);
+    OGL::Window& mainWindow = windowManager.Create(0, "Untitled Engine", maxFPS, 1440, 900);
     mainWindow.MakeCurrent();
-    mainWindow.SetInputMode(GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-
-    auto camera = std::make_shared<OGL::Camera>(glm::vec3(0.0f, 0.0f, 3.0f));
-    camera->SetRotateSpeed(10);
-    auto *cameraController = new CameraController(camera);
 
     if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress))
     {
@@ -71,6 +49,26 @@ int main(int argc, char** argv)
 #if !defined(NDEBUG)
     InitGLDebug();
 #endif
+
+    OGL::InputManager::RegisterBinding(Keys::MoveForward, GLFW_KEY_W);
+    OGL::InputManager::RegisterBinding(Keys::MoveBackward, GLFW_KEY_S);
+    OGL::InputManager::RegisterBinding(Keys::StrafeLeft, GLFW_KEY_A);
+    OGL::InputManager::RegisterBinding(Keys::StrafeRight, GLFW_KEY_D);
+    OGL::InputManager::RegisterBinding(Keys::Ascend, GLFW_KEY_SPACE);
+    OGL::InputManager::RegisterBinding(Keys::Descend, GLFW_KEY_C);
+
+    OGL::WindowManager::RegisterHandler<OGL::FrameBufferEvent>([](const OGL::FrameBufferEvent& event) { Renderer::SetViewport(event.GetWidth(), event.GetHeight()); });
+
+    auto bufferSize = mainWindow.GetFramebufferSize();
+    Renderer::SetViewport(bufferSize[0], bufferSize[1]);
+
+    auto pCamera = std::make_shared<OGL::Camera>(mainWindow.GetAspectRatio(), glm::vec3(0.0f, 0.0f, 3.0f));
+    pCamera->SetRotateSpeed(10);
+    auto pCameraController = std::make_shared<CameraController>(0, pCamera);
+
+    auto pScene = std::make_shared<Scene>(0);
+    pScene->SetActiveCamera(pCamera);
+    pScene->AddController(pCameraController);
 
     float cubeVertices[] = {
             -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
@@ -116,123 +114,44 @@ int main(int argc, char** argv)
             -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f
     };
 
-    // Cube VBO
-
-    auto *cubeVBO = new VBO();
-    cubeVBO->Bind();
-    cubeVBO->SetData(sizeof(cubeVertices), cubeVertices, GL_STATIC_DRAW);
-
-    // Light source cube
-
-    auto *lightSourceVAO = new VAO();
-    lightSourceVAO->Bind();
-    OGL::VBO::SetVertexAttribute(0, 3, 6 * sizeof(float), (void*)0);
-    OGL::VAO::Unbind();
-
-    auto *lightSourceShaderProgram = new ShaderProgram("LightSource", OGL::Logger::GL);
-    lightSourceShaderProgram->Build();
+    auto pCubeVBO = new VBO();
+    pCubeVBO->Bind();
+    pCubeVBO->SetData(sizeof(cubeVertices), cubeVertices, GL_STATIC_DRAW);
 
     glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
+    glm::vec3 lightColor(1.0f, 1.0f, 1.0f);
+    auto pLightCube = std::make_shared<LightCube>(0, lightPos);
+    pLightCube->Scale(glm::vec3(0.2f));
 
-    // Coloured cube
+    auto pColoredCube = std::make_shared<ColoredCube>(1, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.1f, 0.2f), lightColor, lightPos);
+    pColoredCube->Rotate(135.0f);
+    pColoredCube->Scale(glm::vec3(0.8f, 1.0f, 1.2f));
 
-    auto *coloredCubeVAO = new VAO();
-    coloredCubeVAO->Bind();
-    OGL::VBO::SetVertexAttribute(0, 3, 6 * sizeof(float), (void*)0);
-    OGL::VBO::SetVertexAttribute(1, 3, 6 * sizeof(float), (void*)(3 * sizeof(float)));
-    OGL::VAO::Unbind();
+    auto pColoredCube2 = std::make_shared<ColoredCube>(2, glm::vec3(2.0f, 1.0f, -1.0f), glm::vec3(0.2f, 1.0f, 0.3f), lightColor, lightPos);
+    pColoredCube2->Rotate(185.0f);
+    pColoredCube2->Scale(glm::vec3(1.8f, 1.0f, -1.2f));
 
-    auto *coloredCubeShaderProgram = new ShaderProgram("ColoredCube", OGL::Logger::GL);
-    coloredCubeShaderProgram->Build();
-    coloredCubeShaderProgram->Use();
-    coloredCubeShaderProgram->SetUniform3f("objectColor", {1.0f, 0.5f, 0.31f});
-    coloredCubeShaderProgram->SetUniform3f("lightColor", {1.0f, 1.0f, 1.0f});
-    coloredCubeShaderProgram->SetUniform3f("lightPos", {lightPos[0], lightPos[1], lightPos[2]});
+    pScene->AddEntity(pLightCube);
+    pScene->AddEntity(pColoredCube);
+    pScene->AddEntity(pColoredCube2);
 
-    glEnable(GL_DEPTH_TEST);
+    mainWindow.SetInputMode(GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    mainWindow.SetScene(pScene);
 
-    const double maxFPS = opts["maxfps"].as<double>();
-    const double updateFrequency = 1.0 / std::max(maxFPS, 120.0);
-    const double frameFrequency = 1.0 / maxFPS;
-    double lastUpdateTime = 0;
-    double lastFrameTime = 0;
-    double lastLoopTime = 0;
-    double fpsTime = 0;
-    int frameCount = 0;
+    Renderer::EnableCapability(GL_DEPTH_TEST);
 
-    while (!mainWindow.ShouldClose())
+    while (!windowManager.GetWindows().empty())
     {
-        double now = glfwGetTime();
-        fpsTime += now - lastLoopTime;
-
-        if (fpsTime >= 1.0) {
-            mainWindow.SetTitle(("GLSandbox | " + std::to_string(frameCount) + " FPS").c_str());
-            fpsTime -= 1.0;
-            frameCount = 0;
-        }
-
-        double deltaTime = now - lastUpdateTime;
-        if (deltaTime >= updateFrequency) {
-            glfwPollEvents();
-
-            cameraController->Update(deltaTime);
-
-            lastUpdateTime = now;
-        }
-
-        if ((now - lastFrameTime) >= frameFrequency)
+        for (auto const& [id, window] : windowManager.GetWindows())
         {
-            int *pBufferSize = mainWindow.GetFramebufferSize();
-            glViewport(0, 0, pBufferSize[0], pBufferSize[1]);
+            window->MakeCurrent();
+            window->Update();
 
-            glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-            // Projection matrix
-            glm::mat4 projection = glm::perspective(glm::radians(camera->GetFOV()), (float) pBufferSize[0] / (float) pBufferSize[1], 0.1f, 100.0f);
-
-            // View matrix
-            glm::mat4 view = camera->GetViewMatrix();
-
-            // Render colored cube
-            coloredCubeShaderProgram->Use();
-            coloredCubeShaderProgram->SetUniformMatrix4fv("projection", glm::value_ptr(projection));
-            coloredCubeShaderProgram->SetUniformMatrix4fv("view", glm::value_ptr(view));
-            glm::mat4 model = glm::mat4(1.0f);
-            model = glm::rotate(model, glm::radians(135.0f), glm::vec3(1, 1, 1));
-            model = glm::scale(model, glm::vec3(0.8f, 1.0f, 1.2f));
-            coloredCubeShaderProgram->SetUniformMatrix4fv("model", glm::value_ptr(model));
-            auto cameraPos = camera->GetPosition();
-            coloredCubeShaderProgram->SetUniform3f("viewPos", {cameraPos[0], cameraPos[1], cameraPos[2]});
-
-            coloredCubeVAO->Bind();
-
-            glDrawArrays(GL_TRIANGLES, 0, 36);
-
-            // Render light source
-            lightSourceShaderProgram->Use();
-            lightSourceShaderProgram->SetUniformMatrix4fv("projection", glm::value_ptr(projection));
-            lightSourceShaderProgram->SetUniformMatrix4fv("view", glm::value_ptr(view));
-            model = glm::mat4(1.0f);
-            model = glm::translate(model, lightPos);
-            model = glm::scale(model, glm::vec3(0.2f));
-            lightSourceShaderProgram->SetUniformMatrix4fv("model", glm::value_ptr(model));
-
-            lightSourceVAO->Bind();
-
-            glDrawArrays(GL_TRIANGLES, 0, 36);
-
-            mainWindow.SwapBuffers();
-
-            frameCount++;
-            lastFrameTime = now;
+            if (window->ShouldClose()) windowManager.Destroy(id);
         }
-
-        lastLoopTime = now;
     }
 
-    delete coloredCubeVAO;
-    delete cubeVBO;
+    delete pCubeVBO;
 
     return 0;
 }

@@ -3,7 +3,6 @@
 #include <iostream>
 #include <memory>
 
-#include <glad/glad.h>
 #include <spdlog/spdlog.h>
 
 namespace OGL
@@ -11,7 +10,7 @@ namespace OGL
     class Shader
     {
     public:
-        Shader(GLenum type, const std::string &name, const std::string &suffix, std::shared_ptr<spdlog::logger> logger);
+        Shader(unsigned int type, const std::string &name, const std::string &suffix, std::shared_ptr<spdlog::logger> logger);
 
         ~Shader();
 

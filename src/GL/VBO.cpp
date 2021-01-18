@@ -1,3 +1,5 @@
+#include <glad/glad.h>
+
 #include "GL/VBO.hpp"
 
 using namespace OGL;

@@ -4,10 +4,10 @@ namespace OGL
 {
     class Window;
 
-    class InputEvent
+    class InputEventHandler
     {
     public:
-        explicit InputEvent(const Window&);
+        explicit InputEventHandler(const Window&);
 
         const Window& GetWindow();
 

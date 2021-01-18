@@ -2,6 +2,7 @@
 #include <iostream>
 #include <utility>
 
+#include <glad/glad.h>
 #include <spdlog/spdlog.h>
 
 #include "GL/Shader/Shader.hpp"
@@ -9,7 +10,7 @@
 
 using namespace OGL;
 
-Shader::Shader(GLenum type, const std::string &name, const std::string &suffix,
+Shader::Shader(unsigned int type, const std::string &name, const std::string &suffix,
                std::shared_ptr<spdlog::logger> logger) :
         m_id(glCreateShader(type)),
         m_name(name + suffix),

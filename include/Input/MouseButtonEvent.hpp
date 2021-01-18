@@ -4,18 +4,18 @@
 #include <utility>
 
 #include "InputBinding.hpp"
-#include "InputEvent.hpp"
+#include "InputEventHandler.hpp"
 
 namespace OGL
 {
-    class MouseButtonEvent : public InputEvent
+    class MouseButtonEvent : public InputEventHandler
     {
     public:
         MouseButtonEvent(const Window &window, int button, int action, std::shared_ptr<InputBinding> binding = nullptr) :
-            InputEvent(window),
-            m_button(button),
-            m_action(action),
-            m_binding(std::move(binding)) {}
+                InputEventHandler(window),
+                m_button(button),
+                m_action(action),
+                m_binding(std::move(binding)) {}
 
         [[nodiscard]] int GetButton() const { return m_button; }
         [[nodiscard]] int GetAction() const { return m_action; }
