@@ -69,7 +69,7 @@ int main(int argc, char** argv)
     Renderer::SetViewport(bufferSize[0], bufferSize[1]);
 
     auto pCamera = std::make_shared<OGL::Camera>(mainWindow.GetAspectRatio(), glm::vec3(-0.8f, 0.0f, 4.2f));
-    pCamera->SetRotateSpeed(10);
+    pCamera->SetRotateSpeed(5);
     auto pCameraController = std::make_shared<CameraController>(0, pCamera);
 
     auto pScene = std::make_shared<Scene>(0);
@@ -148,6 +148,8 @@ int main(int argc, char** argv)
 
     while (!windowManager.GetWindows().empty())
     {
+        glfwPollEvents();
+
         for (auto const& [id, window] : windowManager.GetWindows())
         {
             window->MakeCurrent();

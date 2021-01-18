@@ -1,6 +1,4 @@
-#include <chrono>
 #include <sstream>
-#include <thread>
 #include <utility>
 
 #include <glad/glad.h>
@@ -24,7 +22,6 @@ Window::Window(int id, const char *title, GLFWmonitor* monitor, int width, int h
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    glfwWindowHint(GLFW_SAMPLES, 4);
 
 #if !defined(NDEBUG)
     glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
@@ -111,11 +108,10 @@ void Window::Update()
         m_frameCount = 0;
     }
 
-    if (m_updateTime >= m_updateFrequency)
+    while (m_updateTime >= m_updateFrequency)
     {
-        glfwPollEvents();
         m_scene->Update(*this);
-        m_updateTime = 0;
+        m_updateTime -= m_updateFrequency;
     }
 
     m_scene->Render(*this);
