@@ -23,9 +23,7 @@ std::string EntityManager::GenerateID()
 {
     std::string id;
     do id = random_string(8);
-    while (m_seenIds.find(id) != m_seenIds.end());
-
-    m_seenIds.insert(id);
+    while (m_entities.find(id) != m_entities.end());
 
     return id;
 }

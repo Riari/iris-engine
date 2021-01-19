@@ -44,7 +44,6 @@ namespace OGL
         std::vector<std::shared_ptr<RenderableEntity>> GetEntities();
 
     private:
-        std::set<std::string> m_seenIds;
         std::map<std::string, std::shared_ptr<RenderableEntity>> m_entities;
 
         EntityManager() = default;
