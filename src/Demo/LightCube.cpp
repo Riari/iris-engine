@@ -1,12 +1,13 @@
 #include <glad/glad.h>
 #include <glm/ext.hpp>
+#include <utility>
 
 #include "Demo/LightCube.hpp"
 #include "Utility/Logger.hpp"
 
 using namespace OGLDemo;
 
-LightCube::LightCube(int id, glm::vec3 position) : OGL::RenderableEntity(id, position)
+LightCube::LightCube(std::string id, glm::vec3 position) : OGL::RenderableEntity(std::move(id), position)
 {
     auto *pVao = new OGL::VAO();
     pVao->Bind();

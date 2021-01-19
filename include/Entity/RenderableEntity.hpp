@@ -9,7 +9,7 @@ namespace OGL
     class RenderableEntity : public Entity
     {
     public:
-        RenderableEntity(int id, glm::vec3 position);
+        RenderableEntity(std::string id, glm::vec3 position);
 
         void SetVAO(const VAO&);
         void SetShaderProgram(std::shared_ptr<ShaderProgram>);

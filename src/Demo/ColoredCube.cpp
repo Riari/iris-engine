@@ -1,5 +1,6 @@
 #include <glad/glad.h>
 #include <glm/ext.hpp>
+#include <utility>
 
 #include "Demo/ColoredCube.hpp"
 #include "GL/VAO.hpp"
@@ -8,7 +9,7 @@
 
 using namespace OGLDemo;
 
-ColoredCube::ColoredCube(int id, glm::vec3 position, glm::vec3 color, glm::vec3 lightColor, glm::vec3 lightPos) : OGL::RenderableEntity(id, position)
+ColoredCube::ColoredCube(std::string id, glm::vec3 position, glm::vec3 color, glm::vec3 lightColor, glm::vec3 lightPos) : OGL::RenderableEntity(std::move(id), position)
 {
     auto *pVao = new OGL::VAO();
     pVao->Bind();

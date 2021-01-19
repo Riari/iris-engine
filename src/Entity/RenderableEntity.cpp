@@ -6,7 +6,7 @@
 
 using namespace OGL;
 
-RenderableEntity::RenderableEntity(int id, glm::vec3 position) : Entity(id, position), m_model(glm::mat4(1.0f))
+RenderableEntity::RenderableEntity(std::string id, glm::vec3 position) : Entity(id, position), m_model(glm::mat4(1.0f))
 {
     m_model = glm::translate(m_model, m_position);
 }

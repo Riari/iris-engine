@@ -12,24 +12,17 @@ void Scene::SetActiveCamera(CameraPtr camera)
 
 void Scene::AddEntity(EntityPtr entity)
 {
-    m_entities.insert(std::pair(entity->GetID(), entity));
+    m_entities.push_back(entity);
 }
 
-Scene::EntityPtr Scene::GetEntity(int id)
+void Scene::AddEntities(std::vector<EntityPtr> entities)
 {
-    return m_entities[id];
+    m_entities.insert(m_entities.end(), entities.begin(), entities.end());
 }
 
 std::vector<Scene::EntityPtr> Scene::GetEntities()
 {
-    std::vector<EntityPtr> entities;
-    for (auto & v : m_entities) entities.push_back(v.second);
-    return entities;
-}
-
-void Scene::RemoveEntity(int id)
-{
-    m_entities.erase(id);
+    return m_entities;
 }
 
 void Scene::AddController(ControllerPtr controller)

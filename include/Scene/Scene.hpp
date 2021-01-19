@@ -17,7 +17,6 @@ namespace OGL
     {
     public:
         typedef std::shared_ptr<RenderableEntity> EntityPtr;
-        typedef std::map<const int, EntityPtr> EntityMap;
         typedef std::shared_ptr<Controller> ControllerPtr;
         typedef std::map<const int, ControllerPtr> ControllerMap;
         typedef std::shared_ptr<Camera> CameraPtr;
@@ -27,9 +26,8 @@ namespace OGL
         void SetActiveCamera(CameraPtr);
 
         void AddEntity(EntityPtr);
-        EntityPtr GetEntity(int);
+        void AddEntities(std::vector<EntityPtr>);
         std::vector<EntityPtr> GetEntities();
-        void RemoveEntity(int);
 
         void AddController(ControllerPtr);
         ControllerPtr GetController(int);
@@ -43,7 +41,7 @@ namespace OGL
         int m_id;
 
         std::shared_ptr<Camera> m_activeCamera;
-        EntityMap m_entities;
+        std::vector<std::shared_ptr<RenderableEntity>> m_entities;
         ControllerMap m_controllers;
     };
 }

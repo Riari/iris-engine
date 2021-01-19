@@ -10,6 +10,7 @@
 #include "Demo/ColoredCube.hpp"
 #include "Demo/Keys.hpp"
 #include "Demo/LightCube.hpp"
+#include "Entity/EntityManager.hpp"
 
 #if !defined(NDEBUG)
 #include "GL/Debug.hpp"
@@ -126,20 +127,21 @@ int main(int argc, char** argv)
 
     glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
     glm::vec3 lightColor(1.0f, 1.0f, 1.0f);
-    auto pLightCube = std::make_shared<LightCube>(0, lightPos);
+
+    OGL::EntityManager& entityManager = OGL::EntityManager::GetInstance();
+
+    auto pLightCube = entityManager.CreateEntity<LightCube>(lightPos);
     pLightCube->Scale(glm::vec3(0.2f));
 
-    auto pColoredCube = std::make_shared<ColoredCube>(1, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.1f, 0.2f), lightColor, lightPos);
+    auto pColoredCube = entityManager.CreateEntity<ColoredCube>(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.1f, 0.2f), lightColor, lightPos);
     pColoredCube->Rotate(135.0f);
     pColoredCube->Scale(glm::vec3(0.8f, 1.0f, 1.2f));
 
-    auto pColoredCube2 = std::make_shared<ColoredCube>(2, glm::vec3(2.0f, 1.0f, -1.0f), glm::vec3(0.2f, 1.0f, 0.3f), lightColor, lightPos);
+    auto pColoredCube2 = entityManager.CreateEntity<ColoredCube>(glm::vec3(2.0f, 1.0f, -1.0f), glm::vec3(0.2f, 1.0f, 0.3f), lightColor, lightPos);
     pColoredCube2->Rotate(185.0f);
     pColoredCube2->Scale(glm::vec3(1.8f, 1.0f, -1.2f));
 
-    pScene->AddEntity(pLightCube);
-    pScene->AddEntity(pColoredCube);
-    pScene->AddEntity(pColoredCube2);
+    pScene->AddEntities(entityManager.GetEntities());
 
     mainWindow.SetInputMode(GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     mainWindow.SetScene(pScene);

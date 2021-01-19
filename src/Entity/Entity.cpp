@@ -1,10 +1,12 @@
 #include "Entity/Entity.hpp"
 
+#include <utility>
+
 using namespace OGL;
 
-Entity::Entity(int id, glm::vec3 position) : m_id(id), m_position(position) {}
+Entity::Entity(std::string id, glm::vec3 position) : m_id(std::move(id)), m_position(position) {}
 
-int Entity::GetID() const
+std::string Entity::GetID() const
 {
     return m_id;
 }

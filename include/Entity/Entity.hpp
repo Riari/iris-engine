@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <string>
 
 #include <glm/glm.hpp>
 
@@ -13,14 +14,14 @@ namespace OGL
     class Entity
     {
     public:
-        Entity(int id, glm::vec3 position);
+        explicit Entity(std::string id, glm::vec3 position);
 
-        [[nodiscard]] int GetID() const;
+        [[nodiscard]] std::string GetID() const;
         void SetPosition(glm::vec3);
         glm::vec3 GetPosition();
 
     protected:
-        int m_id;
+        std::string m_id;
         glm::vec3 m_position;
     };
 }
