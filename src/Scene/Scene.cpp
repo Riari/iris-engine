@@ -1,4 +1,4 @@
-#include "Entity/RenderableEntity.hpp"
+#include "Entity/Entity.hpp"
 #include "Scene/Scene.hpp"
 
 using namespace OGL;

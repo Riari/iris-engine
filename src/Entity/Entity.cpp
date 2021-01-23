@@ -1,22 +1,30 @@
-#include "Entity/Entity.hpp"
-
 #include <utility>
+
+#include <glm/ext.hpp>
+
+#include "Entity/Entity.hpp"
 
 using namespace OGL;
 
-Entity::Entity(std::string id, glm::vec3 position) : m_id(std::move(id)), m_position(position) {}
+Entity::Entity(std::string id, glm::vec3 position) : m_id(std::move(id)), m_transform(std::make_unique<Transform>(position))
+{}
 
-std::string Entity::GetID() const
+void Entity::SetVAO(const VAO &vao)
 {
-    return m_id;
+    m_vao = vao;
 }
 
-void Entity::SetPosition(glm::vec3 position)
+void Entity::SetShaderProgram(std::shared_ptr<ShaderProgram> program)
 {
-    m_position = position;
+    m_shaderProgram = std::move(program);
 }
 
-glm::vec3 Entity::GetPosition()
+bool Entity::IsVisible() const
 {
-    return m_position;
+    return m_visible;
+}
+
+Transform& Entity::GetTransform()
+{
+    return *m_transform;
 }

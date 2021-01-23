@@ -5,6 +5,8 @@
 
 #include <glm/glm.hpp>
 
+#include "GL/Camera.hpp"
+#include "GL/Transform.hpp"
 #include "GL/VAO.hpp"
 #include "GL/VBO.hpp"
 #include "GL/Shader/ShaderProgram.hpp"
@@ -14,14 +16,23 @@ namespace OGL
     class Entity
     {
     public:
-        explicit Entity(std::string id, glm::vec3 position);
+        Entity(std::string id, glm::vec3 position);
 
-        [[nodiscard]] std::string GetID() const;
-        void SetPosition(glm::vec3);
-        glm::vec3 GetPosition();
+        void SetVAO(const VAO&);
+        void SetShaderProgram(std::shared_ptr<ShaderProgram>);
+
+        [[nodiscard]] bool IsVisible() const;
+        Transform& GetTransform();
+
+        virtual void Render(std::shared_ptr<Camera> camera) = 0;
 
     protected:
         std::string m_id;
-        glm::vec3 m_position;
+
+        VAO m_vao;
+        std::shared_ptr<ShaderProgram> m_shaderProgram;
+
+        bool m_visible = true;
+        std::unique_ptr<Transform> m_transform;
     };
 }

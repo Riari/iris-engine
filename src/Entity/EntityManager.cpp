@@ -1,3 +1,4 @@
+#include "Entity/Entity.hpp"
 #include "Entity/EntityManager.hpp"
 #include "Utility/String.hpp"
 
@@ -9,9 +10,9 @@ EntityManager& EntityManager::GetInstance()
     return instance;
 }
 
-std::vector<std::shared_ptr<RenderableEntity>> EntityManager::GetEntities()
+std::vector<std::shared_ptr<Entity>> EntityManager::GetEntities()
 {
-    std::vector<std::shared_ptr<RenderableEntity>> entities;
+    std::vector<std::shared_ptr<Entity>> entities;
     for (const auto& [id, entity] : m_entities)
     {
         entities.push_back(entity);

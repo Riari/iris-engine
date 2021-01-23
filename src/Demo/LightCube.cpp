@@ -1,4 +1,5 @@
 #include <glad/glad.h>
+#include <GLFW/glfw3.h>
 #include <glm/ext.hpp>
 #include <utility>
 
@@ -7,7 +8,7 @@
 
 using namespace OGLDemo;
 
-LightCube::LightCube(std::string id, glm::vec3 position) : OGL::RenderableEntity(std::move(id), position)
+LightCube::LightCube(std::string id, glm::vec3 position, glm::vec3 emissionColor) : OGL::Entity(std::move(id), position), m_emissionColor(emissionColor)
 {
     auto *pVao = new OGL::VAO();
     pVao->Bind();
@@ -23,12 +24,19 @@ LightCube::LightCube(std::string id, glm::vec3 position) : OGL::RenderableEntity
 
 void LightCube::Render(std::shared_ptr<OGL::Camera> camera)
 {
+    GetTransform().SetPosition(glm::vec3(1.0f + sin(glfwGetTime()) * 2.0f, sin(glfwGetTime() / 2.0f) * 1.0f, 0.0f));
+
     m_shaderProgram->Use();
     m_shaderProgram->SetUniformMatrix4fv("projection", glm::value_ptr(camera->GetProjectionMatrix()));
     m_shaderProgram->SetUniformMatrix4fv("view", glm::value_ptr(camera->GetViewMatrix()));
-    m_shaderProgram->SetUniformMatrix4fv("model", glm::value_ptr(m_model));
+    m_shaderProgram->SetUniformMatrix4fv("model", glm::value_ptr(GetTransform().GetModel()));
 
     m_vao.Bind();
 
     glDrawArrays(GL_TRIANGLES, 0, 36);
+}
+
+glm::vec3 LightCube::GetEmissionColor()
+{
+    return m_emissionColor;
 }

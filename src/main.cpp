@@ -69,7 +69,7 @@ int main(int argc, char** argv)
     auto bufferSize = mainWindow.GetFramebufferSize();
     Renderer::SetViewport(bufferSize[0], bufferSize[1]);
 
-    auto pCamera = std::make_shared<OGL::Camera>(mainWindow.GetAspectRatio(), glm::vec3(-0.8f, 0.0f, 4.2f));
+    auto pCamera = std::make_shared<OGL::Camera>(mainWindow.GetAspectRatio(), glm::vec3(-0.8f, 0.0f, 12.0f));
     pCamera->SetRotateSpeed(5);
     auto pCameraController = std::make_shared<CameraController>(0, pCamera);
 
@@ -125,21 +125,18 @@ int main(int argc, char** argv)
     pCubeVBO->Bind();
     pCubeVBO->SetData(sizeof(cubeVertices), cubeVertices, GL_STATIC_DRAW);
 
-    glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
-    glm::vec3 lightColor(1.0f, 1.0f, 1.0f);
-
     OGL::EntityManager& entityManager = OGL::EntityManager::GetInstance();
 
-    auto pLightCube = entityManager.CreateEntity<LightCube>(lightPos);
-    pLightCube->Scale(glm::vec3(0.2f));
+    auto pLightCube = entityManager.CreateEntity<LightCube>(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f));
+    pLightCube->GetTransform().SetScale(0.1f);
 
-    auto pColoredCube = entityManager.CreateEntity<ColoredCube>(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.1f, 0.2f), lightColor, lightPos);
-    pColoredCube->Rotate(135.0f);
-    pColoredCube->Scale(glm::vec3(0.8f, 1.0f, 1.2f));
+    auto pColoredCube = entityManager.CreateEntity<ColoredCube>(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.1f, 0.2f), pLightCube);
+    pColoredCube->GetTransform().SetRotation(135.0f);
+    pColoredCube->GetTransform().SetScale(glm::vec3(0.8f, 1.0f, 1.2f));
 
-    auto pColoredCube2 = entityManager.CreateEntity<ColoredCube>(glm::vec3(2.0f, 1.0f, -1.0f), glm::vec3(0.2f, 1.0f, 0.3f), lightColor, lightPos);
-    pColoredCube2->Rotate(185.0f);
-    pColoredCube2->Scale(glm::vec3(1.8f, 1.0f, -1.2f));
+    auto pColoredCube2 = entityManager.CreateEntity<ColoredCube>(glm::vec3(2.0f, 1.0f, -1.0f), glm::vec3(0.2f, 1.0f, 0.3f), pLightCube);
+    pColoredCube2->GetTransform().SetRotation(185.0f);
+    pColoredCube2->GetTransform().SetScale(glm::vec3(1.8f, 1.0f, -1.2f));
 
     pScene->AddEntities(entityManager.GetEntities());
 

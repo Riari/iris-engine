@@ -42,7 +42,7 @@ namespace OGLDemo
         bool m_ascend = false;
         bool m_descend = false;
 
-        bool m_receivedFirstMouseMoveEvent = true;
+        bool m_receivedFirstMouseMoveEvent = false;
         float m_rotateX, m_rotateY, m_lastCursorX, m_lastCursorY;
     };
 }

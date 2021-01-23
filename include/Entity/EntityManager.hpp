@@ -41,10 +41,10 @@ namespace OGL
             throw Exception("Tried to create entity but supplied args incompatible.");
         }
 
-        std::vector<std::shared_ptr<RenderableEntity>> GetEntities();
+        std::vector<std::shared_ptr<Entity>> GetEntities();
 
     private:
-        std::map<std::string, std::shared_ptr<RenderableEntity>> m_entities;
+        std::map<std::string, std::shared_ptr<Entity>> m_entities;
 
         EntityManager() = default;
 

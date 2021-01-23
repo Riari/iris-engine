@@ -20,10 +20,10 @@ void Renderer::Clear(glm::vec4 color)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void Renderer::Draw(const std::vector<std::shared_ptr<RenderableEntity>>& entities, const Scene::CameraPtr& camera)
+void Renderer::Draw(const std::vector<std::shared_ptr<Entity>>& entities, const Scene::CameraPtr& camera)
 {
     for (const auto& entity : entities)
     {
-        if (entity->GetVisible()) entity->Render(camera);
+        if (entity->IsVisible()) entity->Render(camera);
     }
 }
