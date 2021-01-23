@@ -41,12 +41,12 @@ void Transform::Rotate(float rotation)
 
 void Transform::Scale(float scale)
 {
-    SetScale(m_scale * scale);
+    SetScale(m_scale + scale);
 }
 
 void Transform::Scale(glm::vec3 scale)
 {
-    SetScale(m_scale * scale);
+    SetScale(m_scale + scale);
 }
 
 glm::vec3 Transform::GetPosition()
