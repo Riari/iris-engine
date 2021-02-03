@@ -4,7 +4,7 @@
 
 #include "Entity/Entity.hpp"
 
-using namespace OGL;
+using namespace Iris;
 
 Entity::Entity(std::string id, glm::vec3 position) : m_id(std::move(id)), m_transform(std::make_unique<Transform>(position))
 {}

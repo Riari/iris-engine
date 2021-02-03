@@ -4,7 +4,7 @@
 
 #include "Asset/Image.hpp"
 
-using namespace OGL;
+using namespace Iris;
 
 Image::Image(std::string path, unsigned char *data, int width, int height, int channels) :
         m_path(std::move(path)),

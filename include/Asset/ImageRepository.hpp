@@ -3,7 +3,7 @@
 #include "AssetRepository.hpp"
 #include "Image.hpp"
 
-namespace OGL
+namespace Iris
 {
     class ImageRepository : public AssetRepository<Image>
     {

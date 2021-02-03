@@ -6,7 +6,7 @@
 
 #include "Shader.hpp"
 
-namespace OGL
+namespace Iris
 {
     class VertexShader : public Shader
     {

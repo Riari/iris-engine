@@ -1,6 +1,6 @@
 #include "Asset/AssetManager.hpp"
 
-using namespace OGL;
+using namespace Iris;
 
 AssetManager::AssetManager() : m_images(new ImageRepository)
 {}

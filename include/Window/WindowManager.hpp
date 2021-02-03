@@ -5,7 +5,7 @@
 #include <memory>
 #include <string>
 
-namespace OGL
+namespace Iris
 {
     class Window;
 

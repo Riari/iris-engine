@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <string>
 
-namespace OGL
+namespace Iris
 {
     std::string random_string(size_t length)
     {

@@ -2,7 +2,7 @@
 
 #include "WindowEvent.hpp"
 
-namespace OGL
+namespace Iris
 {
     class Window;
 

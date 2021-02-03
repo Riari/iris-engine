@@ -4,7 +4,7 @@
 #include <map>
 #include <memory>
 
-namespace OGL
+namespace Iris
 {
     template<typename T>
     class AssetRepository

@@ -11,7 +11,7 @@
 #include "GL/VBO.hpp"
 #include "GL/Shader/ShaderProgram.hpp"
 
-namespace OGL
+namespace Iris
 {
     class Entity
     {

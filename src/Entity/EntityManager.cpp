@@ -2,7 +2,7 @@
 #include "Entity/EntityManager.hpp"
 #include "Utility/String.hpp"
 
-using namespace OGL;
+using namespace Iris;
 
 EntityManager& EntityManager::GetInstance()
 {

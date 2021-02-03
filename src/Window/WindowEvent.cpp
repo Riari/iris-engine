@@ -1,6 +1,6 @@
 #include "Window/WindowEvent.hpp"
 
-using namespace OGL;
+using namespace Iris;
 
 WindowEvent::WindowEvent(const Window &window) : m_window(window) {}
 

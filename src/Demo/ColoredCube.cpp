@@ -8,17 +8,17 @@
 #include "GL/Shader/ShaderProgram.hpp"
 #include "Utility/Logger.hpp"
 
-using namespace OGLDemo;
+using namespace IrisDemo;
 
-ColoredCube::ColoredCube(std::string id, glm::vec3 position, glm::vec3 color, std::shared_ptr<LightCube> light) : OGL::Entity(std::move(id), position), m_light(std::move(light))
+ColoredCube::ColoredCube(std::string id, glm::vec3 position, glm::vec3 color, std::shared_ptr<LightCube> light) : Iris::Entity(std::move(id), position), m_light(std::move(light))
 {
-    auto *pVao = new OGL::VAO();
+    auto *pVao = new Iris::VAO();
     pVao->Bind();
-    OGL::VBO::SetVertexAttribute(0, 3, 6 * sizeof(float), (void*)0);
-    OGL::VBO::SetVertexAttribute(1, 3, 6 * sizeof(float), (void*)(3 * sizeof(float)));
-    OGL::VAO::Unbind();
+    Iris::VBO::SetVertexAttribute(0, 3, 6 * sizeof(float), (void*)0);
+    Iris::VBO::SetVertexAttribute(1, 3, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+    Iris::VAO::Unbind();
 
-    auto pProgram = std::make_shared<OGL::ShaderProgram>("ColoredCube", OGL::Logger::GL);
+    auto pProgram = std::make_shared<Iris::ShaderProgram>("ColoredCube", Iris::Logger::GL);
     pProgram->Build();
     pProgram->Use();
     pProgram->SetUniform3f("objectColor", color);
@@ -27,7 +27,7 @@ ColoredCube::ColoredCube(std::string id, glm::vec3 position, glm::vec3 color, st
     SetShaderProgram(pProgram);
 }
 
-void ColoredCube::Render(std::shared_ptr<OGL::Camera> camera)
+void ColoredCube::Render(std::shared_ptr<Iris::Camera> camera)
 {
     m_shaderProgram->Use();
     m_shaderProgram->SetUniform3f("lightPos", m_light->GetTransform().GetPosition());

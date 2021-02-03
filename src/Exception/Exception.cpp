@@ -2,7 +2,7 @@
 
 #include "Exception/Exception.hpp"
 
-using namespace OGL;
+using namespace Iris;
 
 Exception::Exception(std::string error) : m_error(std::move(error))
 {}

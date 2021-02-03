@@ -16,11 +16,11 @@
 #include "GL/Debug.hpp"
 #endif
 
-using namespace OGLDemo;
+using namespace IrisDemo;
 
 int main(int argc, char** argv)
 {
-    cxxopts::Options options("GLSandbox", "GL stuff.");
+    cxxopts::Options options("IrisEngine", "");
 
     options.add_options()
             ("d,display", "Display # to use (launches as window if unspecified)", cxxopts::value<int>()->default_value("-1"))
@@ -31,45 +31,45 @@ int main(int argc, char** argv)
 
     auto opts = options.parse(argc, argv);
 
-    OGL::Logger::Init();
+    Iris::Logger::Init();
 
     glfwInit();
-    glfwSetErrorCallback([](int error_code, const char* description) { OGL::Logger::GL->error(description); });
+    glfwSetErrorCallback([](int error_code, const char* description) { Iris::Logger::GL->error(description); });
 
     const int display = opts["display"].as<int>();
     const int horizontalRes = opts["hres"].as<int>();
     const int verticalRes = opts["vres"].as<int>();
     const double fpsCap = opts["fpscap"].as<double>();
 
-    OGL::WindowManager& windowManager = OGL::WindowManager::GetInstance();
-    OGL::Window& mainWindow = windowManager.Create(0, "Untitled Engine", display, horizontalRes, verticalRes, fpsCap);
+    Iris::WindowManager& windowManager = Iris::WindowManager::GetInstance();
+    Iris::Window& mainWindow = windowManager.Create(0, "Iris Engine", display, horizontalRes, verticalRes, fpsCap);
     mainWindow.MakeCurrent();
 
     if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress))
     {
-        OGL::Logger::MAIN->critical("Failed to initialize GLAD");
+        Iris::Logger::MAIN->critical("Failed to initialize GLAD");
         return -1;
     }
 
-    OGL::Logger::MAIN->info("GLAD initialized");
+    Iris::Logger::MAIN->info("GLAD initialized");
 
 #if !defined(NDEBUG)
     InitGLDebug();
 #endif
 
-    OGL::InputManager::RegisterBinding(Keys::MoveForward, GLFW_KEY_W);
-    OGL::InputManager::RegisterBinding(Keys::MoveBackward, GLFW_KEY_S);
-    OGL::InputManager::RegisterBinding(Keys::StrafeLeft, GLFW_KEY_A);
-    OGL::InputManager::RegisterBinding(Keys::StrafeRight, GLFW_KEY_D);
-    OGL::InputManager::RegisterBinding(Keys::Ascend, GLFW_KEY_SPACE);
-    OGL::InputManager::RegisterBinding(Keys::Descend, GLFW_KEY_C);
+    Iris::InputManager::RegisterBinding(Keys::MoveForward, GLFW_KEY_W);
+    Iris::InputManager::RegisterBinding(Keys::MoveBackward, GLFW_KEY_S);
+    Iris::InputManager::RegisterBinding(Keys::StrafeLeft, GLFW_KEY_A);
+    Iris::InputManager::RegisterBinding(Keys::StrafeRight, GLFW_KEY_D);
+    Iris::InputManager::RegisterBinding(Keys::Ascend, GLFW_KEY_SPACE);
+    Iris::InputManager::RegisterBinding(Keys::Descend, GLFW_KEY_C);
 
-    OGL::WindowManager::RegisterHandler<OGL::FrameBufferEvent>([](const OGL::FrameBufferEvent& event) { Renderer::SetViewport(event.GetWidth(), event.GetHeight()); });
+    Iris::WindowManager::RegisterHandler<Iris::FrameBufferEvent>([](const Iris::FrameBufferEvent& event) { Renderer::SetViewport(event.GetWidth(), event.GetHeight()); });
 
     auto bufferSize = mainWindow.GetFramebufferSize();
     Renderer::SetViewport(bufferSize[0], bufferSize[1]);
 
-    auto pCamera = std::make_shared<OGL::Camera>(mainWindow.GetAspectRatio(), glm::vec3(-0.8f, 0.0f, 12.0f));
+    auto pCamera = std::make_shared<Iris::Camera>(mainWindow.GetAspectRatio(), glm::vec3(-0.8f, 0.0f, 12.0f));
     pCamera->SetRotateSpeed(5);
     auto pCameraController = std::make_shared<CameraController>(0, pCamera);
 
@@ -125,7 +125,7 @@ int main(int argc, char** argv)
     pCubeVBO->Bind();
     pCubeVBO->SetData(sizeof(cubeVertices), cubeVertices, GL_STATIC_DRAW);
 
-    OGL::EntityManager& entityManager = OGL::EntityManager::GetInstance();
+    Iris::EntityManager& entityManager = Iris::EntityManager::GetInstance();
 
     auto pLightCube = entityManager.CreateEntity<LightCube>(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f));
     pLightCube->GetTransform().SetScale(0.1f);

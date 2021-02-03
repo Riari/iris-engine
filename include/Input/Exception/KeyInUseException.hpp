@@ -4,12 +4,12 @@
 
 #include "Exception/Exception.hpp"
 
-namespace OGL
+namespace Iris
 {
-    class KeyInUseException : public ::OGL::Exception::Exception
+    class KeyInUseException : public ::Iris::Exception::Exception
     {
     public:
-        explicit KeyInUseException(std::string error) : ::OGL::Exception::Exception(std::move(error))
+        explicit KeyInUseException(std::string error) : ::Iris::Exception::Exception(std::move(error))
         {}
     };
 }

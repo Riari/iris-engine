@@ -4,12 +4,12 @@
 
 #include "Exception/Exception.hpp"
 
-namespace OGL
+namespace Iris
 {
-    class PrimaryKeyMissingException : public ::OGL::Exception::Exception
+    class PrimaryKeyMissingException : public ::Iris::Exception::Exception
     {
     public:
-        explicit PrimaryKeyMissingException() : ::OGL::Exception::Exception("Primary key is required.")
+        explicit PrimaryKeyMissingException() : ::Iris::Exception::Exception("Primary key is required.")
         {}
     };
 }

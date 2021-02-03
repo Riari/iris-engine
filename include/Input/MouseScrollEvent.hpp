@@ -4,7 +4,7 @@
 
 #include "InputEventHandler.hpp"
 
-namespace OGL
+namespace Iris
 {
     class MouseScrollEvent : public InputEventHandler
     {

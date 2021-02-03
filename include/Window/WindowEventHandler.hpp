@@ -2,7 +2,7 @@
 
 #include "WindowManager.hpp"
 
-namespace OGL
+namespace Iris
 {
     template<typename T>
     class WindowEventHandler

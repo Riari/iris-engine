@@ -2,6 +2,6 @@
 
 #include "GL/EBO.hpp"
 
-using namespace OGL;
+using namespace Iris;
 
 EBO::EBO() : BufferObject(GL_ELEMENT_ARRAY_BUFFER) {}

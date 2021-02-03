@@ -1,6 +1,6 @@
 #include "Controller/Controller.hpp"
 
-using namespace OGL;
+using namespace Iris;
 
 Controller::Controller(int id) : m_id(id) {}
 

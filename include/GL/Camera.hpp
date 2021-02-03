@@ -2,7 +2,7 @@
 
 #include <glm/glm.hpp>
 
-namespace OGL
+namespace Iris
 {
     enum class CameraMovement
     {

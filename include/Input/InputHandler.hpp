@@ -2,7 +2,7 @@
 
 #include "InputManager.hpp"
 
-namespace OGL
+namespace Iris
 {
     template<typename T>
     class InputHandler

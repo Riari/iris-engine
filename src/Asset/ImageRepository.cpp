@@ -6,7 +6,7 @@
 #include "Exception/Exception.hpp"
 #include "Asset/ImageRepository.hpp"
 
-using namespace OGL;
+using namespace Iris;
 
 void ImageRepository::Unload(const std::string &path)
 {

@@ -3,7 +3,7 @@
 #include "Scene/Scene.hpp"
 #include "Window/Window.hpp"
 
-namespace OGL
+namespace Iris
 {
     class RenderableEntity;
 

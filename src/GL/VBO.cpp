@@ -2,7 +2,7 @@
 
 #include "GL/VBO.hpp"
 
-using namespace OGL;
+using namespace Iris;
 
 VBO::VBO() : BufferObject(GL_ARRAY_BUFFER) {}
 

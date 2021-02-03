@@ -1,7 +1,7 @@
 #include "Entity/Entity.hpp"
 #include "Scene/Scene.hpp"
 
-using namespace OGL;
+using namespace Iris;
 
 Scene::Scene(int id) : m_id(id) {}
 

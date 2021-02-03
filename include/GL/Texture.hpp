@@ -4,7 +4,7 @@
 
 #include "Asset/Image.hpp"
 
-namespace OGL
+namespace Iris
 {
     class Texture
     {

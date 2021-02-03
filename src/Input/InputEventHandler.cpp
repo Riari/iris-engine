@@ -1,6 +1,6 @@
 #include "Input/InputEventHandler.hpp"
 
-using namespace OGL;
+using namespace Iris;
 
 InputEventHandler::InputEventHandler(const Window &window) : m_window(window) {}
 

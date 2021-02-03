@@ -2,7 +2,7 @@
 
 #include "GL/Camera.hpp"
 
-using namespace OGL;
+using namespace Iris;
 
 Camera::Camera(float aspectRatio, glm::vec3 position, glm::vec3 worldUp, float yaw, float pitch, float fov) :
         m_aspectRatio(aspectRatio),

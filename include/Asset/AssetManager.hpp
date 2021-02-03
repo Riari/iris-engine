@@ -5,7 +5,7 @@
 
 #include "ImageRepository.hpp"
 
-namespace OGL
+namespace Iris
 {
     class AssetManager
     {

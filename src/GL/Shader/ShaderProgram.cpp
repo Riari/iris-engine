@@ -9,7 +9,7 @@
 #include "GL/Shader/FragmentShader.hpp"
 #include "Exception/Exception.hpp"
 
-using namespace OGL;
+using namespace Iris;
 
 ShaderProgram::ShaderProgram(std::string name, std::shared_ptr<spdlog::logger> logger) :
         m_name(std::move(name)),

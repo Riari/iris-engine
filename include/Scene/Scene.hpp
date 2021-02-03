@@ -10,7 +10,7 @@
 #include "Window/Window.hpp"
 #include "Window/WindowEventHandler.hpp"
 
-namespace OGL
+namespace Iris
 {
     class Scene
     {

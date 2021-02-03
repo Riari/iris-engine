@@ -2,7 +2,7 @@
 
 #include "GL/BufferObject.hpp"
 
-using namespace OGL;
+using namespace Iris;
 
 BufferObject::BufferObject(unsigned int target) : m_target(target)
 {

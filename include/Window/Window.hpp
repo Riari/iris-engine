@@ -5,7 +5,7 @@
 #include <GLFW/glfw3.h>
 #include <spdlog/spdlog.h>
 
-namespace OGL
+namespace Iris
 {
     class Scene;
 

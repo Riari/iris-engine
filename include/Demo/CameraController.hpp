@@ -13,27 +13,27 @@
 #include "Window/Window.hpp"
 #include "Window/WindowEventHandler.hpp"
 
-namespace OGLDemo
+namespace IrisDemo
 {
     class CameraController :
-            public OGL::Controller,
-            public OGL::WindowEventHandler<OGL::FrameBufferEvent>,
-            public OGL::InputHandler<OGL::KeyEvent>,
-            public OGL::InputHandler<OGL::MouseMoveEvent>,
-            public OGL::InputHandler<OGL::MouseScrollEvent>
+            public Iris::Controller,
+            public Iris::WindowEventHandler<Iris::FrameBufferEvent>,
+            public Iris::InputHandler<Iris::KeyEvent>,
+            public Iris::InputHandler<Iris::MouseMoveEvent>,
+            public Iris::InputHandler<Iris::MouseScrollEvent>
     {
     public:
-        explicit CameraController(int id, OGL::Scene::CameraPtr camera);
+        explicit CameraController(int id, Iris::Scene::CameraPtr camera);
 
-        void Handle(OGL::FrameBufferEvent) override;
-        void Handle(OGL::KeyEvent) override;
-        void Handle(OGL::MouseMoveEvent) override;
-        void Handle(OGL::MouseScrollEvent) override;
+        void Handle(Iris::FrameBufferEvent) override;
+        void Handle(Iris::KeyEvent) override;
+        void Handle(Iris::MouseMoveEvent) override;
+        void Handle(Iris::MouseScrollEvent) override;
 
-        void Update(OGL::Window&) override;
+        void Update(Iris::Window&) override;
 
     private:
-        OGL::Scene::CameraPtr m_camera;
+        Iris::Scene::CameraPtr m_camera;
 
         bool m_moveForward = false;
         bool m_moveBackward = false;

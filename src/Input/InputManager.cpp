@@ -9,7 +9,7 @@
 #include "Input/InputBinding.hpp"
 #include "Input/InputManager.hpp"
 
-using namespace OGL;
+using namespace Iris;
 
 void InputManager::RegisterBinding(int id, int primaryKey, int secondaryKey, bool force)
 {

@@ -3,7 +3,7 @@
 
 #include "Utility/Logger.hpp"
 
-using namespace OGL;
+using namespace Iris;
 
 const std::string Logger::PATTERN = "[%Y-%m-%d %H:%M:%S.%e] [%n] [%l] %v";
 const std::shared_ptr<spdlog::logger> Logger::GL = spdlog::stdout_color_mt("GL");

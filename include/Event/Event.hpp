@@ -2,7 +2,7 @@
 
 #include <typeindex>
 
-namespace OGL
+namespace Iris
 {
     class Event
     {

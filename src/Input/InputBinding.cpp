@@ -1,6 +1,6 @@
 #include "Input/InputBinding.hpp"
 
-using namespace OGL;
+using namespace Iris;
 
 InputBinding::InputBinding(int id, int primaryKey, int secondaryKey) :
         m_id(id),

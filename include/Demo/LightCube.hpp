@@ -3,14 +3,14 @@
 #include "Entity/Entity.hpp"
 #include "GL/Camera.hpp"
 
-namespace OGLDemo
+namespace IrisDemo
 {
-    class LightCube : public OGL::Entity
+    class LightCube : public Iris::Entity
     {
     public:
         explicit LightCube(std::string id, glm::vec3 position, glm::vec3 emissionColor);
 
-        void Render(std::shared_ptr<OGL::Camera> camera) override;
+        void Render(std::shared_ptr<Iris::Camera> camera) override;
 
         glm::vec3 GetEmissionColor();
 

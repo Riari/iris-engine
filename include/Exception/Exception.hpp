@@ -3,7 +3,7 @@
 #include <string>
 #include <exception>
 
-namespace OGL
+namespace Iris
 {
     class Exception : public std::exception
     {

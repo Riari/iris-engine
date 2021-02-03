@@ -2,7 +2,7 @@
 
 #include "GL/VAO.hpp"
 
-using namespace OGL;
+using namespace Iris;
 
 VAO::VAO()
 {

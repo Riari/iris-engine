@@ -1,6 +1,6 @@
 #pragma once
 
-namespace OGL
+namespace Iris
 {
     class Window;
 

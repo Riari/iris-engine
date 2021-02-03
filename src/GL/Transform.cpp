@@ -2,7 +2,7 @@
 
 #include "GL/Transform.hpp"
 
-using namespace OGL;
+using namespace Iris;
 
 Transform::Transform(glm::vec3 position) : m_position(position) {}
 

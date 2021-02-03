@@ -11,7 +11,7 @@
 #include "Utility/Logger.hpp"
 #include "Scene/Scene.hpp"
 
-using namespace OGL;
+using namespace Iris;
 
 Window::Window(int id, const char *title, GLFWmonitor* monitor, int width, int height, double fpsCap) :
     m_id(id),

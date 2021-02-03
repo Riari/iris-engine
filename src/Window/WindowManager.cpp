@@ -3,7 +3,7 @@
 #include "Window/Window.hpp"
 #include "Window/WindowManager.hpp"
 
-using namespace OGL;
+using namespace Iris;
 
 WindowManager& WindowManager::GetInstance()
 {

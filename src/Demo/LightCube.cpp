@@ -6,23 +6,23 @@
 #include "Demo/LightCube.hpp"
 #include "Utility/Logger.hpp"
 
-using namespace OGLDemo;
+using namespace IrisDemo;
 
-LightCube::LightCube(std::string id, glm::vec3 position, glm::vec3 emissionColor) : OGL::Entity(std::move(id), position), m_emissionColor(emissionColor)
+LightCube::LightCube(std::string id, glm::vec3 position, glm::vec3 emissionColor) : Iris::Entity(std::move(id), position), m_emissionColor(emissionColor)
 {
-    auto *pVao = new OGL::VAO();
+    auto *pVao = new Iris::VAO();
     pVao->Bind();
-    OGL::VBO::SetVertexAttribute(0, 3, 6 * sizeof(float), (void*)0);
-    OGL::VAO::Unbind();
+    Iris::VBO::SetVertexAttribute(0, 3, 6 * sizeof(float), (void*)0);
+    Iris::VAO::Unbind();
 
-    auto pProgram = std::make_shared<OGL::ShaderProgram>("LightSource", OGL::Logger::GL);
+    auto pProgram = std::make_shared<Iris::ShaderProgram>("LightSource", Iris::Logger::GL);
     pProgram->Build();
 
     SetVAO(*pVao);
     SetShaderProgram(pProgram);
 }
 
-void LightCube::Render(std::shared_ptr<OGL::Camera> camera)
+void LightCube::Render(std::shared_ptr<Iris::Camera> camera)
 {
     GetTransform().SetPosition(glm::vec3(1.0f + sin(glfwGetTime()) * 2.0f, sin(glfwGetTime() / 2.0f) * 1.0f, 0.0f));
 

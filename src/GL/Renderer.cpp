@@ -2,7 +2,7 @@
 
 #include "GL/Renderer.hpp"
 
-using namespace OGL;
+using namespace Iris;
 
 void Renderer::EnableCapability(unsigned int capability)
 {

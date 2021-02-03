@@ -8,7 +8,7 @@
 #include "GL/Shader/Shader.hpp"
 #include "Exception/Exception.hpp"
 
-using namespace OGL;
+using namespace Iris;
 
 Shader::Shader(unsigned int type, const std::string &name, const std::string &suffix,
                std::shared_ptr<spdlog::logger> logger) :

@@ -6,7 +6,7 @@
 
 #include "Exception/Exception.hpp"
 
-namespace OGL
+namespace Iris
 {
     class MonitorNotFoundException : public Exception
     {

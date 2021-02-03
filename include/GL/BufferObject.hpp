@@ -2,7 +2,7 @@
 
 #include <memory>
 
-namespace OGL
+namespace Iris
 {
     class BufferObject
     {

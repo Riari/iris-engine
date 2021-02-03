@@ -5,7 +5,7 @@
 #include "InputBinding.hpp"
 #include "InputEventHandler.hpp"
 
-namespace OGL
+namespace Iris
 {
     class MouseMoveEvent : public InputEventHandler
     {

@@ -2,7 +2,7 @@
 
 #include "BufferObject.hpp"
 
-namespace OGL
+namespace Iris
 {
     class VBO : public BufferObject
     {

@@ -1,6 +1,6 @@
 #pragma once
 
-namespace OGLDemo
+namespace IrisDemo
 {
     enum Keys
     {

@@ -1,6 +1,6 @@
 #include "Event/Event.hpp"
 
-using namespace OGL;
+using namespace Iris;
 
 Event::Event(float timestamp) : m_timestamp(timestamp) {}
 

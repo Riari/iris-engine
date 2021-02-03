@@ -6,7 +6,7 @@
 
 #include "Event.hpp"
 
-namespace OGL
+namespace Iris
 {
     class EventBus
     {
