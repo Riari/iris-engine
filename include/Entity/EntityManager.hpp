@@ -1,17 +1,18 @@
 #pragma once
 
-#include <map>
-#include <memory>
-#include <set>
-#include <vector>
+#include <array>
+#include <queue>
 
-#include "Exception/Exception.hpp"
+#include "Entity/Event/AddComponentEvent.hpp"
+#include "Entity/Event/RemoveComponentEvent.hpp"
+#include "Entity.hpp"
+#include "Event/EventHandler.hpp"
 
 namespace Iris
 {
-    class RenderableEntity;
-
-    class EntityManager
+    class EntityManager :
+            public EventHandler<AddComponentEvent>,
+            public EventHandler<RemoveComponentEvent>
     {
     public:
         EntityManager(EntityManager const&) = delete;
@@ -19,35 +20,19 @@ namespace Iris
 
         static EntityManager& GetInstance();
 
-        template <typename T, typename... Args>
-        std::enable_if_t<
-                std::is_constructible<T, std::string, Args...>::value,
-                std::shared_ptr<T>
-        >
-        CreateEntity(Args&&... args) {
-            auto id = GenerateID();
-            auto pEntity = std::make_shared<T>(id, std::forward<Args>(args)...);
-            m_entities.insert(std::pair(id, pEntity));
-            return pEntity;
-        }
+        EntityId CreateEntity();
+        void DestroyEntity(EntityId);
+        void SetSignature(EntityId, Signature);
+        Signature GetSignature(EntityId);
 
-        template <typename T, typename... Args>
-        std::enable_if_t<
-                !std::is_constructible<T, std::string, Args...>::value,
-                std::shared_ptr<T>
-        >
-        CreateEntity(Args&&...)
-        {
-            throw Exception("Tried to create entity but supplied args incompatible.");
-        }
-
-        std::vector<std::shared_ptr<Entity>> GetEntities();
+        bool Handle(const AddComponentEvent&) override;
+        bool Handle(const RemoveComponentEvent&) override;
 
     private:
-        std::map<std::string, std::shared_ptr<Entity>> m_entities;
+        EntityManager();
 
-        EntityManager() = default;
-
-        std::string GenerateID();
+        std::queue<EntityId> m_entityIds{};
+        std::array<Signature, MAX_ENTITIES> m_entitySignatures{};
+        uint32_t m_livingEntityCount{};
     };
 }

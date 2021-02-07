@@ -1,6 +1,6 @@
 #pragma once
 
-namespace IrisDemo
+namespace Iris
 {
     enum Keys
     {

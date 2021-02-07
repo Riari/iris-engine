@@ -10,6 +10,7 @@
 #include "Input/InputManager.hpp"
 #include "Utility/Logger.hpp"
 #include "Scene/Scene.hpp"
+#include "Window/WindowManager.hpp"
 
 using namespace Iris;
 
@@ -141,6 +142,7 @@ void Window::SetShouldClose(bool state)
 void Window::SetScene(std::shared_ptr<Scene> scene)
 {
     m_scene = std::move(scene);
+    m_scene->Setup(GetAspectRatio());
 }
 
 bool Window::ShouldClose()

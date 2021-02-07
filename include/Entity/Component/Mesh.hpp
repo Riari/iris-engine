@@ -1,0 +1,20 @@
+#pragma once
+
+#include <memory>
+
+#include <glm/glm.hpp>
+
+#include "GL/Shader/ShaderProgram.hpp"
+#include "GL/VAO.hpp"
+#include "GL/VBO.hpp"
+
+namespace Iris
+{
+    struct Mesh
+    {
+        std::shared_ptr<VBO> pVbo;
+        std::shared_ptr<VAO> pVao;
+        std::shared_ptr<ShaderProgram> pShaderProgram;
+        glm::vec3 color;
+    };
+}

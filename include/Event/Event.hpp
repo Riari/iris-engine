@@ -7,7 +7,7 @@ namespace Iris
     class Event
     {
     public:
-        explicit Event(float timestamp = 0.0f);
+        explicit Event();
         [[nodiscard]] float GetTimestamp() const;
 
     private:
