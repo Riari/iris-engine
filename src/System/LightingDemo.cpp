@@ -17,6 +17,6 @@ void LightingDemo::Update(Window &window)
     for (auto const& id : m_entities)
     {
         auto& transform = GetComponent<Transform>(id);
-        transform.position = glm::vec3(1.0f + sin(window.GetDeltaTime()) * 2.0f, sin(window.GetDeltaTime() / 2.0f) * 1.0f, 0.0f);
+        transform.position = glm::vec3(1.0f + sin(window.GetLastLoopTime()) * 2.0f, sin(window.GetLastLoopTime() / 2.0f) * 1.0f, 0.0f);
     }
 }

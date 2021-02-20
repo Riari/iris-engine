@@ -32,9 +32,9 @@ namespace Iris
 
         glm::vec3 position = DEFAULT_POSITION;
         glm::vec3 front = DEFAULT_FRONT;
-        glm::vec3 up = DEFAULT_UP;
-        glm::vec3 right;
-        glm::vec3 worldUp;
+        glm::vec3 up{};
+        glm::vec3 right{};
+        glm::vec3 worldUp = DEFAULT_UP;
 
         float yaw = DEFAULT_YAW;
         float pitch = DEFAULT_PITCH;

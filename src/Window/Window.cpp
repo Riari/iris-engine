@@ -188,3 +188,7 @@ double Window::GetDeltaTime() const
 {
     return m_deltaTime;
 }
+
+double Window::GetLastLoopTime() const {
+    return m_lastLoopTime;
+}

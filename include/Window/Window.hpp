@@ -22,6 +22,7 @@ namespace Iris
         float GetAspectRatio();
 
         [[nodiscard]] double GetDeltaTime() const;
+        [[nodiscard]] double GetLastLoopTime() const;
 
         void MakeCurrent();
         void EnableVsync();

@@ -39,7 +39,7 @@ void MeshRenderer::Update(Window &window)
         auto& transform = GetComponent<Transform>(id);
         auto& mesh = GetComponent<Mesh>(id);
         mesh.pShaderProgram->Use();
-        mesh.pShaderProgram->Use();
+        mesh.pShaderProgram->SetUniform3f("objectColor", mesh.color);
         mesh.pShaderProgram->SetUniform3f("lightPos", lightTransform.position);
         mesh.pShaderProgram->SetUniform3f("lightColor", lightPointLight.color);
         mesh.pShaderProgram->SetUniformMatrix4fv("projection", glm::value_ptr(camera.GetProjectionMatrix()));

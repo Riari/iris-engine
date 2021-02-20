@@ -8,6 +8,7 @@
 #include "Entity/Component/PointLight.hpp"
 #include "Entity/Component/Transform.hpp"
 #include "Entity/EntityManager.hpp"
+#include "GL/Renderer.hpp"
 #include "System/SystemManager.hpp"
 #include "Utility/Logger.hpp"
 
@@ -73,12 +74,26 @@ void MainScene::Setup(float aspectRatio)
     componentManager.RegisterComponentType<Transform>();
 
     std::default_random_engine generator;
-    std::uniform_real_distribution<float> randPosition(-20.0f, 20.0f);
+    std::uniform_real_distribution<float> randPosition(-3.0f, 3.0f);
     std::uniform_real_distribution<float> randRotation(0.0f, 3.0f);
     std::uniform_real_distribution<float> randScale(0.5f, 2.0f);
     std::uniform_real_distribution<float> randColor(0.0f, 1.0f);
 
-    for (int i = 0; i < 10; i++)
+    m_cameraController = systemManager.RegisterSystem<CameraController>();
+    m_meshRenderer = systemManager.RegisterSystem<MeshRenderer>();
+    m_lightingDemo = systemManager.RegisterSystem<LightingDemo>();
+
+    auto pVao = std::make_shared<VAO>();
+    pVao->Bind();
+    VBO::SetVertexAttribute(0, 3, 6 * sizeof(float), (void*)0);
+    VBO::SetVertexAttribute(1, 3, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+    VAO::Unbind();
+
+    auto pProgram = std::make_shared<ShaderProgram>("ColoredCube", Logger::GL);
+    pProgram->Build();
+    pProgram->Use();
+
+    for (int i = 0; i < 5; i++)
     {
         auto id = entityManager.CreateEntity();
         componentManager.AddComponent(id, Transform{
@@ -86,17 +101,6 @@ void MainScene::Setup(float aspectRatio)
                 .rotation = randRotation(generator),
                 .scale = glm::vec3(randScale(generator), randScale(generator), randScale(generator))
         });
-
-        auto pVao = std::make_shared<VAO>();
-        pVao->Bind();
-        VBO::SetVertexAttribute(0, 3, 6 * sizeof(float), (void*)0);
-        VBO::SetVertexAttribute(1, 3, 6 * sizeof(float), (void*)(3 * sizeof(float)));
-        VAO::Unbind();
-
-        auto pProgram = std::make_shared<ShaderProgram>("ColoredCube", Logger::GL);
-        pProgram->Build();
-        pProgram->Use();
-
         componentManager.AddComponent(id, Mesh{
                 .pVbo = pCubeVBO,
                 .pVao = pVao,
@@ -111,7 +115,7 @@ void MainScene::Setup(float aspectRatio)
             .aspectRatio = aspectRatio
     });
 
-    m_cameraController = systemManager.RegisterSystem<CameraController>();
+    componentManager.GetComponent<Camera>(cameraId).UpdateVectors();
     m_cameraController->SetActiveCameraId(cameraId);
 
     auto lightId = entityManager.CreateEntity();
@@ -140,11 +144,8 @@ void MainScene::Setup(float aspectRatio)
             .color = glm::vec3(1.0f, 1.0f, 1.0f)
     });
 
-    m_meshRenderer = systemManager.RegisterSystem<MeshRenderer>();
     m_meshRenderer->SetPointLightId(lightId);
     m_meshRenderer->SetActiveCameraId(cameraId);
-
-    m_lightingDemo = systemManager.RegisterSystem<LightingDemo>();
 }
 
 void MainScene::Update(Window &window)
@@ -155,7 +156,9 @@ void MainScene::Update(Window &window)
 
 void MainScene::Render(Window &window)
 {
+    Renderer::Clear();
     m_meshRenderer->Update(window);
+    window.SwapBuffers();
 }
 
 void MainScene::Teardown()
