@@ -7,7 +7,7 @@ namespace Iris
 {
     const glm::vec3 DEFAULT_POSITION = glm::vec3(0.0f, 0.0f, 0.0f);
     const glm::vec3 DEFAULT_FRONT = glm::vec3(0.0f, 0.0f, -1.0f);
-    const glm::vec3 DEFAULT_UP = glm::vec3(0.0f, 1.0f, 0.0f);
+    const glm::vec3 DEFAULT_WORLD_UP = glm::vec3(0.0f, 1.0f, 0.0f);
 
     const float DEFAULT_YAW = -90.0f;
     const float DEFAULT_PITCH = 0.0f;
@@ -24,7 +24,7 @@ namespace Iris
         glm::vec3 front = DEFAULT_FRONT;
         glm::vec3 up{};
         glm::vec3 right{};
-        glm::vec3 worldUp = DEFAULT_UP;
+        glm::vec3 worldUp = DEFAULT_WORLD_UP;
 
         float yaw = DEFAULT_YAW;
         float pitch = DEFAULT_PITCH;
