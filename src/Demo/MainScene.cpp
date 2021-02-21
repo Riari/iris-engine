@@ -115,7 +115,6 @@ void MainScene::Setup(float aspectRatio)
             .aspectRatio = aspectRatio
     });
 
-    componentManager.GetComponent<Camera>(cameraId).UpdateVectors();
     m_cameraController->SetActiveCameraId(cameraId);
 
     auto lightId = entityManager.CreateEntity();

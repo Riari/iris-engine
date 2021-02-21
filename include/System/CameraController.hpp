@@ -10,6 +10,16 @@
 
 namespace Iris
 {
+    enum class CameraMovement
+    {
+        FORWARD,
+        BACKWARD,
+        LEFT,
+        RIGHT,
+        UP,
+        DOWN
+    };
+
     class CameraController :
             public System,
             public WindowEventHandler<FrameBufferEvent>,
@@ -26,6 +36,11 @@ namespace Iris
         void Handle(KeyEvent) override;
         void Handle(MouseMoveEvent) override;
         void Handle(MouseScrollEvent) override;
+
+        void AdjustFOV(float adjustment) const;
+        void Move(CameraMovement direction, double deltaTime, double moveSpeed) const;
+        void Rotate(float xOffset, float yOffset, double deltaTime, double rotateSpeed) const;
+        void UpdateVectors() const;
 
         void Update(Window&) override;
 

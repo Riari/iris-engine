@@ -13,6 +13,7 @@ std::list<ComponentType> CameraController::GetComponentTypes()
 void CameraController::SetActiveCameraId(EntityId id)
 {
     m_activeCameraId = id;
+    UpdateVectors();
 }
 
 void CameraController::Handle(FrameBufferEvent event)
@@ -59,23 +60,92 @@ void CameraController::Handle(MouseMoveEvent event)
 
 void CameraController::Handle(MouseScrollEvent event)
 {
-    GetComponent<Camera>(m_activeCameraId).AdjustFOV(event.GetY());
+    AdjustFOV(event.GetY());
+}
+
+void CameraController::AdjustFOV(float adjustment) const
+{
+    auto& camera = GetComponent<Camera>(m_activeCameraId);
+
+    camera.fov -= adjustment;
+
+    if (camera.fov < 1.0f) camera.fov = 1.0f;
+    if (camera.fov > DEFAULT_FOV) camera.fov = DEFAULT_FOV;
+}
+
+void CameraController::Move(CameraMovement direction, double deltaTime, double moveSpeed) const
+{
+    auto& camera = GetComponent<Camera>(m_activeCameraId);
+
+    float velocity = moveSpeed * deltaTime;
+
+    switch (direction)
+    {
+        case CameraMovement::FORWARD:
+            camera.position += camera.front * velocity;
+            break;
+        case CameraMovement::BACKWARD:
+            camera.position -= camera.front * velocity;
+            break;
+        case CameraMovement::LEFT:
+            camera.position -= camera.right * velocity;
+            break;
+        case CameraMovement::RIGHT:
+            camera.position += camera.right * velocity;
+            break;
+        case CameraMovement::UP:
+            camera.position += camera.up * velocity;
+            break;
+        case CameraMovement::DOWN:
+            camera.position -= camera.up * velocity;
+            break;
+    }
+}
+
+void CameraController::Rotate(float xOffset, float yOffset, double deltaTime, double rotateSpeed) const
+{
+    auto& camera = GetComponent<Camera>(m_activeCameraId);
+
+    float velocity = rotateSpeed * deltaTime;
+
+    camera.yaw = glm::mod(camera.yaw + (xOffset * velocity), 360.0f);
+    camera.pitch += yOffset * velocity;
+
+    if (camera.constrainPitch)
+    {
+        if (camera.pitch > 89.0f) camera.pitch = 89.0f;
+        if (camera.pitch < -89.0f) camera.pitch = -89.0f;
+    }
+
+    UpdateVectors();
+}
+
+void CameraController::UpdateVectors() const
+{
+    auto& camera = GetComponent<Camera>(m_activeCameraId);
+
+    glm::vec3 front;
+    front.x = cos(glm::radians(camera.yaw)) * cos(glm::radians(camera.pitch));
+    front.y = sin(glm::radians(camera.pitch));
+    front.z = sin(glm::radians(camera.yaw)) * cos(glm::radians(camera.pitch));
+
+    camera.front = glm::normalize(front);
+    camera.right = glm::normalize(glm::cross(front, camera.worldUp));
+    camera.up = glm::normalize(glm::cross(camera.right, front));
 }
 
 void CameraController::Update(Window &window)
 {
-    auto& camera = GetComponent<Camera>(m_activeCameraId);
-
-    camera.Rotate(m_rotateX, m_rotateY, window.GetDeltaTime(), 1.0f);
+    Rotate(m_rotateX, m_rotateY, window.GetDeltaTime(), 1.0f);
     m_rotateX = 0.0f;
     m_rotateY = 0.0f;
 
     float moveSpeed = Iris::InputManager::IsAltDown() ? 5.0f : 1.0f;
 
-    if (m_moveForward) camera.Move(CameraMovement::FORWARD, window.GetDeltaTime(), moveSpeed);
-    if (m_moveBackward) camera.Move(CameraMovement::BACKWARD, window.GetDeltaTime(), moveSpeed);
-    if (m_strafeRight) camera.Move(CameraMovement::RIGHT, window.GetDeltaTime(), moveSpeed);
-    if (m_strafeLeft) camera.Move(CameraMovement::LEFT, window.GetDeltaTime(), moveSpeed);
-    if (m_ascend) camera.Move(CameraMovement::UP, window.GetDeltaTime(), moveSpeed);
-    if (m_descend) camera.Move(CameraMovement::DOWN, window.GetDeltaTime(), moveSpeed);
+    if (m_moveForward) Move(CameraMovement::FORWARD, window.GetDeltaTime(), moveSpeed);
+    if (m_moveBackward) Move(CameraMovement::BACKWARD, window.GetDeltaTime(), moveSpeed);
+    if (m_strafeRight) Move(CameraMovement::RIGHT, window.GetDeltaTime(), moveSpeed);
+    if (m_strafeLeft) Move(CameraMovement::LEFT, window.GetDeltaTime(), moveSpeed);
+    if (m_ascend) Move(CameraMovement::UP, window.GetDeltaTime(), moveSpeed);
+    if (m_descend) Move(CameraMovement::DOWN, window.GetDeltaTime(), moveSpeed);
 }
