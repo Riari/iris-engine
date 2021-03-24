@@ -1,5 +1,4 @@
 #include <algorithm>
-#include <utility>
 
 #include <fmt/core.h>
 #include <GLFW/glfw3.h>

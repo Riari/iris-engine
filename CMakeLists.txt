@@ -51,3 +51,18 @@ add_custom_target(copy-shader-sources ALL COMMAND ${CMAKE_COMMAND} -E copy_direc
 add_dependencies(${PROJECT_NAME} copy-assets copy-shader-sources)
 
 target_link_libraries(${PROJECT_NAME} PUBLIC fmt glad glfw spdlog)
+
+target_precompile_headers(
+        ${PROJECT_NAME} PRIVATE
+
+        # STL
+        <algorithm>
+        <utility>
+        <memory>
+
+        # Third-party
+        <spdlog/spdlog.h>
+        <fmt/core.h>
+        <glad/glad.h>
+        <GLFW/glfw3.h>
+)

@@ -3,14 +3,11 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
-#include <spdlog/spdlog.h>
 #include <cxxopts.hpp>
 
 #include "Demo/Keys.hpp"
 #include "Demo/MainScene.hpp"
 #include "GL/Renderer.hpp"
-#include "Input/InputManager.hpp"
-#include "System/CameraController.hpp"
 
 #if !defined(NDEBUG)
 #include "GL/Debug.hpp"

@@ -1,7 +1,4 @@
-
-#include <Entity/Event/RemoveComponentEvent.hpp>
-
-#include "Entity/Event/AddComponentEvent.hpp"
+#include "Entity/Event/RemoveComponentEvent.hpp"
 
 using namespace Iris;
 

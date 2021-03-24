@@ -1,5 +1,4 @@
 #include <memory>
-#include <utility>
 
 #include <glad/glad.h>
 #include <spdlog/spdlog.h>
