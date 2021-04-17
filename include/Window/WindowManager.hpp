@@ -19,7 +19,7 @@ namespace Iris
 
         std::map<int, std::shared_ptr<Window>> GetWindows();
 
-        Window& Create(int id, const char *title, int monitor, int width, int height, double fpsCap);
+        Window& Create(int id, const char *title, int monitor, int width, int height, double fpsCap, GLFWwindow *share = NULL);
         Window& Get(int id);
         void Destroy(int id);
 

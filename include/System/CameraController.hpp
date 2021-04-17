@@ -42,7 +42,7 @@ namespace Iris
         void Rotate(float xOffset, float yOffset, double deltaTime, double rotateSpeed) const;
         void UpdateVectors() const;
 
-        void Update(Window&) override;
+        void Update(double);
 
     private:
         EntityId m_activeCameraId;

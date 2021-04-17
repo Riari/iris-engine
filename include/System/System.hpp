@@ -5,6 +5,7 @@
 
 #include "Entity/ComponentManager.hpp"
 #include "Entity/Entity.hpp"
+#include "Scene/Scene.hpp"
 #include "Window/Window.hpp"
 
 namespace Iris
@@ -16,7 +17,8 @@ namespace Iris
         void RemoveEntity(EntityId);
 
         static std::list<ComponentType> GetComponentTypes();
-        virtual void Update(Window&) = 0;
+        virtual void Update(double);
+        virtual void Update(Window&, Scene&);
 
     protected:
         std::set<EntityId> m_entities;

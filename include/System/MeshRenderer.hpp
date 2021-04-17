@@ -12,10 +12,10 @@ namespace Iris
         void SetPointLightId(EntityId);
         void SetActiveCameraId(EntityId);
 
-        void Update(Window&) override;
+        void Update(Window&, Scene&) override;
 
     private:
-        EntityId m_pointLightId;
-        EntityId m_activeCameraId;
+        EntityId m_pointLightId{};
+        EntityId m_activeCameraId{};
     };
 }

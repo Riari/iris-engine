@@ -1,5 +1,10 @@
 #pragma once
 
+#include <set>
+
+#include <glm/glm.hpp>
+
+#include "Entity/Entity.hpp"
 #include "Window/Window.hpp"
 
 namespace Iris
@@ -7,9 +12,18 @@ namespace Iris
     class Scene
     {
     public:
-        virtual void Setup(float aspectRatio) = 0;
-        virtual void Update(Window&) = 0;
-        virtual void Render(Window&) = 0;
-        virtual void Teardown() = 0;
+        explicit Scene(int id);
+
+        void SetClearColor(glm::vec4);
+        glm::vec4 GetClearColor();
+
+        void AddEntity(EntityId);
+        std::set<EntityId> GetEntities();
+        void RemoveEntity(EntityId);
+
+    private:
+        int m_id;
+        glm::vec4 m_clearColor;
+        std::set<EntityId> m_entityIds;
     };
 }

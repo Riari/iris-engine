@@ -14,7 +14,7 @@
 
 using namespace Iris;
 
-Window::Window(int id, const char *title, GLFWmonitor* monitor, int width, int height, double fpsCap) :
+Window::Window(int id, const char *title, GLFWmonitor* monitor, int width, int height, double fpsCap, GLFWwindow* share) :
     m_id(id),
     m_title(title),
     m_updateFrequency(1.0 / std::max(fpsCap, 120.0)),
@@ -28,7 +28,7 @@ Window::Window(int id, const char *title, GLFWmonitor* monitor, int width, int h
     glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
 #endif
 
-    GLFWwindow *window = glfwCreateWindow(width, height, title, monitor, NULL);
+    GLFWwindow *window = glfwCreateWindow(width, height, title, monitor, share);
     if (window == NULL)
     {
         glfwTerminate();
@@ -61,6 +61,11 @@ int Window::GetID() const
     return m_id;
 }
 
+GLFWwindow *Window::GetGLFWWindow()
+{
+    return m_window;
+}
+
 int* Window::GetSize()
 {
     int width, height;
@@ -91,37 +96,10 @@ void Window::EnableVsync()
     glfwSwapInterval(1);
 }
 
-void Window::Update()
-{
-    if (m_scene == nullptr) return;
-
-    double now = glfwGetTime();
-    m_deltaTime = now - m_lastLoopTime;
-    m_fpsTime += m_deltaTime;
-    m_updateTime += m_deltaTime;
-    m_lastLoopTime = now;
-
-    if (m_fpsTime >= 1.0) {
-        std::stringstream title;
-        title << m_title << " | " << std::to_string(m_frameCount) << " FPS";
-        SetTitle(title.str().c_str());
-        m_fpsTime = 0;
-        m_frameCount = 0;
-    }
-
-    while (m_updateTime >= m_updateFrequency)
-    {
-        m_scene->Update(*this);
-        m_updateTime -= m_updateFrequency;
-    }
-
-    m_scene->Render(*this);
-    m_frameCount++;
-}
-
 void Window::SwapBuffers()
 {
     glfwSwapBuffers(m_window);
+    m_frameCount++;
 }
 
 void Window::SetInputMode(int mode, int value)
@@ -134,20 +112,63 @@ void Window::SetTitle(const char *title)
     glfwSetWindowTitle(m_window, title);
 }
 
+const char *Window::GetTitle()
+{
+    return m_title;
+}
+
 void Window::SetShouldClose(bool state)
 {
     glfwSetWindowShouldClose(m_window, state);
 }
 
-void Window::SetScene(std::shared_ptr<Scene> scene)
-{
-    m_scene = std::move(scene);
-    m_scene->Setup(GetAspectRatio());
-}
-
 bool Window::ShouldClose()
 {
     return glfwWindowShouldClose(m_window);
+}
+
+void Window::Tick()
+{
+    double now = glfwGetTime();
+    m_deltaTime = now - m_lastLoopTime;
+    m_fpsTime += m_deltaTime;
+    m_updateTime += m_deltaTime;
+    m_lastLoopTime = now;
+}
+
+bool Window::ShouldUpdateFPS() const
+{
+    return m_fpsTime >= 1.0;
+}
+
+bool Window::ShouldUpdate() const
+{
+    return m_updateTime >= m_updateFrequency;
+}
+
+void Window::OnUpdated()
+{
+    m_updateTime -= m_updateFrequency;
+}
+
+double Window::GetDeltaTime() const
+{
+    return m_deltaTime;
+}
+
+double Window::GetLastLoopTime() const {
+    return m_lastLoopTime;
+}
+
+int Window::GetFrameCount() const
+{
+    return m_frameCount;
+}
+
+void Window::ResetFPSState()
+{
+    m_fpsTime = 0;
+    m_frameCount = 0;
 }
 
 void Window::DispatchFrameBufferEvent(int w, int h) const
@@ -182,13 +203,4 @@ Window* Window::GetPointer(GLFWwindow *window)
     if (!ptr) throw Exception("Failed to get pointer for window");
 
     return ptr;
-}
-
-double Window::GetDeltaTime() const
-{
-    return m_deltaTime;
-}
-
-double Window::GetLastLoopTime() const {
-    return m_lastLoopTime;
 }

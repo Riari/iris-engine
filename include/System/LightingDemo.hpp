@@ -9,6 +9,6 @@ namespace Iris
     {
     public:
         static std::list<ComponentType> GetComponentTypes();
-        void Update(Window&) override;
+        void Update(Window&, Scene&) override;
     };
 }

@@ -16,9 +16,9 @@ std::map<int, std::shared_ptr<Window>> WindowManager::GetWindows()
     return m_windows;
 }
 
-Window& WindowManager::Create(const int id, const char *title, int monitor, int width, int height, double fpsCap)
+Window& WindowManager::Create(const int id, const char *title, int monitor, int width, int height, double fpsCap, GLFWwindow *share)
 {
-    auto window = std::make_unique<Window>(id, title, GetMonitor(monitor), width, height, fpsCap);
+    auto window = std::make_unique<Window>(id, title, GetMonitor(monitor), width, height, fpsCap, share);
     m_windows.insert(std::pair<int, std::shared_ptr<Window>>(id, std::move(window)));
     return Get(id);
 }

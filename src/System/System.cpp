@@ -16,3 +16,13 @@ std::list<ComponentType> System::GetComponentTypes()
 {
     return {};
 }
+
+void System::Update(double)
+{
+    // noop
+}
+
+void System::Update(Window& window, Scene& scene)
+{
+    // noop
+}

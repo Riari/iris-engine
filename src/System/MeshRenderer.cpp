@@ -1,10 +1,10 @@
-#include <glad/glad.h>
 #include <glm/ext.hpp>
 
 #include "Entity/Component/Camera.hpp"
 #include "Entity/Component/Mesh.hpp"
 #include "Entity/Component/PointLight.hpp"
 #include "Entity/Component/Transform.hpp"
+#include "Scene/Scene.hpp"
 #include "System/MeshRenderer.hpp"
 
 using namespace Iris;
@@ -27,7 +27,7 @@ void MeshRenderer::SetActiveCameraId(EntityId id)
     m_activeCameraId = id;
 }
 
-void MeshRenderer::Update(Window &window)
+void MeshRenderer::Update(Window &window, Scene &scene)
 {
     auto& lightTransform = GetComponent<Transform>(m_pointLightId);
     auto& lightPointLight = GetComponent<PointLight>(m_pointLightId);

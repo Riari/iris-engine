@@ -133,18 +133,18 @@ void CameraController::UpdateVectors() const
     camera.up = glm::normalize(glm::cross(camera.right, front));
 }
 
-void CameraController::Update(Window &window)
+void CameraController::Update(double deltaTime)
 {
-    Rotate(m_rotateX, m_rotateY, window.GetDeltaTime(), 1.0f);
+    Rotate(m_rotateX, m_rotateY, deltaTime, 1.0f);
     m_rotateX = 0.0f;
     m_rotateY = 0.0f;
 
     float moveSpeed = Iris::InputManager::IsAltDown() ? 5.0f : 1.0f;
 
-    if (m_moveForward) Move(CameraMovement::FORWARD, window.GetDeltaTime(), moveSpeed);
-    if (m_moveBackward) Move(CameraMovement::BACKWARD, window.GetDeltaTime(), moveSpeed);
-    if (m_strafeRight) Move(CameraMovement::RIGHT, window.GetDeltaTime(), moveSpeed);
-    if (m_strafeLeft) Move(CameraMovement::LEFT, window.GetDeltaTime(), moveSpeed);
-    if (m_ascend) Move(CameraMovement::UP, window.GetDeltaTime(), moveSpeed);
-    if (m_descend) Move(CameraMovement::DOWN, window.GetDeltaTime(), moveSpeed);
+    if (m_moveForward) Move(CameraMovement::FORWARD, deltaTime, moveSpeed);
+    if (m_moveBackward) Move(CameraMovement::BACKWARD, deltaTime, moveSpeed);
+    if (m_strafeRight) Move(CameraMovement::RIGHT, deltaTime, moveSpeed);
+    if (m_strafeLeft) Move(CameraMovement::LEFT, deltaTime, moveSpeed);
+    if (m_ascend) Move(CameraMovement::UP, deltaTime, moveSpeed);
+    if (m_descend) Move(CameraMovement::DOWN, deltaTime, moveSpeed);
 }

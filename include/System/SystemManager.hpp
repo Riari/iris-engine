@@ -48,6 +48,11 @@ namespace Iris
             return system;
         }
 
+        std::unordered_map<const char*, std::shared_ptr<System>> GetSystems()
+        {
+            return m_systems;
+        }
+
         template<typename T>
         void SetSignature(Signature signature)
         {
