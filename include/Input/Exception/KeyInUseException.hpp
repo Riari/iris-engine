@@ -6,10 +6,10 @@
 
 namespace Iris
 {
-    class KeyInUseException : public ::Iris::Exception::Exception
+    class KeyInUseException : public Exception
     {
     public:
-        explicit KeyInUseException(std::string error) : ::Iris::Exception::Exception(std::move(error))
+        explicit KeyInUseException(std::string error) : Exception(std::move(error))
         {}
     };
 }

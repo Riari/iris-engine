@@ -6,10 +6,10 @@
 
 namespace Iris
 {
-    class PrimaryKeyMissingException : public ::Iris::Exception::Exception
+    class PrimaryKeyMissingException : public Exception
     {
     public:
-        explicit PrimaryKeyMissingException() : ::Iris::Exception::Exception("Primary key is required.")
+        explicit PrimaryKeyMissingException() : Exception("Primary key is required.")
         {}
     };
 }
