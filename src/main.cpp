@@ -7,6 +7,7 @@
 #include "App/App.hpp"
 #include "Demo/Keys.hpp"
 #include "Entity/Component/Camera.hpp"
+#include "Entity/Component/Material.hpp"
 #include "Entity/Component/Mesh.hpp"
 #include "Entity/Component/PointLight.hpp"
 #include "Entity/Component/Transform.hpp"
@@ -137,6 +138,7 @@ int main(int argc, char** argv)
     SystemManager& systemManager = SystemManager::GetInstance();
 
     componentManager.RegisterComponentType<Camera>();
+    componentManager.RegisterComponentType<Material>();
     componentManager.RegisterComponentType<Mesh>();
     componentManager.RegisterComponentType<PointLight>();
     componentManager.RegisterComponentType<Transform>();
@@ -184,6 +186,12 @@ int main(int argc, char** argv)
                 .pShaderProgram = pProgram,
                 .color = glm::vec3(randColor(generator), randColor(generator), randColor(generator))
         });
+        componentManager.AddComponent(id, Material{
+                .ambient = glm::vec3(randColor(generator), randColor(generator), randColor(generator)),
+                .diffuse = glm::vec3(randColor(generator), randColor(generator), randColor(generator)),
+                .specular = glm::vec3(randColor(generator), randColor(generator), randColor(generator)),
+                .shininess = 32.0f
+        });
     }
 
     auto cameraId = entityManager.CreateEntity();
@@ -218,8 +226,15 @@ int main(int argc, char** argv)
             .pShaderProgram = pLightProgram,
             .color = glm::vec3(1.0f, 1.0f, 1.0f)
     });
+    componentManager.AddComponent(lightId, Material{
+            .ambient = glm::vec3(1.0f, 1.0f, 1.0f),
+            .diffuse = glm::vec3(1.0f, 1.0f, 1.0f),
+            .specular = glm::vec3(1.0f, 1.0f, 1.0f),
+    });
     componentManager.AddComponent(lightId, PointLight{
-            .color = glm::vec3(1.0f, 1.0f, 1.0f)
+            .ambient = glm::vec3(0.2f, 0.2f, 0.2f),
+            .diffuse = glm::vec3(0.5f, 0.5f, 0.5f),
+            .specular = glm::vec3(1.0f, 1.0f, 1.0f),
     });
 
     meshRenderer->SetPointLightId(lightId);

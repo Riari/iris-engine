@@ -1,6 +1,7 @@
 #include <glm/ext.hpp>
 
 #include "Entity/Component/Camera.hpp"
+#include "Entity/Component/Material.hpp"
 #include "Entity/Component/Mesh.hpp"
 #include "Entity/Component/PointLight.hpp"
 #include "Entity/Component/Transform.hpp"
@@ -38,10 +39,22 @@ void MeshRenderer::Update(Window &window, Scene &scene)
     {
         auto& transform = GetComponent<Transform>(id);
         auto& mesh = GetComponent<Mesh>(id);
+        auto& material = GetComponent<Material>(id);
+
         mesh.pShaderProgram->Use();
-        mesh.pShaderProgram->SetUniform3f("objectColor", mesh.color);
+
+        mesh.pShaderProgram->SetUniform3f("material.ambient", material.ambient);
+        mesh.pShaderProgram->SetUniform3f("material.diffuse", material.diffuse);
+        mesh.pShaderProgram->SetUniform3f("material.specular", material.specular);
+        mesh.pShaderProgram->SetUniformFloat("material.shininess", material.shininess);
+
+        mesh.pShaderProgram->SetUniform3f("light.ambient", lightPointLight.ambient);
+        mesh.pShaderProgram->SetUniform3f("light.diffuse", lightPointLight.diffuse);
+        mesh.pShaderProgram->SetUniform3f("light.specular", lightPointLight.specular);
         mesh.pShaderProgram->SetUniform3f("lightPos", lightTransform.position);
-        mesh.pShaderProgram->SetUniform3f("lightColor", lightPointLight.color);
+
+        mesh.pShaderProgram->SetUniform3f("objectColor", mesh.color);
+
         mesh.pShaderProgram->SetUniformMatrix4fv("projection", glm::value_ptr(camera.GetProjectionMatrix()));
         mesh.pShaderProgram->SetUniformMatrix4fv("view", glm::value_ptr(camera.GetViewMatrix()));
         mesh.pShaderProgram->SetUniformMatrix4fv("model", glm::value_ptr(transform.GetModel()));
