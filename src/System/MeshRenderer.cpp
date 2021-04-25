@@ -45,7 +45,6 @@ void MeshRenderer::Update(Window &window, Scene &scene)
         mesh.pShaderProgram->SetUniformMatrix4fv("projection", glm::value_ptr(camera.GetProjectionMatrix()));
         mesh.pShaderProgram->SetUniformMatrix4fv("view", glm::value_ptr(camera.GetViewMatrix()));
         mesh.pShaderProgram->SetUniformMatrix4fv("model", glm::value_ptr(transform.GetModel()));
-        mesh.pShaderProgram->SetUniform3f("viewPos", camera.position);
 
         mesh.pVao->Bind();
 
