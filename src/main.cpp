@@ -5,6 +5,7 @@
 #include <cxxopts.hpp>
 
 #include "App/App.hpp"
+#include "Asset/AssetManager.hpp"
 #include "Demo/Keys.hpp"
 #include "Entity/Component/Camera.hpp"
 #include "Entity/Component/Material.hpp"
@@ -13,6 +14,7 @@
 #include "Entity/Component/Transform.hpp"
 #include "Entity/EntityManager.hpp"
 #include "GL/Renderer.hpp"
+#include "GL/Texture.hpp"
 #include "Input/InputManager.hpp"
 #include "Scene/Scene.hpp"
 #include "Scene/SceneManager.hpp"
@@ -86,47 +88,48 @@ int main(int argc, char** argv)
     Renderer::EnableCapability(GL_DEPTH_TEST);
 
     float cubeVertices[] = {
-            -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-            0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-            0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-            0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-            -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-            -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+            // positions          // normals           // texture coords
+            -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
+            0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 0.0f,
+            0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 1.0f,
+            0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 1.0f,
+            -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 1.0f,
+            -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
 
-            -0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
-            0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
-            0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
-            0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
-            -0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
-            -0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+            -0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   0.0f, 0.0f,
+            0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   1.0f, 0.0f,
+            0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   1.0f, 1.0f,
+            0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   1.0f, 1.0f,
+            -0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   0.0f, 1.0f,
+            -0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   0.0f, 0.0f,
 
-            -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
-            -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
-            -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
-            -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
-            -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
-            -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+            -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
+            -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 1.0f,
+            -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+            -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+            -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
+            -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
 
-            0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
-            0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-            0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-            0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-            0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
-            0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+            0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
+            0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 1.0f,
+            0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+            0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+            0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
+            0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
 
-            -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
-            0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
-            0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
-            0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
-            -0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
-            -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+            -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f,
+            0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 1.0f,
+            0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 0.0f,
+            0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 0.0f,
+            -0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 0.0f,
+            -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f,
 
-            -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
-            0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
-            0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-            0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-            -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-            -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f
+            -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f,
+            0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 1.0f,
+            0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
+            0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
+            -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 0.0f,
+            -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f
     };
 
     auto pCubeVBO = std::make_shared<VBO>();
@@ -158,37 +161,52 @@ int main(int argc, char** argv)
     app.RegisterRenderSystem(meshRenderer);
     app.RegisterRenderSystem(lightingDemo);
 
-    auto pVao = std::make_shared<VAO>();
-    pVao->Bind();
-    VBO::SetVertexAttribute(0, 3, 6 * sizeof(float), (void*)0);
-    VBO::SetVertexAttribute(1, 3, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+    auto pCubeVao = std::make_shared<VAO>();
+    pCubeVao->Bind();
+    VBO::SetVertexAttribute(0, 3, 8 * sizeof(float), (void*)0);
+    VBO::SetVertexAttribute(1, 3, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+    VBO::SetVertexAttribute(2, 2, 8 * sizeof(float), (void*)(6 * sizeof(float)));
     VAO::Unbind();
 
     auto pProgram = std::make_shared<ShaderProgram>("ColoredCube", Logger::GL);
     pProgram->Build();
     pProgram->Use();
 
+    AssetManager& assetManager = AssetManager::GetInstance();
+
+    std::shared_ptr<Image> containerDiffuseImage = assetManager.GetImage("assets/textures/container_diffuse.png");
+    std::shared_ptr<Texture> containerDiffuseTexture = std::make_shared<Texture>(containerDiffuseImage);
+    containerDiffuseTexture->Bind(GL_TEXTURE0);
+    containerDiffuseTexture->Define();
+    assetManager.UnloadImage(containerDiffuseImage->GetPath());
+
+    std::shared_ptr<Image> containerSpecularImage = assetManager.GetImage("assets/textures/container_specular.png");
+    std::shared_ptr<Texture> containerSpecularTexture = std::make_shared<Texture>(containerSpecularImage);
+    containerSpecularTexture->Bind(GL_TEXTURE1);
+    containerSpecularTexture->Define();
+    assetManager.UnloadImage(containerSpecularImage->GetPath());
+
     Scene& mainScene = SceneManager::GetInstance().Create(1);
     mainScene.SetClearColor(glm::vec4(0.1f, 0.1f, 0.14f, 1.0f));
 
-    for (int i = 0; i < 5; i++)
+    for (int i = 0; i < 8; i++)
     {
         auto id = entityManager.CreateEntity();
         mainScene.AddEntity(id);
+        auto transformScale = randScale(generator);
         componentManager.AddComponent(id, Transform{
                 .position = glm::vec3(randPosition(generator), randPosition(generator), randPosition(generator)),
                 .rotation = randRotation(generator),
-                .scale = glm::vec3(randScale(generator), randScale(generator), randScale(generator))
+                .scale = glm::vec3(transformScale, transformScale, transformScale)
         });
         componentManager.AddComponent(id, Mesh{
                 .pVbo = pCubeVBO,
-                .pVao = pVao,
+                .pVao = pCubeVao,
                 .pShaderProgram = pProgram,
                 .color = glm::vec3(randColor(generator), randColor(generator), randColor(generator))
         });
         componentManager.AddComponent(id, Material{
-                .ambient = glm::vec3(randColor(generator), randColor(generator), randColor(generator)),
-                .diffuse = glm::vec3(randColor(generator), randColor(generator), randColor(generator)),
+                .diffuseTexture = containerDiffuseTexture,
                 .specular = glm::vec3(randColor(generator), randColor(generator), randColor(generator)),
                 .shininess = 32.0f
         });
@@ -213,7 +231,7 @@ int main(int argc, char** argv)
 
     auto pLightVao = std::make_shared<VAO>();
     pLightVao->Bind();
-    VBO::SetVertexAttribute(0, 3, 6 * sizeof(float), (void*)0);
+    VBO::SetVertexAttribute(0, 3, 8 * sizeof(float), (void*)0);
     VAO::Unbind();
 
     auto pLightProgram = std::make_shared<ShaderProgram>("LightSource", Logger::GL);
@@ -227,8 +245,6 @@ int main(int argc, char** argv)
             .color = glm::vec3(1.0f, 1.0f, 1.0f)
     });
     componentManager.AddComponent(lightId, Material{
-            .ambient = glm::vec3(1.0f, 1.0f, 1.0f),
-            .diffuse = glm::vec3(1.0f, 1.0f, 1.0f),
             .specular = glm::vec3(1.0f, 1.0f, 1.0f),
     });
     componentManager.AddComponent(lightId, PointLight{

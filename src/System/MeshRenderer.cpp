@@ -14,7 +14,8 @@ std::list<ComponentType> MeshRenderer::GetComponentTypes()
 {
     return {
         GetComponentType<Transform>(),
-        GetComponentType<Mesh>()
+        GetComponentType<Mesh>(),
+        GetComponentType<Material>()
     };
 }
 
@@ -43,9 +44,8 @@ void MeshRenderer::Update(Window &window, Scene &scene)
 
         mesh.pShaderProgram->Use();
 
-        mesh.pShaderProgram->SetUniform3f("material.ambient", material.ambient);
-        mesh.pShaderProgram->SetUniform3f("material.diffuse", material.diffuse);
-        mesh.pShaderProgram->SetUniform3f("material.specular", material.specular);
+        mesh.pShaderProgram->SetUniformInt("material.texture", 0);
+        mesh.pShaderProgram->SetUniformInt("material.specular", 1);
         mesh.pShaderProgram->SetUniformFloat("material.shininess", material.shininess);
 
         mesh.pShaderProgram->SetUniform3f("light.ambient", lightPointLight.ambient);

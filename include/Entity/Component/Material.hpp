@@ -2,12 +2,13 @@
 
 #include <glm/glm.hpp>
 
+#include "GL/Texture.hpp"
+
 namespace Iris
 {
     struct Material
     {
-        glm::vec3 ambient;
-        glm::vec3 diffuse;
+        std::shared_ptr<Texture> diffuseTexture;
         glm::vec3 specular;
         float shininess;
     };
