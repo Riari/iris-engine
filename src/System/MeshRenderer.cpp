@@ -44,8 +44,18 @@ void MeshRenderer::Update(Window &window, Scene &scene)
 
         mesh.pShaderProgram->Use();
 
-        mesh.pShaderProgram->SetUniformInt("material.texture", 0);
-        mesh.pShaderProgram->SetUniformInt("material.specular", 1);
+        if (material.diffuseMap != nullptr)
+        {
+            material.diffuseMap->Bind(GL_TEXTURE0);
+            mesh.pShaderProgram->SetUniformInt("material.texture", 0);
+        }
+
+        if (material.specularMap != nullptr)
+        {
+            material.specularMap->Bind(GL_TEXTURE1);
+            mesh.pShaderProgram->SetUniformInt("material.specular", 1);
+        }
+
         mesh.pShaderProgram->SetUniformFloat("material.shininess", material.shininess);
 
         mesh.pShaderProgram->SetUniform3f("light.ambient", lightPointLight.ambient);

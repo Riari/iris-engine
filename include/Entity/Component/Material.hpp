@@ -8,8 +8,8 @@ namespace Iris
 {
     struct Material
     {
-        std::shared_ptr<Texture> diffuseTexture;
-        glm::vec3 specular;
+        std::shared_ptr<Texture> diffuseMap;
+        std::shared_ptr<Texture> specularMap;
         float shininess;
     };
 }

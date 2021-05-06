@@ -4,6 +4,7 @@
 #include <memory>
 
 #include "ImageRepository.hpp"
+#include "GL/Texture.hpp"
 
 namespace Iris
 {
@@ -20,6 +21,7 @@ namespace Iris
         }
 
         [[nodiscard]] std::shared_ptr<Image> GetImage(std::string path) const;
+        [[nodiscard]] std::shared_ptr<Texture> GenerateTexture(std::string path) const;
 
         void UnloadImage(const std::string &path) const;
 

@@ -174,17 +174,8 @@ int main(int argc, char** argv)
 
     AssetManager& assetManager = AssetManager::GetInstance();
 
-    std::shared_ptr<Image> containerDiffuseImage = assetManager.GetImage("assets/textures/container_diffuse.png");
-    std::shared_ptr<Texture> containerDiffuseTexture = std::make_shared<Texture>(containerDiffuseImage);
-    containerDiffuseTexture->Bind(GL_TEXTURE0);
-    containerDiffuseTexture->Define();
-    assetManager.UnloadImage(containerDiffuseImage->GetPath());
-
-    std::shared_ptr<Image> containerSpecularImage = assetManager.GetImage("assets/textures/container_specular.png");
-    std::shared_ptr<Texture> containerSpecularTexture = std::make_shared<Texture>(containerSpecularImage);
-    containerSpecularTexture->Bind(GL_TEXTURE1);
-    containerSpecularTexture->Define();
-    assetManager.UnloadImage(containerSpecularImage->GetPath());
+    std::shared_ptr<Texture> containerDiffuseTexture = assetManager.GenerateTexture("assets/textures/container_diffuse.png");
+    std::shared_ptr<Texture> containerSpecularTexture = assetManager.GenerateTexture("assets/textures/container_specular.png");
 
     Scene& mainScene = SceneManager::GetInstance().Create(1);
     mainScene.SetClearColor(glm::vec4(0.1f, 0.1f, 0.14f, 1.0f));
@@ -206,8 +197,8 @@ int main(int argc, char** argv)
                 .color = glm::vec3(randColor(generator), randColor(generator), randColor(generator))
         });
         componentManager.AddComponent(id, Material{
-                .diffuseTexture = containerDiffuseTexture,
-                .specular = glm::vec3(randColor(generator), randColor(generator), randColor(generator)),
+                .diffuseMap = containerDiffuseTexture,
+                .specularMap = containerSpecularTexture,
                 .shininess = 32.0f
         });
     }
@@ -244,9 +235,7 @@ int main(int argc, char** argv)
             .pShaderProgram = pLightProgram,
             .color = glm::vec3(1.0f, 1.0f, 1.0f)
     });
-    componentManager.AddComponent(lightId, Material{
-            .specular = glm::vec3(1.0f, 1.0f, 1.0f),
-    });
+    componentManager.AddComponent(lightId, Material{});
     componentManager.AddComponent(lightId, PointLight{
             .ambient = glm::vec3(0.2f, 0.2f, 0.2f),
             .diffuse = glm::vec3(0.5f, 0.5f, 0.5f),
