@@ -1,5 +1,7 @@
 #include "Asset/AssetManager.hpp"
 
+#include <utility>
+
 using namespace Iris;
 
 std::shared_ptr<Image> AssetManager::GetImage(std::string path) const
@@ -14,9 +16,9 @@ void AssetManager::UnloadImage(const std::string &path) const
 
 std::shared_ptr<Texture> AssetManager::GenerateTexture(std::string path) const
 {
-    std::shared_ptr<Image> image = GetImage(path);
+    std::shared_ptr<Image> image = GetImage(std::move(path));
     std::shared_ptr<Texture> texture = std::make_shared<Texture>(image);
-    texture->Bind(GL_TEXTURE0);
+    texture->Bind();
     texture->Define();
     UnloadImage(image->GetPath());
 
