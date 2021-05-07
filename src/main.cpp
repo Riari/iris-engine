@@ -176,6 +176,7 @@ int main(int argc, char** argv)
 
     std::shared_ptr<Texture> containerDiffuseTexture = assetManager.GenerateTexture("assets/textures/container_diffuse.png");
     std::shared_ptr<Texture> containerSpecularTexture = assetManager.GenerateTexture("assets/textures/container_specular.png");
+    std::shared_ptr<Texture> containerEmissionTexture = assetManager.GenerateTexture("assets/textures/container_emission.jpg");
 
     Scene& mainScene = SceneManager::GetInstance().Create(1);
     mainScene.SetClearColor(glm::vec4(0.1f, 0.1f, 0.14f, 1.0f));
@@ -199,6 +200,7 @@ int main(int argc, char** argv)
         componentManager.AddComponent(id, Material{
                 .diffuseMap = containerDiffuseTexture,
                 .specularMap = containerSpecularTexture,
+                .emissionMap = containerEmissionTexture,
                 .shininess = 32.0f
         });
     }

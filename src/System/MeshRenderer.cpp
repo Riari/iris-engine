@@ -56,14 +56,24 @@ void MeshRenderer::Update(Window &window, Scene &scene)
             mesh.pShaderProgram->SetUniformInt("material.specular", 1);
         }
 
+        if (material.emissionMap != nullptr)
+        {
+            material.emissionMap->Bind(GL_TEXTURE2);
+            mesh.pShaderProgram->SetUniformInt("material.emission", 2);
+        }
+
         mesh.pShaderProgram->SetUniformFloat("material.shininess", material.shininess);
 
+        mesh.pShaderProgram->SetUniform3f("lightPos", lightTransform.position);
         mesh.pShaderProgram->SetUniform3f("light.ambient", lightPointLight.ambient);
         mesh.pShaderProgram->SetUniform3f("light.diffuse", lightPointLight.diffuse);
         mesh.pShaderProgram->SetUniform3f("light.specular", lightPointLight.specular);
-        mesh.pShaderProgram->SetUniform3f("lightPos", lightTransform.position);
+
+        // TODO: remove this!
+        transform.rotation += 0.02f / transform.scale.x;
 
         mesh.pShaderProgram->SetUniform3f("objectColor", mesh.color);
+        mesh.pShaderProgram->SetUniformFloat("time", glfwGetTime());
 
         mesh.pShaderProgram->SetUniformMatrix4fv("projection", glm::value_ptr(camera.GetProjectionMatrix()));
         mesh.pShaderProgram->SetUniformMatrix4fv("view", glm::value_ptr(camera.GetViewMatrix()));

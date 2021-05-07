@@ -10,6 +10,7 @@ namespace Iris
     {
         std::shared_ptr<Texture> diffuseMap;
         std::shared_ptr<Texture> specularMap;
+        std::shared_ptr<Texture> emissionMap;
         float shininess;
     };
 }
