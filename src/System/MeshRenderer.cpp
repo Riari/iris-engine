@@ -5,10 +5,19 @@
 #include "Entity/Component/Mesh.hpp"
 #include "Entity/Component/PointLight.hpp"
 #include "Entity/Component/Transform.hpp"
+#include "Utility/Logger.hpp"
 #include "Scene/Scene.hpp"
 #include "System/MeshRenderer.hpp"
 
 using namespace Iris;
+
+MeshRenderer::MeshRenderer()
+{
+    m_pBasicShaderProgram = std::make_unique<ShaderProgram>("Basic", Logger::GL);
+    m_pBasicShaderProgram->Build();
+    m_pMaterialShaderProgram = std::make_unique<ShaderProgram>("Material", Logger::GL);
+    m_pMaterialShaderProgram->Build();
+}
 
 std::list<ComponentType> MeshRenderer::GetComponentTypes()
 {
@@ -42,42 +51,54 @@ void MeshRenderer::Update(Window &window, Scene &scene)
         auto& mesh = GetComponent<Mesh>(id);
         auto& material = GetComponent<Material>(id);
 
-        mesh.pShaderProgram->Use();
-
-        if (material.diffuseMap != nullptr)
+        if (material.pDiffuseMap == nullptr && material.pSpecularMap == nullptr && material.pEmissionMap == nullptr)
         {
-            material.diffuseMap->Bind(GL_TEXTURE0);
-            mesh.pShaderProgram->SetUniformInt("material.texture", 0);
-        }
+            m_pBasicShaderProgram->Use();
 
-        if (material.specularMap != nullptr)
+            m_pBasicShaderProgram->SetUniformMatrix4fv("projection", glm::value_ptr(camera.GetProjectionMatrix()));
+            m_pBasicShaderProgram->SetUniformMatrix4fv("view", glm::value_ptr(camera.GetViewMatrix()));
+            m_pBasicShaderProgram->SetUniformMatrix4fv("model", glm::value_ptr(transform.GetModel()));
+
+            m_pBasicShaderProgram->SetUniform3f("objectColor", mesh.color);
+        }
+        else
         {
-            material.specularMap->Bind(GL_TEXTURE1);
-            mesh.pShaderProgram->SetUniformInt("material.specular", 1);
+            m_pMaterialShaderProgram->Use();
+
+            m_pMaterialShaderProgram->SetUniformMatrix4fv("projection", glm::value_ptr(camera.GetProjectionMatrix()));
+            m_pMaterialShaderProgram->SetUniformMatrix4fv("view", glm::value_ptr(camera.GetViewMatrix()));
+            m_pMaterialShaderProgram->SetUniformMatrix4fv("model", glm::value_ptr(transform.GetModel()));
+
+            if (material.pDiffuseMap != nullptr)
+            {
+                material.pDiffuseMap->Bind(GL_TEXTURE0);
+                m_pMaterialShaderProgram->SetUniformInt("material.texture", 0);
+            }
+
+            if (material.pSpecularMap != nullptr)
+            {
+                material.pSpecularMap->Bind(GL_TEXTURE1);
+                m_pMaterialShaderProgram->SetUniformInt("material.specular", 1);
+            }
+
+            if (material.pEmissionMap != nullptr)
+            {
+                material.pEmissionMap->Bind(GL_TEXTURE2);
+                m_pMaterialShaderProgram->SetUniformInt("material.emission", 2);
+            }
+
+            m_pMaterialShaderProgram->SetUniformFloat("material.shininess", material.shininess);
+
+            m_pMaterialShaderProgram->SetUniform3f("lightPos", lightTransform.position);
+            m_pMaterialShaderProgram->SetUniform3f("light.ambient", lightPointLight.ambient);
+            m_pMaterialShaderProgram->SetUniform3f("light.diffuse", lightPointLight.diffuse);
+            m_pMaterialShaderProgram->SetUniform3f("light.specular", lightPointLight.specular);
+
+            m_pMaterialShaderProgram->SetUniformFloat("time", glfwGetTime());
+
+            // TODO: remove this!
+            transform.rotation += 0.02f / transform.scale.x;
         }
-
-        if (material.emissionMap != nullptr)
-        {
-            material.emissionMap->Bind(GL_TEXTURE2);
-            mesh.pShaderProgram->SetUniformInt("material.emission", 2);
-        }
-
-        mesh.pShaderProgram->SetUniformFloat("material.shininess", material.shininess);
-
-        mesh.pShaderProgram->SetUniform3f("lightPos", lightTransform.position);
-        mesh.pShaderProgram->SetUniform3f("light.ambient", lightPointLight.ambient);
-        mesh.pShaderProgram->SetUniform3f("light.diffuse", lightPointLight.diffuse);
-        mesh.pShaderProgram->SetUniform3f("light.specular", lightPointLight.specular);
-
-        // TODO: remove this!
-        transform.rotation += 0.02f / transform.scale.x;
-
-        mesh.pShaderProgram->SetUniform3f("objectColor", mesh.color);
-        mesh.pShaderProgram->SetUniformFloat("time", glfwGetTime());
-
-        mesh.pShaderProgram->SetUniformMatrix4fv("projection", glm::value_ptr(camera.GetProjectionMatrix()));
-        mesh.pShaderProgram->SetUniformMatrix4fv("view", glm::value_ptr(camera.GetViewMatrix()));
-        mesh.pShaderProgram->SetUniformMatrix4fv("model", glm::value_ptr(transform.GetModel()));
 
         mesh.pVao->Bind();
 

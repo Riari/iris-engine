@@ -17,6 +17,7 @@ namespace Iris
         void RemoveEntity(EntityId);
 
         static std::list<ComponentType> GetComponentTypes();
+
         virtual void Update(double);
         virtual void Update(Window&, Scene&);
 

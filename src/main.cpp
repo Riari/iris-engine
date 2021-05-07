@@ -168,10 +168,6 @@ int main(int argc, char** argv)
     VBO::SetVertexAttribute(2, 2, 8 * sizeof(float), (void*)(6 * sizeof(float)));
     VAO::Unbind();
 
-    auto pProgram = std::make_shared<ShaderProgram>("ColoredCube", Logger::GL);
-    pProgram->Build();
-    pProgram->Use();
-
     AssetManager& assetManager = AssetManager::GetInstance();
 
     std::shared_ptr<Texture> containerDiffuseTexture = assetManager.GenerateTexture("assets/textures/container_diffuse.png");
@@ -193,14 +189,12 @@ int main(int argc, char** argv)
         });
         componentManager.AddComponent(id, Mesh{
                 .pVbo = pCubeVBO,
-                .pVao = pCubeVao,
-                .pShaderProgram = pProgram,
-                .color = glm::vec3(randColor(generator), randColor(generator), randColor(generator))
+                .pVao = pCubeVao
         });
         componentManager.AddComponent(id, Material{
-                .diffuseMap = containerDiffuseTexture,
-                .specularMap = containerSpecularTexture,
-                .emissionMap = containerEmissionTexture,
+                .pDiffuseMap = containerDiffuseTexture,
+                .pSpecularMap = containerSpecularTexture,
+                .pEmissionMap = containerEmissionTexture,
                 .shininess = 32.0f
         });
     }
@@ -227,14 +221,9 @@ int main(int argc, char** argv)
     VBO::SetVertexAttribute(0, 3, 8 * sizeof(float), (void*)0);
     VAO::Unbind();
 
-    auto pLightProgram = std::make_shared<ShaderProgram>("LightSource", Logger::GL);
-    pLightProgram->Build();
-    pLightProgram->Use();
-
     componentManager.AddComponent(lightId, Mesh{
             .pVbo = pCubeVBO,
             .pVao = pLightVao,
-            .pShaderProgram = pLightProgram,
             .color = glm::vec3(1.0f, 1.0f, 1.0f)
     });
     componentManager.AddComponent(lightId, Material{});
