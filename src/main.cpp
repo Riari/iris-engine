@@ -147,9 +147,10 @@ int main(int argc, char** argv)
     componentManager.RegisterComponentType<Transform>();
 
     std::default_random_engine generator;
+    std::uniform_real_distribution<float> randPositionX(-6.0f, 6.0f);
     std::uniform_real_distribution<float> randPosition(-3.0f, 3.0f);
     std::uniform_real_distribution<float> randRotation(0.0f, 3.0f);
-    std::uniform_real_distribution<float> randScale(0.5f, 2.0f);
+    std::uniform_real_distribution<float> randScale(0.2f, 2.0f);
     std::uniform_real_distribution<float> randColor(0.0f, 1.0f);
 
     auto cameraController = systemManager.RegisterSystem<CameraController>();
@@ -177,13 +178,13 @@ int main(int argc, char** argv)
     Scene& mainScene = SceneManager::GetInstance().Create(1);
     mainScene.SetClearColor(glm::vec4(0.1f, 0.1f, 0.14f, 1.0f));
 
-    for (int i = 0; i < 8; i++)
+    for (int i = 0; i < 20; i++)
     {
         auto id = entityManager.CreateEntity();
         mainScene.AddEntity(id);
         auto transformScale = randScale(generator);
         componentManager.AddComponent(id, Transform{
-                .position = glm::vec3(randPosition(generator), randPosition(generator), randPosition(generator)),
+                .position = glm::vec3(randPositionX(generator), randPosition(generator), randPosition(generator)),
                 .rotation = randRotation(generator),
                 .scale = glm::vec3(transformScale, transformScale, transformScale)
         });
