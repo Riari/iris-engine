@@ -39,10 +39,8 @@ void main()
     vec3 specularMap = vec3(texture(material.specular, TexCoords));
     vec3 specular = light.specular * spec * specularMap;
 
-    vec3 emissionMap = vec3(texture(material.emission, TexCoords + vec2(0.0, time * 0.75)));
+    vec3 emissionMap = vec3(texture(material.emission, TexCoords));
     vec3 emission = emissionMap * (sin(time) * 0.5f + 0.5f) * 2.0;
-    vec3 emissionMask = step(vec3(1.0f), vec3(1.0f) - specularMap);
-    emission = emission * emissionMask;
 
     FragColor = vec4(ambient + diffuse + specular + emission, 1.0);
 }
