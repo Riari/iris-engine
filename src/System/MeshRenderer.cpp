@@ -97,7 +97,8 @@ void MeshRenderer::Update(Window &window, Scene &scene)
             m_pMaterialShaderProgram->SetUniformFloat("time", glfwGetTime());
 
             // TODO: remove this!
-            transform.rotation += 0.02f / transform.scale.x;
+            if (id % 2 == 0) transform.rotation += 0.02f / transform.scale.x;
+            else transform.rotation -= 0.02f / transform.scale.x;
         }
 
         mesh.pVao->Bind();
