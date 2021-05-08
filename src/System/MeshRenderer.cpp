@@ -72,7 +72,7 @@ void MeshRenderer::Update(Window &window, Scene &scene)
             if (material.pDiffuseMap != nullptr)
             {
                 material.pDiffuseMap->Bind(GL_TEXTURE0);
-                m_pMaterialShaderProgram->SetUniformInt("material.texture", 0);
+                m_pMaterialShaderProgram->SetUniformInt("material.diffuse", 0);
             }
 
             if (material.pSpecularMap != nullptr)
