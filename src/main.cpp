@@ -10,6 +10,7 @@
 #include "Entity/Component/Camera.hpp"
 #include "Entity/Component/Material.hpp"
 #include "Entity/Component/Mesh.hpp"
+#include "Entity/Component/DirectionalLight.hpp"
 #include "Entity/Component/PointLight.hpp"
 #include "Entity/Component/Transform.hpp"
 #include "Entity/EntityManager.hpp"
@@ -143,6 +144,7 @@ int main(int argc, char** argv)
     componentManager.RegisterComponentType<Camera>();
     componentManager.RegisterComponentType<Material>();
     componentManager.RegisterComponentType<Mesh>();
+    componentManager.RegisterComponentType<DirectionalLight>();
     componentManager.RegisterComponentType<PointLight>();
     componentManager.RegisterComponentType<Transform>();
 
@@ -209,32 +211,54 @@ int main(int argc, char** argv)
 
     cameraController->SetActiveCameraId(cameraId);
 
-    auto lightId = entityManager.CreateEntity();
-    mainScene.AddEntity(lightId);
-    componentManager.AddComponent(lightId, Transform{
+    auto pointLightId = entityManager.CreateEntity();
+    mainScene.AddEntity(pointLightId);
+    componentManager.AddComponent(pointLightId, Transform{
             .position = glm::vec3(0.0f, 0.0f, 0.0f),
             .rotation = 0.0f,
             .scale = glm::vec3(0.1f, 0.1f, 0.1f)
     });
 
-    auto pLightVao = std::make_shared<VAO>();
-    pLightVao->Bind();
+    auto pPointLightVao = std::make_shared<VAO>();
+    pPointLightVao->Bind();
     VBO::SetVertexAttribute(0, 3, 8 * sizeof(float), (void*)0);
     VAO::Unbind();
 
-    componentManager.AddComponent(lightId, Mesh{
+    componentManager.AddComponent(pointLightId, Mesh{
             .pVbo = pCubeVBO,
-            .pVao = pLightVao,
+            .pVao = pPointLightVao,
             .color = glm::vec3(1.0f, 1.0f, 1.0f)
     });
-    componentManager.AddComponent(lightId, Material{});
-    componentManager.AddComponent(lightId, PointLight{
+    componentManager.AddComponent(pointLightId, Material{});
+    componentManager.AddComponent(pointLightId, PointLight{
             .ambient = glm::vec3(0.2f, 0.2f, 0.2f),
-            .diffuse = glm::vec3(0.5f, 0.5f, 0.5f),
+            .diffuse = glm::vec3(1.0f, 1.0f, 1.0f),
             .specular = glm::vec3(1.0f, 1.0f, 1.0f),
     });
 
-    meshRenderer->SetPointLightId(lightId);
+    auto directionalLightId = entityManager.CreateEntity();
+    mainScene.AddEntity(directionalLightId);
+    componentManager.AddComponent(directionalLightId, Transform{
+            .position = glm::vec3(0.0f, 0.0f, 0.0f),
+            .rotation = 0.0f,
+            .scale = glm::vec3(0.1f, 0.1f, 0.1f)
+    });
+
+    componentManager.AddComponent(directionalLightId, Mesh{
+            .pVbo = pCubeVBO,
+            .pVao = pPointLightVao,
+            .color = glm::vec3(0.0f, 0.0f, 0.0f)
+    });
+    componentManager.AddComponent(directionalLightId, Material{});
+    componentManager.AddComponent(directionalLightId, DirectionalLight{
+            .direction = glm::vec3(-0.2f, -1.0f, -0.3f),
+            .ambient = glm::vec3(0.2f, 0.2f, 0.2f),
+            .diffuse = glm::vec3(0.8f, 0.2f, 0.2f),
+            .specular = glm::vec3(1.0f, 1.0f, 1.0f),
+    });
+
+    meshRenderer->SetPointLightId(pointLightId);
+    meshRenderer->SetDirectionalLightId(directionalLightId);
     meshRenderer->SetActiveCameraId(cameraId);
 
     std::list<std::unique_ptr<State>> states;

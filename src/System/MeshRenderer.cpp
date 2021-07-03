@@ -3,6 +3,7 @@
 #include "Entity/Component/Camera.hpp"
 #include "Entity/Component/Material.hpp"
 #include "Entity/Component/Mesh.hpp"
+#include "Entity/Component/DirectionalLight.hpp"
 #include "Entity/Component/PointLight.hpp"
 #include "Entity/Component/Transform.hpp"
 #include "Utility/Logger.hpp"
@@ -33,6 +34,11 @@ void MeshRenderer::SetPointLightId(EntityId id)
     m_pointLightId = id;
 }
 
+void MeshRenderer::SetDirectionalLightId(EntityId id)
+{
+    m_directionalLightId = id;
+}
+
 void MeshRenderer::SetActiveCameraId(EntityId id)
 {
     m_activeCameraId = id;
@@ -40,8 +46,9 @@ void MeshRenderer::SetActiveCameraId(EntityId id)
 
 void MeshRenderer::Update(Window &window, Scene &scene)
 {
-    auto& lightTransform = GetComponent<Transform>(m_pointLightId);
-    auto& lightPointLight = GetComponent<PointLight>(m_pointLightId);
+    auto& pointLightTransform = GetComponent<Transform>(m_pointLightId);
+    auto& pointLight = GetComponent<PointLight>(m_pointLightId);
+    auto& directionalLight = GetComponent<DirectionalLight>(m_directionalLightId);
 
     auto& camera = GetComponent<Camera>(m_activeCameraId);
 
@@ -89,16 +96,17 @@ void MeshRenderer::Update(Window &window, Scene &scene)
 
             m_pMaterialShaderProgram->SetUniformFloat("material.shininess", material.shininess);
 
-            m_pMaterialShaderProgram->SetUniform3f("lightPos", lightTransform.position);
-            m_pMaterialShaderProgram->SetUniform3f("light.ambient", lightPointLight.ambient);
-            m_pMaterialShaderProgram->SetUniform3f("light.diffuse", lightPointLight.diffuse);
-            m_pMaterialShaderProgram->SetUniform3f("light.specular", lightPointLight.specular);
+            m_pMaterialShaderProgram->SetUniform3f("pointLightPos", pointLightTransform.position);
+            m_pMaterialShaderProgram->SetUniform3f("pointLight.ambient", pointLight.ambient);
+            m_pMaterialShaderProgram->SetUniform3f("pointLight.diffuse", pointLight.diffuse);
+            m_pMaterialShaderProgram->SetUniform3f("pointLight.specular", pointLight.specular);
+
+            m_pMaterialShaderProgram->SetUniform3f("directionalLight.direction", directionalLight.direction);
+            m_pMaterialShaderProgram->SetUniform3f("directionalLight.ambient", directionalLight.ambient);
+            m_pMaterialShaderProgram->SetUniform3f("directionalLight.diffuse", directionalLight.diffuse);
+            m_pMaterialShaderProgram->SetUniform3f("directionalLight.specular", directionalLight.specular);
 
             m_pMaterialShaderProgram->SetUniformFloat("time", glfwGetTime());
-
-            // TODO: remove this!
-            if (id % 2 == 0) transform.rotation += 0.02f / transform.scale.x;
-            else transform.rotation -= 0.02f / transform.scale.x;
         }
 
         mesh.pVao->Bind();
