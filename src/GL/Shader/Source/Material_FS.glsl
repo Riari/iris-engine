@@ -18,6 +18,10 @@ struct PointLight {
     vec3 ambient;
     vec3 diffuse;
     vec3 specular;
+
+    float constant;
+    float linear;
+    float quadratic;
 };
 
 uniform Material material;
@@ -34,9 +38,11 @@ out vec4 FragColor;
 
 void main()
 {
-    // Note: ambient light is only taken from one light source.
-    // TODO: extract ambient light to a global setting (scene/environment property)
-    vec3 ambient = directionalLight.ambient * vec3(texture(material.diffuse, TexCoords));
+    float distance = length(PointLightPos - FragPos);
+    float attenuation = 1.0 / (pointLight.constant + pointLight.linear * distance + pointLight.quadratic * (distance * distance));
+
+    // TODO: extract global ambient light to a global setting (scene/environment property)
+    vec3 ambient = (pointLight.ambient * attenuation) * directionalLight.ambient * vec3(texture(material.diffuse, TexCoords));
 
     vec3 norm = normalize(Normal);
 
@@ -50,6 +56,7 @@ void main()
 
     // Final diffuse
     vec3 diffuse = (pointLight.diffuse * pointLightDiff) * (directionalLight.diffuse * directionalLightDiff) * vec3(texture(material.diffuse, TexCoords));
+    diffuse *= attenuation;
 
     vec3 viewDir = normalize(-FragPos);
 
@@ -64,6 +71,7 @@ void main()
     // Final specular
     vec3 specularMap = vec3(texture(material.specular, TexCoords));
     vec3 specular = (pointLight.specular * pointLightSpec) * (directionalLight.specular * directionalLightSpec) * specularMap;
+    specular *= attenuation;
 
     vec3 emissionMap = vec3(texture(material.emission, TexCoords));
     vec3 emission = emissionMap * (sin(time) * 0.5f + 0.5f) * 2.0;

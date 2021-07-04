@@ -100,6 +100,9 @@ void MeshRenderer::Update(Window &window, Scene &scene)
             m_pMaterialShaderProgram->SetUniform3f("pointLight.ambient", pointLight.ambient);
             m_pMaterialShaderProgram->SetUniform3f("pointLight.diffuse", pointLight.diffuse);
             m_pMaterialShaderProgram->SetUniform3f("pointLight.specular", pointLight.specular);
+            m_pMaterialShaderProgram->SetUniformFloat("pointLight.constant", pointLight.constant);
+            m_pMaterialShaderProgram->SetUniformFloat("pointLight.linear", pointLight.linear);
+            m_pMaterialShaderProgram->SetUniformFloat("pointLight.quadratic", pointLight.quadratic);
 
             m_pMaterialShaderProgram->SetUniform3f("directionalLight.direction", directionalLight.direction);
             m_pMaterialShaderProgram->SetUniform3f("directionalLight.ambient", directionalLight.ambient);

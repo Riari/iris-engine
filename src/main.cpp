@@ -231,9 +231,12 @@ int main(int argc, char** argv)
     });
     componentManager.AddComponent(pointLightId, Material{});
     componentManager.AddComponent(pointLightId, PointLight{
-            .ambient = glm::vec3(0.2f, 0.2f, 0.2f),
+            .ambient = glm::vec3(0.2f, 0.2f, 1.0f),
             .diffuse = glm::vec3(1.0f, 1.0f, 1.0f),
             .specular = glm::vec3(1.0f, 1.0f, 1.0f),
+            .constant = 1.0f,
+            .linear = 0.09f,
+            .quadratic = 0.032f
     });
 
     auto directionalLightId = entityManager.CreateEntity();
