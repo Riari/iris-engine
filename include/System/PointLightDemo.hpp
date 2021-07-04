@@ -8,7 +8,7 @@
 namespace Iris
 {
     // Temporary system
-    class LightingDemo : public System
+    class PointLightDemo : public System
     {
     public:
         static std::list<ComponentType> GetComponentTypes();

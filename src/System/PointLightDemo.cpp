@@ -1,11 +1,11 @@
 #include "Entity/Component/PointLight.hpp"
 #include "Entity/Component/Transform.hpp"
 #include "Scene/Scene.hpp"
-#include "System/LightingDemo.hpp"
+#include "System/PointLightDemo.hpp"
 
 using namespace Iris;
 
-std::list<ComponentType> LightingDemo::GetComponentTypes()
+std::list<ComponentType> PointLightDemo::GetComponentTypes()
 {
     return {
         GetComponentType<Transform>(),
@@ -13,7 +13,7 @@ std::list<ComponentType> LightingDemo::GetComponentTypes()
     };
 }
 
-void LightingDemo::Update(Window &window, Scene& scene)
+void PointLightDemo::Update(Window &window, Scene& scene)
 {
     auto sceneEntities = scene.GetEntities();
 

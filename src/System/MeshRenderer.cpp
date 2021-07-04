@@ -5,6 +5,7 @@
 #include "Entity/Component/Mesh.hpp"
 #include "Entity/Component/DirectionalLight.hpp"
 #include "Entity/Component/PointLight.hpp"
+#include "Entity/Component/SpotLight.hpp"
 #include "Entity/Component/Transform.hpp"
 #include "Utility/Logger.hpp"
 #include "Scene/Scene.hpp"
@@ -16,8 +17,8 @@ MeshRenderer::MeshRenderer()
 {
     m_pBasicShaderProgram = std::make_unique<ShaderProgram>("Basic", Logger::GL);
     m_pBasicShaderProgram->Build();
-    m_pMaterialShaderProgram = std::make_unique<ShaderProgram>("Material", Logger::GL);
-    m_pMaterialShaderProgram->Build();
+    m_pMatShaderProg = std::make_unique<ShaderProgram>("Material", Logger::GL);
+    m_pMatShaderProg->Build();
 }
 
 std::list<ComponentType> MeshRenderer::GetComponentTypes()
@@ -29,14 +30,19 @@ std::list<ComponentType> MeshRenderer::GetComponentTypes()
     };
 }
 
+void MeshRenderer::SetDirectionalLightId(EntityId id)
+{
+    m_directionalLightId = id;
+}
+
 void MeshRenderer::SetPointLightId(EntityId id)
 {
     m_pointLightId = id;
 }
 
-void MeshRenderer::SetDirectionalLightId(EntityId id)
+void MeshRenderer::SetSpotLightId(EntityId id)
 {
-    m_directionalLightId = id;
+    m_spotLightId = id;
 }
 
 void MeshRenderer::SetActiveCameraId(EntityId id)
@@ -46,9 +52,11 @@ void MeshRenderer::SetActiveCameraId(EntityId id)
 
 void MeshRenderer::Update(Window &window, Scene &scene)
 {
+    auto& directionalLight = GetComponent<DirectionalLight>(m_directionalLightId);
     auto& pointLightTransform = GetComponent<Transform>(m_pointLightId);
     auto& pointLight = GetComponent<PointLight>(m_pointLightId);
-    auto& directionalLight = GetComponent<DirectionalLight>(m_directionalLightId);
+    auto& spotLightTransform = GetComponent<Transform>(m_spotLightId);
+    auto& spotLight = GetComponent<SpotLight>(m_spotLightId);
 
     auto& camera = GetComponent<Camera>(m_activeCameraId);
 
@@ -70,46 +78,61 @@ void MeshRenderer::Update(Window &window, Scene &scene)
         }
         else
         {
-            m_pMaterialShaderProgram->Use();
+            m_pMatShaderProg->Use();
 
-            m_pMaterialShaderProgram->SetUniformMatrix4fv("projection", glm::value_ptr(camera.GetProjectionMatrix()));
-            m_pMaterialShaderProgram->SetUniformMatrix4fv("view", glm::value_ptr(camera.GetViewMatrix()));
-            m_pMaterialShaderProgram->SetUniformMatrix4fv("model", glm::value_ptr(transform.GetModel()));
+            m_pMatShaderProg->SetUniformMatrix4fv("projection", glm::value_ptr(camera.GetProjectionMatrix()));
+            m_pMatShaderProg->SetUniformMatrix4fv("view", glm::value_ptr(camera.GetViewMatrix()));
+            m_pMatShaderProg->SetUniformMatrix4fv("model", glm::value_ptr(transform.GetModel()));
 
             if (material.pDiffuseMap != nullptr)
             {
                 material.pDiffuseMap->Bind(GL_TEXTURE0);
-                m_pMaterialShaderProgram->SetUniformInt("material.diffuse", 0);
+                m_pMatShaderProg->SetUniformInt("material.diffuse", 0);
             }
 
             if (material.pSpecularMap != nullptr)
             {
                 material.pSpecularMap->Bind(GL_TEXTURE1);
-                m_pMaterialShaderProgram->SetUniformInt("material.specular", 1);
+                m_pMatShaderProg->SetUniformInt("material.specular", 1);
             }
 
             if (material.pEmissionMap != nullptr)
             {
                 material.pEmissionMap->Bind(GL_TEXTURE2);
-                m_pMaterialShaderProgram->SetUniformInt("material.emission", 2);
+                m_pMatShaderProg->SetUniformInt("material.emission", 2);
             }
 
-            m_pMaterialShaderProgram->SetUniformFloat("material.shininess", material.shininess);
+            m_pMatShaderProg->SetUniformFloat("material.shininess", material.shininess);
 
-            m_pMaterialShaderProgram->SetUniform3f("pointLightPos", pointLightTransform.position);
-            m_pMaterialShaderProgram->SetUniform3f("pointLight.ambient", pointLight.ambient);
-            m_pMaterialShaderProgram->SetUniform3f("pointLight.diffuse", pointLight.diffuse);
-            m_pMaterialShaderProgram->SetUniform3f("pointLight.specular", pointLight.specular);
-            m_pMaterialShaderProgram->SetUniformFloat("pointLight.constant", pointLight.constant);
-            m_pMaterialShaderProgram->SetUniformFloat("pointLight.linear", pointLight.linear);
-            m_pMaterialShaderProgram->SetUniformFloat("pointLight.quadratic", pointLight.quadratic);
+            m_pMatShaderProg->SetUniform3f("directionalLight.ambient", directionalLight.ambient);
+            m_pMatShaderProg->SetUniform3f("directionalLight.diffuse", directionalLight.diffuse);
+            m_pMatShaderProg->SetUniform3f("directionalLight.specular", directionalLight.specular);
+            m_pMatShaderProg->SetUniform3f("directionalLight.direction", directionalLight.direction);
 
-            m_pMaterialShaderProgram->SetUniform3f("directionalLight.direction", directionalLight.direction);
-            m_pMaterialShaderProgram->SetUniform3f("directionalLight.ambient", directionalLight.ambient);
-            m_pMaterialShaderProgram->SetUniform3f("directionalLight.diffuse", directionalLight.diffuse);
-            m_pMaterialShaderProgram->SetUniform3f("directionalLight.specular", directionalLight.specular);
+            m_pMatShaderProg->SetUniform3f("pointLightPos", pointLightTransform.position);
+            m_pMatShaderProg->SetUniform3f("pointLight.ambient", pointLight.ambient);
+            m_pMatShaderProg->SetUniform3f("pointLight.diffuse", pointLight.diffuse);
+            m_pMatShaderProg->SetUniform3f("pointLight.specular", pointLight.specular);
+            m_pMatShaderProg->SetUniformFloat("pointLight.constant", pointLight.constant);
+            m_pMatShaderProg->SetUniformFloat("pointLight.linear", pointLight.linear);
+            m_pMatShaderProg->SetUniformFloat("pointLight.quadratic", pointLight.quadratic);
 
-            m_pMaterialShaderProgram->SetUniformFloat("time", glfwGetTime());
+            m_pMatShaderProg->SetUniform3f("spotLightPos", spotLightTransform.position);
+            m_pMatShaderProg->SetUniform3f("spotLight.ambient", spotLight.ambient);
+            m_pMatShaderProg->SetUniform3f("spotLight.diffuse", spotLight.diffuse);
+            m_pMatShaderProg->SetUniform3f("spotLight.specular", spotLight.specular);
+            m_pMatShaderProg->SetUniform3f("spotLight.direction", spotLight.direction);
+            m_pMatShaderProg->SetUniformFloat("spotLight.innerEdge", spotLight.innerEdge);
+            m_pMatShaderProg->SetUniformFloat("spotLight.outerEdge", spotLight.outerEdge);
+            m_pMatShaderProg->SetUniformFloat("spotLight.constant", spotLight.constant);
+            m_pMatShaderProg->SetUniformFloat("spotLight.linear", spotLight.linear);
+            m_pMatShaderProg->SetUniformFloat("spotLight.quadratic", spotLight.quadratic);
+
+            m_pMatShaderProg->SetUniformFloat("time", glfwGetTime());
+
+            // TODO: remove this!
+            if (id % 2 == 0) transform.rotation += 0.02f / transform.scale.x;
+            else transform.rotation -= 0.02f / transform.scale.x;
         }
 
         mesh.pVao->Bind();

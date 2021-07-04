@@ -12,6 +12,7 @@
 #include "Entity/Component/Mesh.hpp"
 #include "Entity/Component/DirectionalLight.hpp"
 #include "Entity/Component/PointLight.hpp"
+#include "Entity/Component/SpotLight.hpp"
 #include "Entity/Component/Transform.hpp"
 #include "Entity/EntityManager.hpp"
 #include "GL/Renderer.hpp"
@@ -22,7 +23,8 @@
 #include "State/State.hpp"
 #include "System/CameraController.hpp"
 #include "System/MeshRenderer.hpp"
-#include "System/LightingDemo.hpp"
+#include "System/PointLightDemo.hpp"
+#include "System/SpotLightDemo.hpp"
 #include "System/SystemManager.hpp"
 #include "Window/FrameBufferEvent.hpp"
 #include "Window/WindowManager.hpp"
@@ -146,6 +148,7 @@ int main(int argc, char** argv)
     componentManager.RegisterComponentType<Mesh>();
     componentManager.RegisterComponentType<DirectionalLight>();
     componentManager.RegisterComponentType<PointLight>();
+    componentManager.RegisterComponentType<SpotLight>();
     componentManager.RegisterComponentType<Transform>();
 
     std::default_random_engine generator;
@@ -157,12 +160,14 @@ int main(int argc, char** argv)
 
     auto cameraController = systemManager.RegisterSystem<CameraController>();
     auto meshRenderer = systemManager.RegisterSystem<MeshRenderer>();
-    auto lightingDemo = systemManager.RegisterSystem<LightingDemo>();
+    auto pointLightDemo = systemManager.RegisterSystem<PointLightDemo>();
+    auto spotLightDemo = systemManager.RegisterSystem<SpotLightDemo>();
 
     App& app = App::GetInstance();
     app.RegisterUpdateSystem(cameraController);
     app.RegisterRenderSystem(meshRenderer);
-    app.RegisterRenderSystem(lightingDemo);
+    app.RegisterRenderSystem(pointLightDemo);
+    app.RegisterRenderSystem(spotLightDemo);
 
     auto pCubeVao = std::make_shared<VAO>();
     pCubeVao->Bind();
@@ -188,17 +193,17 @@ int main(int argc, char** argv)
         componentManager.AddComponent(id, Transform{
                 .position = glm::vec3(randPositionX(generator), randPosition(generator), randPosition(generator)),
                 .rotation = randRotation(generator),
-                .scale = glm::vec3(transformScale, transformScale, transformScale)
+                .scale = glm::vec3(transformScale, transformScale, transformScale),
         });
         componentManager.AddComponent(id, Mesh{
                 .pVbo = pCubeVBO,
-                .pVao = pCubeVao
+                .pVao = pCubeVao,
         });
         componentManager.AddComponent(id, Material{
                 .pDiffuseMap = containerDiffuseTexture,
                 .pSpecularMap = containerSpecularTexture,
                 .pEmissionMap = containerEmissionTexture,
-                .shininess = 32.0f
+                .shininess = 32.0f,
         });
     }
 
@@ -206,7 +211,7 @@ int main(int argc, char** argv)
     mainScene.AddEntity(cameraId);
     componentManager.AddComponent(cameraId, Camera{
             .position = glm::vec3(-0.8f, 0.0f, 12.0f),
-            .aspectRatio = mainWindow.GetAspectRatio()
+            .aspectRatio = mainWindow.GetAspectRatio(),
     });
 
     cameraController->SetActiveCameraId(cameraId);
@@ -216,7 +221,7 @@ int main(int argc, char** argv)
     componentManager.AddComponent(pointLightId, Transform{
             .position = glm::vec3(0.0f, 0.0f, 0.0f),
             .rotation = 0.0f,
-            .scale = glm::vec3(0.1f, 0.1f, 0.1f)
+            .scale = glm::vec3(0.1f, 0.1f, 0.1f),
     });
 
     auto pPointLightVao = std::make_shared<VAO>();
@@ -236,7 +241,7 @@ int main(int argc, char** argv)
             .specular = glm::vec3(1.0f, 1.0f, 1.0f),
             .constant = 1.0f,
             .linear = 0.09f,
-            .quadratic = 0.032f
+            .quadratic = 0.032f,
     });
 
     auto directionalLightId = entityManager.CreateEntity();
@@ -244,25 +249,51 @@ int main(int argc, char** argv)
     componentManager.AddComponent(directionalLightId, Transform{
             .position = glm::vec3(0.0f, 0.0f, 0.0f),
             .rotation = 0.0f,
-            .scale = glm::vec3(0.1f, 0.1f, 0.1f)
+            .scale = glm::vec3(0.1f, 0.1f, 0.1f),
     });
-
     componentManager.AddComponent(directionalLightId, Mesh{
             .pVbo = pCubeVBO,
             .pVao = pPointLightVao,
-            .color = glm::vec3(0.0f, 0.0f, 0.0f)
+            .color = glm::vec3(0.0f, 0.0f, 0.0f),
     });
     componentManager.AddComponent(directionalLightId, Material{});
     componentManager.AddComponent(directionalLightId, DirectionalLight{
-            .direction = glm::vec3(-0.2f, -1.0f, -0.3f),
             .ambient = glm::vec3(0.2f, 0.2f, 0.2f),
             .diffuse = glm::vec3(0.8f, 0.2f, 0.2f),
             .specular = glm::vec3(1.0f, 1.0f, 1.0f),
+            .direction = glm::vec3(-0.2f, -1.0f, -0.3f),
     });
 
-    meshRenderer->SetPointLightId(pointLightId);
+    auto spotLightId = entityManager.CreateEntity();
+    mainScene.AddEntity(spotLightId);
+    componentManager.AddComponent(spotLightId, Transform{
+            .position = glm::vec3(0.0f, 0.0f, 0.0f),
+            .rotation = 0.0f,
+            .scale = glm::vec3(0.01f, 0.01f, 0.01f),
+    });
+
+    componentManager.AddComponent(spotLightId, Mesh{
+            .pVbo = pCubeVBO,
+            .pVao = pPointLightVao,
+            .color = glm::vec3(0.0f, 0.0f, 0.0f),
+    });
+    componentManager.AddComponent(spotLightId, Material{});
+    componentManager.AddComponent(spotLightId, SpotLight{
+            .ambient = glm::vec3(0.2f, 0.2f, 0.2f),
+            .diffuse = glm::vec3(0.8f, 0.8f, 0.8f),
+            .specular = glm::vec3(1.0f, 1.0f, 1.0f),
+            .innerEdge = glm::cos(glm::radians(12.5f)),
+            .outerEdge = glm::cos(glm::radians(17.5f)),
+            .constant = 1.0f,
+            .linear = 0.09f,
+            .quadratic = 0.032f,
+    });
+
     meshRenderer->SetDirectionalLightId(directionalLightId);
+    meshRenderer->SetPointLightId(pointLightId);
+    meshRenderer->SetSpotLightId(spotLightId);
     meshRenderer->SetActiveCameraId(cameraId);
+    spotLightDemo->SetCameraId(cameraId);
 
     std::list<std::unique_ptr<State>> states;
     states.push_back(std::make_unique<State>(mainWindow, mainScene));
