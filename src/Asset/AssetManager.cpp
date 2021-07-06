@@ -4,6 +4,16 @@
 
 using namespace Iris;
 
+std::shared_ptr<ShaderProgram> AssetManager::GetShaderProgram(std::string name) const
+{
+    return m_shaderPrograms->Get(std::move(name));
+}
+
+void AssetManager::UnloadShaderProgram(const std::string &name) const
+{
+    m_shaderPrograms->Unload(name);
+}
+
 std::shared_ptr<Image> AssetManager::GetImage(std::string path) const
 {
     return m_images->Get(std::move(path));

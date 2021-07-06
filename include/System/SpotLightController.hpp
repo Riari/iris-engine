@@ -7,8 +7,7 @@
 
 namespace Iris
 {
-    // Temporary system
-    class SpotLightDemo : public System
+    class SpotLightController : public System
     {
     public:
         static std::list<ComponentType> GetComponentTypes();

@@ -23,8 +23,8 @@
 #include "State/State.hpp"
 #include "System/CameraController.hpp"
 #include "System/MeshRenderer.hpp"
-#include "System/PointLightDemo.hpp"
-#include "System/SpotLightDemo.hpp"
+#include "System/PointLightController.hpp"
+#include "System/SpotLightController.hpp"
 #include "System/SystemManager.hpp"
 #include "Window/FrameBufferEvent.hpp"
 #include "Window/WindowManager.hpp"
@@ -159,15 +159,15 @@ int main(int argc, char** argv)
     std::uniform_real_distribution<float> randColor(0.0f, 1.0f);
 
     auto cameraController = systemManager.RegisterSystem<CameraController>();
+    auto pointLightController = systemManager.RegisterSystem<PointLightController>();
+    auto spotLightController = systemManager.RegisterSystem<SpotLightController>();
     auto meshRenderer = systemManager.RegisterSystem<MeshRenderer>();
-    auto pointLightDemo = systemManager.RegisterSystem<PointLightDemo>();
-    auto spotLightDemo = systemManager.RegisterSystem<SpotLightDemo>();
 
     App& app = App::GetInstance();
     app.RegisterUpdateSystem(cameraController);
+    app.RegisterPreRenderSystem(pointLightController);
+    app.RegisterPreRenderSystem(spotLightController);
     app.RegisterRenderSystem(meshRenderer);
-    app.RegisterRenderSystem(pointLightDemo);
-    app.RegisterRenderSystem(spotLightDemo);
 
     auto pCubeVao = std::make_shared<VAO>();
     pCubeVao->Bind();
@@ -216,33 +216,35 @@ int main(int argc, char** argv)
 
     cameraController->SetActiveCameraId(cameraId);
 
-    auto pointLightId = entityManager.CreateEntity();
-    mainScene.AddEntity(pointLightId);
-    componentManager.AddComponent(pointLightId, Transform{
-            .position = glm::vec3(0.0f, 0.0f, 0.0f),
-            .rotation = 0.0f,
-            .scale = glm::vec3(0.1f, 0.1f, 0.1f),
-    });
-
     auto pPointLightVao = std::make_shared<VAO>();
     pPointLightVao->Bind();
     VBO::SetVertexAttribute(0, 3, 8 * sizeof(float), (void*)0);
     VAO::Unbind();
 
-    componentManager.AddComponent(pointLightId, Mesh{
-            .pVbo = pCubeVBO,
-            .pVao = pPointLightVao,
-            .color = glm::vec3(1.0f, 1.0f, 1.0f)
-    });
-    componentManager.AddComponent(pointLightId, Material{});
-    componentManager.AddComponent(pointLightId, PointLight{
-            .ambient = glm::vec3(0.2f, 0.2f, 1.0f),
-            .diffuse = glm::vec3(1.0f, 1.0f, 1.0f),
-            .specular = glm::vec3(1.0f, 1.0f, 1.0f),
-            .constant = 1.0f,
-            .linear = 0.09f,
-            .quadratic = 0.032f,
-    });
+    for (int i = 0; i < 4; i++)
+    {
+        auto pointLightId = entityManager.CreateEntity();
+        mainScene.AddEntity(pointLightId);
+        componentManager.AddComponent(pointLightId, Transform{
+                .position = glm::vec3(randPositionX(generator), randPosition(generator), randPosition(generator)),
+                .rotation = 0.0f,
+                .scale = glm::vec3(0.1f, 0.1f, 0.1f),
+        });
+        componentManager.AddComponent(pointLightId, Mesh{
+                .pVbo = pCubeVBO,
+                .pVao = pPointLightVao,
+                .color = glm::vec3(1.0f, 1.0f, 1.0f)
+        });
+        componentManager.AddComponent(pointLightId, Material{});
+        componentManager.AddComponent(pointLightId, PointLight{
+                .ambient = glm::vec3(0.1f, 0.1f, 0.1f),
+                .diffuse = glm::vec3(0.2f, 0.2f, 0.2f),
+                .specular = glm::vec3(0.5f, 0.5f, 0.5f),
+                .constant = 1.0f,
+                .linear = 0.09f,
+                .quadratic = 0.032f,
+        });
+    }
 
     auto directionalLightId = entityManager.CreateEntity();
     mainScene.AddEntity(directionalLightId);
@@ -290,10 +292,10 @@ int main(int argc, char** argv)
     });
 
     meshRenderer->SetDirectionalLightId(directionalLightId);
-    meshRenderer->SetPointLightId(pointLightId);
-    meshRenderer->SetSpotLightId(spotLightId);
     meshRenderer->SetActiveCameraId(cameraId);
-    spotLightDemo->SetCameraId(cameraId);
+
+    // For demo purposes while there's only one spot light defined.
+    spotLightController->SetCameraId(cameraId);
 
     std::list<std::unique_ptr<State>> states;
     states.push_back(std::make_unique<State>(mainWindow, mainScene));
