@@ -85,12 +85,14 @@ void MeshRenderer::Update(Window &window, Scene &scene)
 
             materialShaderProgram->SetUniformFloat("material.shininess", material.shininess);
 
+            materialShaderProgram->SetUniformFloat("time", glfwGetTime());
+
+            materialShaderProgram->SetUniform3f("viewPosition", camera.position);
+
             materialShaderProgram->SetUniform3f("directionalLight.ambient", directionalLight.ambient);
             materialShaderProgram->SetUniform3f("directionalLight.diffuse", directionalLight.diffuse);
             materialShaderProgram->SetUniform3f("directionalLight.specular", directionalLight.specular);
             materialShaderProgram->SetUniform3f("directionalLight.direction", directionalLight.direction);
-
-            materialShaderProgram->SetUniformFloat("time", glfwGetTime());
 
             // TODO: remove this!
             if (id % 2 == 0) transform.rotation += 0.02f / transform.scale.x;

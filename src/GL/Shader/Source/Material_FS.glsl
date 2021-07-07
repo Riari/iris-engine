@@ -47,6 +47,7 @@ struct SpotLight {
 
 uniform Material material;
 uniform float time;
+uniform vec3 viewPosition;
 
 uniform int pointLightCount;
 uniform int spotLightCount;
@@ -61,27 +62,29 @@ in vec2 TexCoords;
 
 out vec4 FragColor;
 
-vec3 CalcDirectionalLight(DirectionalLight light, vec3 normal);
-vec3 CalcPointLight(PointLight light, vec3 normal);
-vec3 CalcSpotLight(SpotLight light, vec3 normal);
+vec3 CalcDirectionalLight(DirectionalLight light, vec3 normal, vec3 viewDirection);
+vec3 CalcPointLight(PointLight light, vec3 normal, vec3 viewDirection);
+vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 viewDirection);
 float CalcLightDiffuseFactor(vec3 normal, vec3 lightDirection);
-float CalcLightSpecularFactor(vec3 normal, vec3 lightDirection);
+float CalcLightSpecularFactor(vec3 normal, vec3 lightDirection, vec3 viewDirection);
 vec3 Sample(sampler2D sampler);
 
 void main()
 {
     vec3 normal = normalize(Normal);
+    vec3 viewDirection = normalize(viewPosition - FragPos);
 
-    vec3 color = CalcDirectionalLight(directionalLight, normal);
+    vec3 color = vec3(0.0);
+    color += CalcDirectionalLight(directionalLight, normal, viewDirection);
 
     for (int i = 0; i < pointLightCount; i++)
     {
-        color += CalcPointLight(pointLights[i], normal);
+        color += CalcPointLight(pointLights[i], normal, viewDirection);
     }
 
     for (int i = 0; i < spotLightCount; i++)
     {
-        color += CalcSpotLight(spotLights[i], normal);
+        color += CalcSpotLight(spotLights[i], normal, viewDirection);
     }
 
     vec3 emissionMap = Sample(material.emission);
@@ -90,7 +93,7 @@ void main()
     FragColor = vec4(color, 1.0);
 }
 
-vec3 CalcDirectionalLight(DirectionalLight light, vec3 normal)
+vec3 CalcDirectionalLight(DirectionalLight light, vec3 normal, vec3 viewDirection)
 {
     vec3 lightDirection = normalize(-light.direction);
 
@@ -98,7 +101,7 @@ vec3 CalcDirectionalLight(DirectionalLight light, vec3 normal)
     float diffuseFactor = CalcLightDiffuseFactor(normal, lightDirection);
 
     // Specular
-    float specularFactor = CalcLightSpecularFactor(normal, lightDirection);
+    float specularFactor = CalcLightSpecularFactor(normal, lightDirection, viewDirection);
 
     // Result
     vec3 ambient = light.ambient * Sample(material.diffuse);
@@ -108,15 +111,15 @@ vec3 CalcDirectionalLight(DirectionalLight light, vec3 normal)
     return (ambient + diffuse + specular);
 }
 
-vec3 CalcPointLight(PointLight light, vec3 normal)
+vec3 CalcPointLight(PointLight light, vec3 normal, vec3 viewDirection)
 {
-    vec3 lightDirection = normalize(-light.position - FragPos);
+    vec3 lightDirection = normalize(light.position - FragPos);
 
     // Diffuse
     float diffuseFactor = CalcLightDiffuseFactor(normal, lightDirection);
 
     // Specular
-    float specularFactor = CalcLightSpecularFactor(normal, lightDirection);
+    float specularFactor = CalcLightSpecularFactor(normal, lightDirection, viewDirection);
 
     // Attenuation
     float distance = length(-light.position - FragPos);
@@ -134,15 +137,15 @@ vec3 CalcPointLight(PointLight light, vec3 normal)
     return (ambient + diffuse + specular);
 }
 
-vec3 CalcSpotLight(SpotLight light, vec3 normal)
+vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 viewDirection)
 {
-    vec3 lightDirection = normalize(-light.position - FragPos);
+    vec3 lightDirection = normalize(light.position - FragPos);
 
     // Diffuse
     float diffuseFactor = CalcLightDiffuseFactor(normal, lightDirection);
 
     // Specular
-    float specularFactor = CalcLightSpecularFactor(normal, lightDirection);
+    float specularFactor = CalcLightSpecularFactor(normal, lightDirection, viewDirection);
 
     // Intensity (edge softening)
     float theta = dot(lightDirection, normalize(-light.direction));
@@ -170,10 +173,10 @@ float CalcLightDiffuseFactor(vec3 normal, vec3 lightDirection)
     return max(dot(normal, lightDirection), 0.0);
 }
 
-float CalcLightSpecularFactor(vec3 normal, vec3 lightDirection)
+float CalcLightSpecularFactor(vec3 normal, vec3 lightDirection, vec3 viewDirection)
 {
     vec3 reflectDirection = reflect(-lightDirection, normal);
-    return pow(max(dot(vec3(0.0), reflectDirection), 0.0), material.shininess);
+    return pow(max(dot(viewDirection, reflectDirection), 0.0), material.shininess);
 }
 
 vec3 Sample(sampler2D sampler)

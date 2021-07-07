@@ -221,7 +221,27 @@ int main(int argc, char** argv)
     VBO::SetVertexAttribute(0, 3, 8 * sizeof(float), (void*)0);
     VAO::Unbind();
 
-    for (int i = 0; i < 4; i++)
+    auto directionalLightId = entityManager.CreateEntity();
+    mainScene.AddEntity(directionalLightId);
+    componentManager.AddComponent(directionalLightId, Transform{
+            .position = glm::vec3(0.0f, 0.0f, 0.0f),
+            .rotation = 0.0f,
+            .scale = glm::vec3(0.1f, 0.1f, 0.1f),
+    });
+    componentManager.AddComponent(directionalLightId, Mesh{
+            .pVbo = pCubeVBO,
+            .pVao = pPointLightVao,
+            .color = glm::vec3(0.0f, 0.0f, 0.0f),
+    });
+    componentManager.AddComponent(directionalLightId, Material{});
+    componentManager.AddComponent(directionalLightId, DirectionalLight{
+            .ambient = glm::vec3(0.02f, 0.02f, 0.02f),
+            .diffuse = glm::vec3(0.4f, 0.1f, 0.1f),
+            .specular = glm::vec3(0.4f, 0.1f, 0.1f),
+            .direction = glm::vec3(-0.2f, -1.0f, -0.3f),
+    });
+
+    for (int i = 0; i < 6; i++)
     {
         auto pointLightId = entityManager.CreateEntity();
         mainScene.AddEntity(pointLightId);
@@ -237,7 +257,7 @@ int main(int argc, char** argv)
         });
         componentManager.AddComponent(pointLightId, Material{});
         componentManager.AddComponent(pointLightId, PointLight{
-                .ambient = glm::vec3(0.1f, 0.1f, 0.1f),
+                .ambient = glm::vec3(0.05f, 0.05f, 0.05f),
                 .diffuse = glm::vec3(0.2f, 0.2f, 0.2f),
                 .specular = glm::vec3(0.5f, 0.5f, 0.5f),
                 .constant = 1.0f,
@@ -245,26 +265,6 @@ int main(int argc, char** argv)
                 .quadratic = 0.032f,
         });
     }
-
-    auto directionalLightId = entityManager.CreateEntity();
-    mainScene.AddEntity(directionalLightId);
-    componentManager.AddComponent(directionalLightId, Transform{
-            .position = glm::vec3(0.0f, 0.0f, 0.0f),
-            .rotation = 0.0f,
-            .scale = glm::vec3(0.1f, 0.1f, 0.1f),
-    });
-    componentManager.AddComponent(directionalLightId, Mesh{
-            .pVbo = pCubeVBO,
-            .pVao = pPointLightVao,
-            .color = glm::vec3(0.0f, 0.0f, 0.0f),
-    });
-    componentManager.AddComponent(directionalLightId, Material{});
-    componentManager.AddComponent(directionalLightId, DirectionalLight{
-            .ambient = glm::vec3(0.2f, 0.2f, 0.2f),
-            .diffuse = glm::vec3(0.8f, 0.2f, 0.2f),
-            .specular = glm::vec3(1.0f, 1.0f, 1.0f),
-            .direction = glm::vec3(-0.2f, -1.0f, -0.3f),
-    });
 
     auto spotLightId = entityManager.CreateEntity();
     mainScene.AddEntity(spotLightId);
@@ -281,8 +281,8 @@ int main(int argc, char** argv)
     });
     componentManager.AddComponent(spotLightId, Material{});
     componentManager.AddComponent(spotLightId, SpotLight{
-            .ambient = glm::vec3(0.2f, 0.2f, 0.2f),
-            .diffuse = glm::vec3(0.8f, 0.8f, 0.8f),
+            .ambient = glm::vec3(0.6f, 0.6f, 0.4f),
+            .diffuse = glm::vec3(1.0f, 1.0f, 0.8f),
             .specular = glm::vec3(1.0f, 1.0f, 1.0f),
             .innerEdge = glm::cos(glm::radians(12.5f)),
             .outerEdge = glm::cos(glm::radians(17.5f)),
