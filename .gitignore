@@ -26,6 +26,7 @@ _deps
 
 # Generated files
 .idea/**/contentModel.xml
+.idea/**/deployment.xml
 
 # Sensitive or high-churn files
 .idea/**/dataSources/
