@@ -2,9 +2,6 @@
 #include <random>
 
 #include <glm/glm.hpp>
-#include <imgui.h>
-#include <imgui_impl_glfw.h>
-#include <imgui_impl_opengl3.h>
 #include <cxxopts.hpp>
 
 #include "App/App.hpp"
@@ -20,6 +17,8 @@
 #include "Entity/EntityManager.hpp"
 #include "GL/Renderer.hpp"
 #include "GL/Texture.hpp"
+#include "ImGui/ImGuiLayer.hpp"
+#include "ImGui/Window/TestWindow.hpp"
 #include "Input/InputManager.hpp"
 #include "Scene/Scene.hpp"
 #include "Scene/SceneManager.hpp"
@@ -77,17 +76,9 @@ int main(int argc, char** argv)
     InitGLDebug();
 #endif
 
-    // TODO: Clean this up
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
-    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-
-    ImGui::StyleColorsDark();
-
-    ImGui_ImplGlfw_InitForOpenGL(mainWindow.GetGLFWWindow(), true);
-    ImGui_ImplOpenGL3_Init("#version 330");
+    ImGuiLayer imGuiLayer = ImGuiLayer();
+    imGuiLayer.AttachWindow(std::make_unique<TestWindow>());
+    imGuiLayer.Init(mainWindow.GetGLFWWindow());
 
     InputManager::RegisterBinding(Keys::MoveForward, GLFW_KEY_W);
     InputManager::RegisterBinding(Keys::MoveBackward, GLFW_KEY_S);
@@ -313,9 +304,11 @@ int main(int argc, char** argv)
     spotLightController->SetCameraId(cameraId);
 
     std::list<std::unique_ptr<State>> states;
-    states.push_back(std::make_unique<State>(mainWindow, mainScene));
+    states.push_back(std::make_unique<State>(mainWindow, mainScene, imGuiLayer));
 
     app.Run(states);
+
+    imGuiLayer.Cleanup();
 
     return 0;
 }

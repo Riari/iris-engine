@@ -2,8 +2,8 @@
 
 using namespace Iris;
 
-State::State(Window& window, Scene& scene)
-    : m_window(window), m_scene(scene) {}
+State::State(Window& window, Scene& scene, ImGuiLayer& imGuiLayer)
+    : m_window(window), m_scene(scene), m_imGuiLayer(imGuiLayer) {}
 
 Window &State::GetWindow()
 {
@@ -13,4 +13,9 @@ Window &State::GetWindow()
 Scene &State::GetScene()
 {
     return m_scene;
+}
+
+ImGuiLayer &State::GetImGuiLayer()
+{
+    return m_imGuiLayer;
 }
