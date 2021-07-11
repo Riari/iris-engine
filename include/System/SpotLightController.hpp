@@ -12,7 +12,7 @@ namespace Iris
     public:
         static std::list<ComponentType> GetComponentTypes();
 
-        void Update(Window&, Scene&) override;
+        void Update(Window&, Scene&, bool debug) override;
 
         void SetCameraId(EntityId);
 

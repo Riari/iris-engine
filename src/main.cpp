@@ -18,7 +18,7 @@
 #include "GL/Renderer.hpp"
 #include "GL/Texture.hpp"
 #include "ImGui/ImGuiLayer.hpp"
-#include "ImGui/Window/TestWindow.hpp"
+#include "ImGui/Window/InfoPanel.hpp"
 #include "Input/InputManager.hpp"
 #include "Scene/Scene.hpp"
 #include "Scene/SceneManager.hpp"
@@ -77,7 +77,7 @@ int main(int argc, char** argv)
 #endif
 
     ImGuiLayer imGuiLayer = ImGuiLayer();
-    imGuiLayer.AttachWindow(std::make_unique<TestWindow>());
+    imGuiLayer.AttachPanel(std::make_unique<InfoPanel>());
     imGuiLayer.Init(mainWindow.GetGLFWWindow());
 
     InputManager::RegisterBinding(Keys::MoveForward, GLFW_KEY_W);
@@ -86,6 +86,7 @@ int main(int argc, char** argv)
     InputManager::RegisterBinding(Keys::StrafeRight, GLFW_KEY_D);
     InputManager::RegisterBinding(Keys::Ascend, GLFW_KEY_SPACE);
     InputManager::RegisterBinding(Keys::Descend, GLFW_KEY_C);
+    InputManager::RegisterBinding(Keys::ToggleDebug, GLFW_KEY_H);
 
     WindowManager::RegisterHandler<FrameBufferEvent>([](const FrameBufferEvent& event) { Renderer::SetViewport(event.GetWidth(), event.GetHeight()); });
 

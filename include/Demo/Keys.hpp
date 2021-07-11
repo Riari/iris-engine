@@ -9,6 +9,7 @@ namespace Iris
         StrafeLeft,
         StrafeRight,
         Ascend,
-        Descend
+        Descend,
+        ToggleDebug
     };
 }

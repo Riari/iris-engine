@@ -12,7 +12,7 @@ namespace Iris
         void SetDirectionalLightId(EntityId);
         void SetActiveCameraId(EntityId);
 
-        void Update(Window&, Scene&) override;
+        void Update(Window&, Scene&, bool debug) override;
 
     private:
         EntityId m_directionalLightId{};

@@ -31,7 +31,7 @@ void MeshRenderer::SetActiveCameraId(EntityId id)
     m_activeCameraId = id;
 }
 
-void MeshRenderer::Update(Window &window, Scene &scene)
+void MeshRenderer::Update(Window &window, Scene &scene, bool debug)
 {
     AssetManager& assetManager = AssetManager::GetInstance();
     auto basicShaderProgram = assetManager.GetShaderProgram("Basic");

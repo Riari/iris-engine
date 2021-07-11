@@ -17,12 +17,17 @@ std::list<ComponentType> System::GetComponentTypes()
     return {};
 }
 
-void System::Update(double)
+std::set<EntityId> System::GetEntities()
+{
+    return m_entities;
+}
+
+void System::Update(Window& window, bool debug)
 {
     // noop
 }
 
-void System::Update(Window& window, Scene& scene)
+void System::Update(Window& window, Scene& scene, bool debug)
 {
     // noop
 }

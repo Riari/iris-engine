@@ -20,7 +20,7 @@ void SpotLightController::SetCameraId(EntityId id)
     m_cameraId = id;
 }
 
-void SpotLightController::Update(Window &window, Scene& scene)
+void SpotLightController::Update(Window &window, Scene& scene, bool debug)
 {
     auto sceneEntities = scene.GetEntities();
     auto& camera = GetComponent<Camera>(m_cameraId);

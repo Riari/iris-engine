@@ -2,9 +2,9 @@
 
 #include <memory>
 
+#include "ImGui/ImGuiLayer.hpp"
 #include "Scene/Scene.hpp"
 #include "Window/Window.hpp"
-#include "ImGui/ImGuiLayer.hpp"
 
 namespace Iris
 {

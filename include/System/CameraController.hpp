@@ -42,7 +42,7 @@ namespace Iris
         void Rotate(float xOffset, float yOffset, double deltaTime, double rotateSpeed) const;
         void UpdateVectors() const;
 
-        void Update(double) override;
+        void Update(Window& window, bool debug) override;
 
     private:
         EntityId m_activeCameraId;
@@ -53,6 +53,7 @@ namespace Iris
         bool m_strafeRight = false;
         bool m_ascend = false;
         bool m_descend = false;
+        bool m_focused = true;
 
         bool m_receivedFirstMouseMoveEvent = false;
         float m_rotateX, m_rotateY, m_lastCursorX, m_lastCursorY;

@@ -1,10 +1,10 @@
 #pragma once
 
-#include "ImGui/ImGuiWindow.hpp"
+#include "ImGui/ImGuiPanel.hpp"
 
 namespace Iris
 {
-    class TestWindow : public ImGuiWindow
+    class InfoPanel : public ImGuiPanel
     {
     public:
         void Build() override;

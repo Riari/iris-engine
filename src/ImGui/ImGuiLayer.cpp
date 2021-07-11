@@ -6,7 +6,7 @@
 
 using namespace Iris;
 
-void ImGuiLayer::Init(GLFWwindow* glfwWindow)
+void ImGuiLayer::Init(GLFWwindow *window)
 {
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -16,13 +16,13 @@ void ImGuiLayer::Init(GLFWwindow* glfwWindow)
 
     ImGui::StyleColorsDark();
 
-    ImGui_ImplGlfw_InitForOpenGL(glfwWindow, true);
+    ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init("#version 330");
 }
 
-void ImGuiLayer::AttachWindow(std::unique_ptr<ImGuiWindow> imGuiWindow)
+void ImGuiLayer::AttachPanel(std::unique_ptr<ImGuiPanel> panel)
 {
-    m_windows.push_back(std::move(imGuiWindow));
+    m_panels.push_back(std::move(panel));
 }
 
 void ImGuiLayer::PrepareNewFrame()
@@ -34,9 +34,9 @@ void ImGuiLayer::PrepareNewFrame()
 
 void ImGuiLayer::PrepareRender()
 {
-    for (auto &window : m_windows)
+    for (auto &panel : m_panels)
     {
-        window->Build();
+        panel->Build();
     }
 
     ImGui::Render();

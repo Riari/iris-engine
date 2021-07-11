@@ -1,7 +1,6 @@
 #pragma once
 
 #include <list>
-#include <set>
 
 #include "Entity/ComponentManager.hpp"
 #include "Entity/Entity.hpp"
@@ -18,8 +17,10 @@ namespace Iris
 
         static std::list<ComponentType> GetComponentTypes();
 
-        virtual void Update(double);
-        virtual void Update(Window&, Scene&);
+        std::set<EntityId> GetEntities();
+
+        virtual void Update(Window&, bool debug);
+        virtual void Update(Window&, Scene&, bool debug);
 
     protected:
         std::set<EntityId> m_entities;

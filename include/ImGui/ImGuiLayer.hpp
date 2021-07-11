@@ -5,7 +5,8 @@
 
 #include <GLFW/glfw3.h>
 
-#include "ImGuiWindow.hpp"
+#include "ImGuiPanel.hpp"
+#include "Window/Window.hpp"
 
 namespace Iris
 {
@@ -14,7 +15,7 @@ namespace Iris
     public:
         void Init(GLFWwindow*);
 
-        void AttachWindow(std::unique_ptr<ImGuiWindow>);
+        void AttachPanel(std::unique_ptr<ImGuiPanel> panel);
 
         void PrepareNewFrame();
         void PrepareRender();
@@ -23,6 +24,6 @@ namespace Iris
         void Cleanup();
 
     private:
-        std::list<std::unique_ptr<ImGuiWindow>> m_windows;
+        std::list<std::unique_ptr<ImGuiPanel>> m_panels;
     };
 }

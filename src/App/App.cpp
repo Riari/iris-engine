@@ -1,4 +1,5 @@
 #include "App/App.hpp"
+#include "Demo/Keys.hpp"
 #include "GL/Renderer.hpp"
 
 using namespace Iris;
@@ -29,6 +30,17 @@ void App::RegisterPostRenderSystem(const std::shared_ptr<System>& system)
     m_postRenderSystems.push_back(system);
 }
 
+void App::Handle(KeyEvent event)
+{
+    auto binding = event.GetBinding();
+    if (binding == nullptr) return;
+
+    if (binding->GetID() == Keys::ToggleDebug && event.GetAction() == GLFW_PRESS)
+    {
+        m_debug = !m_debug;
+    }
+}
+
 void App::Run(const std::list<std::unique_ptr<State>>& states) const
 {
     while (!m_shouldExit)
@@ -41,7 +53,7 @@ void App::Run(const std::list<std::unique_ptr<State>>& states) const
             auto &scene = state->GetScene();
             auto &imGuiLayer = state->GetImGuiLayer();
 
-            imGuiLayer.PrepareNewFrame();
+            if (m_debug) imGuiLayer.PrepareNewFrame();
 
             window.MakeCurrent();
             window.EnableVsync();
@@ -57,21 +69,21 @@ void App::Run(const std::list<std::unique_ptr<State>>& states) const
 
             while (window.ShouldUpdate())
             {
-                for (const auto &system : m_updateSystems) system->Update(window.GetDeltaTime());
+                for (const auto &system : m_updateSystems) system->Update(window, m_debug);
                 window.OnUpdated();
             }
 
-            imGuiLayer.PrepareRender();
+            if (m_debug) imGuiLayer.PrepareRender();
 
             Renderer::Clear(scene.GetClearColor());
 
-            for (const auto &system : m_preRenderSystems) system->Update(window, scene);
-            for (const auto &system : m_renderSystems) system->Update(window, scene);
+            for (const auto &system : m_preRenderSystems) system->Update(window, scene, m_debug);
+            for (const auto &system : m_renderSystems) system->Update(window, scene, m_debug);
 
-            imGuiLayer.Render();
+            if (m_debug) imGuiLayer.Render();
 
             window.SwapBuffers();
-            for (const auto &system : m_postRenderSystems) system->Update(window, scene);
+            for (const auto &system : m_postRenderSystems) system->Update(window, scene, m_debug);
         }
     }
 }

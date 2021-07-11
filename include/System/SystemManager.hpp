@@ -54,6 +54,16 @@ namespace Iris
         }
 
         template<typename T>
+        std::shared_ptr<System> GetSystem()
+        {
+            const char* typeName = typeid(T).name();
+
+            assert(m_systems.find(typeName) != m_systems.end() && "System retrieved before registered.");
+
+            return m_systems.find(typeName)->second;
+        }
+
+        template<typename T>
         void SetSignature(Signature signature)
         {
             const char* typeName = typeid(T).name();

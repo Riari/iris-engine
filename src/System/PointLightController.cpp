@@ -14,7 +14,7 @@ std::list<ComponentType> PointLightController::GetComponentTypes()
     };
 }
 
-void PointLightController::Update(Window &window, Scene& scene)
+void PointLightController::Update(Window &window, Scene& scene, bool debug)
 {
     auto sceneEntities = scene.GetEntities();
 

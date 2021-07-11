@@ -133,8 +133,14 @@ void CameraController::UpdateVectors() const
     camera.up = glm::normalize(glm::cross(camera.right, front));
 }
 
-void CameraController::Update(double deltaTime)
+void CameraController::Update(Window& window, bool debug)
 {
+    window.SetInputMode(GLFW_CURSOR, debug ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_DISABLED );
+
+    if (debug) return;
+
+    auto deltaTime = window.GetDeltaTime();
+
     Rotate(m_rotateX, m_rotateY, deltaTime, 1.0f);
     m_rotateX = 0.0f;
     m_rotateY = 0.0f;

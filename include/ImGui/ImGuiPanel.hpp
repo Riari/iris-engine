@@ -2,7 +2,7 @@
 
 namespace Iris
 {
-    class ImGuiWindow
+    class ImGuiPanel
     {
     public:
         virtual void Build() = 0;
