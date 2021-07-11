@@ -18,7 +18,7 @@
 #include "GL/Renderer.hpp"
 #include "GL/Texture.hpp"
 #include "ImGui/ImGuiLayer.hpp"
-#include "ImGui/Window/InfoPanel.hpp"
+#include "ImGui/Panel/InfoPanel.hpp"
 #include "Input/InputManager.hpp"
 #include "Scene/Scene.hpp"
 #include "Scene/SceneManager.hpp"

@@ -2,7 +2,7 @@
 
 #include "Entity/Component/Transform.hpp"
 #include "Entity/ComponentManager.hpp"
-#include "ImGui/Window/InfoPanel.hpp"
+#include "ImGui/Panel/InfoPanel.hpp"
 #include "System/PointLightController.hpp"
 #include "System/SystemManager.hpp"
 
