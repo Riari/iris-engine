@@ -19,6 +19,7 @@
 #include "GL/Texture.hpp"
 #include "ImGui/ImGuiLayer.hpp"
 #include "ImGui/Panel/InfoPanel.hpp"
+#include "ImGui/Panel/PointLightControlPanel.hpp"
 #include "Input/InputManager.hpp"
 #include "Scene/Scene.hpp"
 #include "Scene/SceneManager.hpp"
@@ -75,10 +76,6 @@ int main(int argc, char** argv)
 #if !defined(NDEBUG)
     InitGLDebug();
 #endif
-
-    ImGuiLayer imGuiLayer = ImGuiLayer();
-    imGuiLayer.AttachPanel(std::make_unique<InfoPanel>());
-    imGuiLayer.Init(mainWindow.GetGLFWWindow());
 
     InputManager::RegisterBinding(Keys::MoveForward, GLFW_KEY_W);
     InputManager::RegisterBinding(Keys::MoveBackward, GLFW_KEY_S);
@@ -192,7 +189,7 @@ int main(int argc, char** argv)
     Scene& mainScene = SceneManager::GetInstance().Create(1);
     mainScene.SetClearColor(glm::vec4(0.1f, 0.1f, 0.14f, 1.0f));
 
-    for (int i = 0; i < 20; i++)
+    for (int i = 0; i < 16; i++)
     {
         auto id = entityManager.CreateEntity();
         mainScene.AddEntity(id);
@@ -248,7 +245,7 @@ int main(int argc, char** argv)
             .direction = glm::vec3(-0.2f, -1.0f, -0.3f),
     });
 
-    for (int i = 0; i < 6; i++)
+    for (int i = 0; i < 2; i++)
     {
         auto pointLightId = entityManager.CreateEntity();
         mainScene.AddEntity(pointLightId);
@@ -288,9 +285,9 @@ int main(int argc, char** argv)
     });
     componentManager.AddComponent(spotLightId, Material{});
     componentManager.AddComponent(spotLightId, SpotLight{
-            .ambient = glm::vec3(0.6f, 0.6f, 0.4f),
-            .diffuse = glm::vec3(1.0f, 1.0f, 0.8f),
-            .specular = glm::vec3(1.0f, 1.0f, 1.0f),
+            .ambient = glm::vec3(0.0f, 0.0f, 0.0f),
+            .diffuse = glm::vec3(0.0f, 0.0f, 0.0f),
+            .specular = glm::vec3(0.0f, 0.0f, 0.0f),
             .innerEdge = glm::cos(glm::radians(12.5f)),
             .outerEdge = glm::cos(glm::radians(17.5f)),
             .constant = 1.0f,
@@ -303,6 +300,11 @@ int main(int argc, char** argv)
 
     // For demo purposes while there's only one spot light defined.
     spotLightController->SetCameraId(cameraId);
+
+    ImGuiLayer imGuiLayer = ImGuiLayer();
+    imGuiLayer.AttachPanel(std::make_unique<InfoPanel>(cameraId));
+    imGuiLayer.AttachPanel(std::make_unique<PointLightControlPanel>());
+    imGuiLayer.Init(mainWindow.GetGLFWWindow());
 
     std::list<std::unique_ptr<State>> states;
     states.push_back(std::make_unique<State>(mainWindow, mainScene, imGuiLayer));

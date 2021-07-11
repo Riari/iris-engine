@@ -93,10 +93,6 @@ void MeshRenderer::Update(Window &window, Scene &scene, bool debug)
             materialShaderProgram->SetUniform3f("directionalLight.diffuse", directionalLight.diffuse);
             materialShaderProgram->SetUniform3f("directionalLight.specular", directionalLight.specular);
             materialShaderProgram->SetUniform3f("directionalLight.direction", directionalLight.direction);
-
-            // TODO: remove this!
-            if (id % 2 == 0) transform.rotation += 0.02f / transform.scale.x;
-            else transform.rotation -= 0.02f / transform.scale.x;
         }
 
         mesh.pVao->Bind();

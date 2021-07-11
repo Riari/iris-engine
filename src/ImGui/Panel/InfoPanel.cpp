@@ -1,31 +1,33 @@
 #include <imgui.h>
 
-#include "Entity/Component/Transform.hpp"
+#include "Entity/Component/Camera.hpp"
 #include "Entity/ComponentManager.hpp"
 #include "ImGui/Panel/InfoPanel.hpp"
-#include "System/PointLightController.hpp"
-#include "System/SystemManager.hpp"
 
 using namespace Iris;
+
+InfoPanel::InfoPanel(EntityId mainCameraId) : m_mainCameraId(mainCameraId) {}
 
 void InfoPanel::Build()
 {
     // TODO: make this better
     ComponentManager& componentManager = ComponentManager::GetInstance();
-    SystemManager& systemManager = SystemManager::GetInstance();
-    auto pPointLightController = systemManager.GetSystem<PointLightController>();
-    auto pointLights = pPointLightController->GetEntities();
+    auto& camera = componentManager.GetComponent<Camera>(m_mainCameraId);
 
     ImGui::Begin("Info");
-    ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 
-    int i = 0;
-    for (auto const& id : pointLights)
-    {
-        auto& transform = componentManager.GetComponent<Transform>(id);
+    ImGui::Text("Performance");
+    ImGui::Separator();
+    ImGui::Text("Frame time: %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 
-        ImGui::Text("Point light %", i++);
-    }
+    ImGui::Spacing();
+
+    ImGui::Text("Camera");
+    ImGui::Separator();
+    ImGui::Text("Position: (%.3f, %.3f, %.3f)", camera.position[0], camera.position[1], camera.position[2]);
+    ImGui::Text("Front: (%.3f, %.3f, %.3f)", camera.front[0], camera.front[1], camera.front[2]);
+    ImGui::Text("Yaw: %.3f, Pitch: %.3f", camera.yaw, camera.pitch);
+    ImGui::Text("FOV: %.3f", camera.fov);
 
     ImGui::End();
 }
