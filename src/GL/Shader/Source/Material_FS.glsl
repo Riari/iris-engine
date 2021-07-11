@@ -122,7 +122,7 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 viewDirection)
     float specularFactor = CalcLightSpecularFactor(normal, lightDirection, viewDirection);
 
     // Attenuation
-    float distance = length(-light.position - FragPos);
+    float distance = length(light.position - FragPos);
     float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * (distance * distance));
 
     // Result
@@ -153,7 +153,7 @@ vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 viewDirection)
     float intensity = smoothstep(0.0, 1.0, (theta - light.outerEdge) / epsilon);
 
     // Attenuation
-    float distance = length(-light.position - FragPos);
+    float distance = length(light.position - FragPos);
     float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * (distance * distance));
 
     // Result
