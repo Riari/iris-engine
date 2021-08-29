@@ -9,9 +9,9 @@
 
 using namespace Iris;
 
-Texture::Texture(std::shared_ptr<Image> image) : m_image(std::move(image))
+Texture::Texture(std::shared_ptr<Image> image) : Object(), m_image(std::move(image))
 {
-    glGenTextures(1, &m_texture);
+    glGenTextures(1, &m_id);
 }
 
 void Texture::Bind(GLenum unit) const
@@ -22,7 +22,7 @@ void Texture::Bind(GLenum unit) const
 
 void Texture::Bind() const
 {
-    glBindTexture(GL_TEXTURE_2D, m_texture);
+    glBindTexture(GL_TEXTURE_2D, m_id);
 }
 
 void Texture::Define(bool withMipmap) const

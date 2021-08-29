@@ -1,8 +1,10 @@
 #pragma once
 
+#include "Object.hpp"
+
 namespace Iris
 {
-    class VAO
+    class VAO : protected Object
     {
     public:
         VAO();
@@ -12,8 +14,5 @@ namespace Iris
         void Bind() const;
 
         static void Unbind();
-
-    private:
-        unsigned int m_vao{};
     };
 }

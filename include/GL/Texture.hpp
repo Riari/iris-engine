@@ -3,10 +3,11 @@
 #include <memory>
 
 #include "Asset/Image.hpp"
+#include "GL/Object.hpp"
 
 namespace Iris
 {
-    class Texture
+    class Texture : protected Object
     {
     public:
         explicit Texture(std::shared_ptr<Image> image);
@@ -24,7 +25,6 @@ namespace Iris
         static void SetFilterMethod(GLint param);
 
     private:
-        unsigned int m_texture{};
         std::shared_ptr<Image> m_image;
     };
 }

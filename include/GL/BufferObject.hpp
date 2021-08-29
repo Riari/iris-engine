@@ -2,9 +2,11 @@
 
 #include <memory>
 
+#include "Object.hpp"
+
 namespace Iris
 {
-    class BufferObject
+    class BufferObject : protected Object
     {
     public:
         explicit BufferObject(unsigned int target);
@@ -18,8 +20,6 @@ namespace Iris
         void Unbind() const;
 
     private:
-        unsigned int m_vbo{};
         unsigned int m_target;
-        const unsigned int *m_buffer{};
     };
 }

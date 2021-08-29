@@ -12,17 +12,19 @@ using namespace Iris;
 
 Shader::Shader(unsigned int type, const std::string &name, const std::string &suffix,
                std::shared_ptr<spdlog::logger> logger) :
-        m_id(glCreateShader(type)),
+        Object(),
         m_name(name + suffix),
         m_logger(std::move(logger))
-{}
+{
+    m_id = glCreateShader(type);
+}
 
 Shader::~Shader()
 {
     glDeleteShader(m_id);
 }
 
-unsigned int Shader::GetID() const
+GLuint Shader::GetID() const
 {
     return m_id;
 }
