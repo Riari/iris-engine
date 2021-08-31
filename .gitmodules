@@ -13,3 +13,6 @@
 [submodule "external/fmt"]
 	path = external/fmt
 	url = git@github.com:fmtlib/fmt.git
+[submodule "external/vcpkg"]
+	path = external/vcpkg
+	url = git@github.com:microsoft/vcpkg.git

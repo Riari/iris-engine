@@ -18,10 +18,23 @@ set(IMGUI_DIR "${EXT_DIR}/imgui")
 set(KHR_DIR "${EXT_DIR}/KHR")
 set(SPDLOG_DIR "${EXT_DIR}/spdlog")
 set(STB_DIR "${EXT_DIR}/stb")
+set(VCPKG_DIR "${EXT_DIR}/vcpkg")
+
+set(ZLIB_DIR "${VCPKG_DIR}/packages/zlib_x64-windows")
+set(ASSIMP_DIR "${VCPKG_DIR}/packages/assimp_x64-windows")
 
 set(ASSETS_DIR "${CMAKE_SOURCE_DIR}/assets")
 set(INC_DIR "${CMAKE_SOURCE_DIR}/include")
 set(SRC_DIR "${CMAKE_SOURCE_DIR}/src")
+
+# find_package paths
+set(assimp_DIR "${ASSIMP_DIR}/share/assimp")
+set(irrlicht_DIR "${VCPKG_DIR}/packages/irrlicht_x64-windows/share/irrlicht")
+set(kubazip_DIR "${VCPKG_DIR}/packages/kubazip_x64-windows/share/kubazip")
+set(minizip_DIR "${VCPKG_DIR}/packages/minizip_x64-windows/share/minizip")
+set(poly2tri_DIR "${VCPKG_DIR}/packages/poly2tri_x64-windows/share/poly2tri")
+set(polyclipping_DIR "${VCPKG_DIR}/packages/polyclipping_x64-windows/share/polyclipping")
+set(utf8cpp_DIR "${VCPKG_DIR}/packages/utfcpp_x64-windows/share/utf8cpp")
 
 # GLFW
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
@@ -72,12 +85,20 @@ target_include_directories(imgui
         "${KHR_DIR}/include"
 )
 
+# zlib
+set(ZLIB_LIBRARY "${ZLIB_DIR}/lib/zlib.lib")
+set(ZLIB_INCLUDE_DIR "${ZLIB_DIR}/include")
+
+# Assimp
+find_package(assimp CONFIG REQUIRED)
+
 # Misc. third party stuff
 include_directories(
         "${CXXOPTS_DIR}"
         "${GLAD_DIR}/include"
         "${GLM_INCLUDE_DIRS}"
         "${IMGUI_DIR}/include"
+        "${ASSIMP_DIR}/include"
         "${INC_DIR}"
         "${STB_DIR}"
 )
@@ -96,7 +117,7 @@ add_custom_target(copy-shader-sources ALL COMMAND ${CMAKE_COMMAND} -E copy_direc
 
 add_dependencies(${PROJECT_NAME} copy-assets copy-shader-sources)
 
-target_link_libraries(${PROJECT_NAME} PUBLIC fmt glad glfw imgui spdlog -limm32)
+target_link_libraries(${PROJECT_NAME} PUBLIC fmt glad glfw imgui spdlog assimp::assimp -limm32)
 
 target_precompile_headers(
         ${PROJECT_NAME} PRIVATE
