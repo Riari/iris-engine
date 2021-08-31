@@ -17,6 +17,5 @@ Bootstrap vcpkg:
 Install assimp x64:
 
 ```
-.\external\vcpkg\vcpkg install 
+.\external\vcpkg\vcpkg install assimp:x64-windows
 ```
-
