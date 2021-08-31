@@ -27,15 +27,6 @@ set(ASSETS_DIR "${CMAKE_SOURCE_DIR}/assets")
 set(INC_DIR "${CMAKE_SOURCE_DIR}/include")
 set(SRC_DIR "${CMAKE_SOURCE_DIR}/src")
 
-# find_package paths
-set(assimp_DIR "${ASSIMP_DIR}/share/assimp")
-set(irrlicht_DIR "${VCPKG_DIR}/packages/irrlicht_x64-windows/share/irrlicht")
-set(kubazip_DIR "${VCPKG_DIR}/packages/kubazip_x64-windows/share/kubazip")
-set(minizip_DIR "${VCPKG_DIR}/packages/minizip_x64-windows/share/minizip")
-set(poly2tri_DIR "${VCPKG_DIR}/packages/poly2tri_x64-windows/share/poly2tri")
-set(polyclipping_DIR "${VCPKG_DIR}/packages/polyclipping_x64-windows/share/polyclipping")
-set(utf8cpp_DIR "${VCPKG_DIR}/packages/utfcpp_x64-windows/share/utf8cpp")
-
 # GLFW
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)

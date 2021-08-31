@@ -19,3 +19,9 @@ Install assimp x64:
 ```
 .\external\vcpkg\vcpkg install assimp:x64-windows
 ```
+
+Run CMake:
+
+```
+cmake . -DCMAKE_BUILD_TYPE=Debug -G Ninja -DCMAKE_TOOLCHAIN_FILE=.\external\vcpkg\scripts\buildsystems\vcpkg.cmake
+```
