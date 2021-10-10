@@ -17,7 +17,7 @@ Bootstrap vcpkg:
 Install assimp x64:
 
 ```
-.\external\vcpkg\vcpkg install assimp:x64-windows
+.\external\vcpkg\vcpkg install
 ```
 
 Run CMake:

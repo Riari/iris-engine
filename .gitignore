@@ -1,5 +1,6 @@
 ## CMake
-
+.cmake
+cmake-build-*/
 CMakeLists.txt.user
 CMakeCache.txt
 CMakeFiles
@@ -11,6 +12,17 @@ install_manifest.txt
 compile_commands.json
 CTestTestfile.cmake
 _deps
+
+## vcpkg
+
+vcpkg-manifest-install.log
+vcpkg_installed/
+
+## Ninja
+
+.ninja_deps
+.ninja_log
+build.ninja
 
 ## JetBrains
 
@@ -53,9 +65,6 @@ _deps
 # .idea/modules
 # *.iml
 # *.ipr
-
-# CMake
-cmake-build-*/
 
 # Mongo Explorer plugin
 .idea/**/mongoSettings.xml
