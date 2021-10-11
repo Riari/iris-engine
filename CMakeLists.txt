@@ -18,6 +18,7 @@ set(SRC_DIR "${CMAKE_SOURCE_DIR}/src")
 
 # vcpkg
 set(CMAKE_TOOLCHAIN_FILE ${VCPKG_DIR}/scripts/buildsystems/vcpkg.cmake CACHE STRING "Vcpkg toolchain file")
+include(${VCPKG_DIR}/scripts/buildsystems/vcpkg.cmake)
 
 find_package(assimp CONFIG REQUIRED)
 find_package(cxxopts CONFIG REQUIRED)
