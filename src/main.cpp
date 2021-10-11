@@ -29,6 +29,7 @@
 #include "System/PointLightController.hpp"
 #include "System/SpotLightController.hpp"
 #include "System/SystemManager.hpp"
+#include "Utility/Logger.hpp"
 #include "Window/FrameBufferEvent.hpp"
 #include "Window/WindowManager.hpp"
 
