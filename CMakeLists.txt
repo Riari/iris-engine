@@ -8,10 +8,7 @@ set(CMAKE_CXX_FLAGS, "${CXX_FLAGS}")
 set(CMAKE_EXE_LINKER_FLAGS "-static")
 
 # Paths
-set(EXT_DIR "${CMAKE_SOURCE_DIR}/external")
-set(KHR_DIR "${EXT_DIR}/KHR")
-set(VCPKG_DIR "${EXT_DIR}/vcpkg")
-
+set(VCPKG_DIR "${CMAKE_SOURCE_DIR}/external/vcpkg")
 set(ASSETS_DIR "${CMAKE_SOURCE_DIR}/assets")
 set(INC_DIR "${CMAKE_SOURCE_DIR}/include")
 set(SRC_DIR "${CMAKE_SOURCE_DIR}/src")
