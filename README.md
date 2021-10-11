@@ -14,7 +14,7 @@ Bootstrap vcpkg:
 .\external\vcpkg\bootstrap-vcpkg.bat -disableMetrics
 ```
 
-Install assimp x64:
+Install dependencies:
 
 ```
 .\external\vcpkg\vcpkg install
