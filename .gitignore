@@ -1,3 +1,5 @@
+resources/
+
 ## CMake
 .cmake
 cmake-build-*/

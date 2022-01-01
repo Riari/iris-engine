@@ -5,7 +5,7 @@
 
 using namespace Iris;
 
-Mesh::Mesh(std::vector<GLVertex> vertices, vector<unsigned int> indices, std::vector<GLTexture> textures) :
+Mesh::Mesh(std::vector<GLVertex> vertices, std::vector<unsigned int> indices, std::vector<GLTexture> textures) :
     m_vertices(std::move(vertices)),
     m_indices(std::move(indices)),
     m_textures(std::move(textures))
@@ -22,7 +22,7 @@ void Mesh::Draw(ShaderProgram &program)
     {
         glActiveTexture(GL_TEXTURE0 + i);
 
-        string name, typeIndex;
+        std::string name, typeIndex;
         switch (m_textures[i].type)
         {
             case Diffuse:
@@ -39,7 +39,7 @@ void Mesh::Draw(ShaderProgram &program)
                 break;
         }
 
-        program.SetUniformFloat(prefix.append(name, typeIndex), i);
+        program.SetUniformFloat(prefix + name + typeIndex, i);
         glBindTexture(GL_TEXTURE_2D, m_textures[i].id);
     }
     glActiveTexture(GL_TEXTURE0);

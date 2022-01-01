@@ -12,6 +12,6 @@ namespace Iris
     struct GLTexture
     {
         unsigned int id;
-        TextureType type;
+        GLTextureType type;
     };
 }
