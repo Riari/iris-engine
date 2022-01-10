@@ -9,7 +9,7 @@
 #include "Demo/Keys.hpp"
 #include "Entity/Component/CameraComponent.hpp"
 #include "Entity/Component/MaterialComponent.hpp"
-#include "Entity/Component/Mesh.hpp"
+#include "Entity/Component/MeshComponent.hpp"
 #include "Entity/Component/DirectionalLightComponent.hpp"
 #include "Entity/Component/PointLightComponent.hpp"
 #include "Entity/Component/SpotLightComponent.hpp"
