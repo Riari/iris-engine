@@ -10,11 +10,10 @@ namespace Iris
 {
     class Mesh {
     public:
-
         Mesh(std::vector<GLVertex> vertices, std::vector<unsigned int> indices, std::vector<GLTexture> textures);
         void Draw(ShaderProgram &shader);
     private:
-        // Mesh data
+        // MeshComponent data
         std::vector<GLVertex> m_vertices;
         std::vector<unsigned int> m_indices;
         std::vector<GLTexture> m_textures;
@@ -22,6 +21,6 @@ namespace Iris
         // Render data
         unsigned int m_vao, m_vbo, m_ebo;
 
-        void SetupMesh();
+        void Init();
     };
 }

@@ -1,6 +1,6 @@
 #include "Asset/AssetManager.hpp"
-#include "Entity/Component/PointLight.hpp"
-#include "Entity/Component/Transform.hpp"
+#include "Entity/Component/PointLightComponent.hpp"
+#include "Entity/Component/TransformComponent.hpp"
 #include "Scene/Scene.hpp"
 #include "System/PointLightController.hpp"
 
@@ -9,8 +9,8 @@ using namespace Iris;
 std::list<ComponentType> PointLightController::GetComponentTypes()
 {
     return {
-        GetComponentType<Transform>(),
-        GetComponentType<PointLight>()
+        GetComponentType<TransformComponent>(),
+        GetComponentType<PointLightComponent>()
     };
 }
 
@@ -28,8 +28,8 @@ void PointLightController::Update(Window &window, Scene& scene, bool debug)
         // TODO: find a better way of limiting the update to the intersection of system and scene entities
         if (sceneEntities.find(id) == sceneEntities.end()) continue;
 
-        auto& transform = GetComponent<Transform>(id);
-        auto& pointLight = GetComponent<PointLight>(id);
+        auto& transform = GetComponent<TransformComponent>(id);
+        auto& pointLight = GetComponent<PointLightComponent>(id);
 
         auto key = "pointLights[" + std::to_string(i) + "].";
         materialShaderProgram->SetUniform3f(key + "position", transform.position);

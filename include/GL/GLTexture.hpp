@@ -6,12 +6,15 @@ namespace Iris
     {
         Diffuse,
         Specular,
-        Emission
+        Emission,
+        Normal,
+        Height,
     };
 
     struct GLTexture
     {
         unsigned int id;
         GLTextureType type;
+        const char* path;
     };
 }

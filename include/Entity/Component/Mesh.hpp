@@ -10,7 +10,7 @@
 
 namespace Iris
 {
-    struct Mesh
+    struct MeshComponent
     {
         std::shared_ptr<VBO> pVbo;
         std::shared_ptr<VAO> pVao;

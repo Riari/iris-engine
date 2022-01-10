@@ -7,13 +7,13 @@
 #include "App/App.hpp"
 #include "Asset/AssetManager.hpp"
 #include "Demo/Keys.hpp"
-#include "Entity/Component/Camera.hpp"
-#include "Entity/Component/Material.hpp"
+#include "Entity/Component/CameraComponent.hpp"
+#include "Entity/Component/MaterialComponent.hpp"
 #include "Entity/Component/Mesh.hpp"
-#include "Entity/Component/DirectionalLight.hpp"
-#include "Entity/Component/PointLight.hpp"
-#include "Entity/Component/SpotLight.hpp"
-#include "Entity/Component/Transform.hpp"
+#include "Entity/Component/DirectionalLightComponent.hpp"
+#include "Entity/Component/PointLightComponent.hpp"
+#include "Entity/Component/SpotLightComponent.hpp"
+#include "Entity/Component/TransformComponent.hpp"
 #include "Entity/EntityManager.hpp"
 #include "GL/Renderer.hpp"
 #include "GL/Texture.hpp"
@@ -140,28 +140,27 @@ int main(int argc, char** argv)
             -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f
     };
 
-    auto pCubeVBO = std::make_shared<VBO>();
-    pCubeVBO->Bind();
-    pCubeVBO->SetData(sizeof(cubeVertices), cubeVertices, GL_STATIC_DRAW);
+    auto pDemoVBO = std::make_shared<VBO>();
+    pDemoVBO->Bind();
+    pDemoVBO->SetData(sizeof(cubeVertices), cubeVertices, GL_STATIC_DRAW);
 
     EntityManager& entityManager = EntityManager::GetInstance();
     ComponentManager& componentManager = ComponentManager::GetInstance();
     SystemManager& systemManager = SystemManager::GetInstance();
 
-    componentManager.RegisterComponentType<Camera>();
-    componentManager.RegisterComponentType<Material>();
-    componentManager.RegisterComponentType<Mesh>();
-    componentManager.RegisterComponentType<DirectionalLight>();
-    componentManager.RegisterComponentType<PointLight>();
-    componentManager.RegisterComponentType<SpotLight>();
-    componentManager.RegisterComponentType<Transform>();
+    componentManager.RegisterComponentType<CameraComponent>();
+    componentManager.RegisterComponentType<MaterialComponent>();
+    componentManager.RegisterComponentType<MeshComponent>();
+    componentManager.RegisterComponentType<DirectionalLightComponent>();
+    componentManager.RegisterComponentType<PointLightComponent>();
+    componentManager.RegisterComponentType<SpotLightComponent>();
+    componentManager.RegisterComponentType<TransformComponent>();
 
     std::default_random_engine generator;
     std::uniform_real_distribution<float> randPositionX(-6.0f, 6.0f);
     std::uniform_real_distribution<float> randPosition(-3.0f, 3.0f);
     std::uniform_real_distribution<float> randRotation(0.0f, 3.0f);
     std::uniform_real_distribution<float> randScale(0.2f, 2.0f);
-    std::uniform_real_distribution<float> randColor(0.0f, 1.0f);
 
     auto cameraController = systemManager.RegisterSystem<CameraController>();
     auto pointLightController = systemManager.RegisterSystem<PointLightController>();
@@ -174,8 +173,8 @@ int main(int argc, char** argv)
     app.RegisterPreRenderSystem(spotLightController);
     app.RegisterRenderSystem(meshRenderer);
 
-    auto pCubeVao = std::make_shared<VAO>();
-    pCubeVao->Bind();
+    auto pDemoVAO = std::make_shared<VAO>();
+    pDemoVAO->Bind();
     VBO::SetVertexAttribute(0, 3, 8 * sizeof(float), (void*)0);
     VBO::SetVertexAttribute(1, 3, 8 * sizeof(float), (void*)(3 * sizeof(float)));
     VBO::SetVertexAttribute(2, 2, 8 * sizeof(float), (void*)(6 * sizeof(float)));
@@ -190,21 +189,21 @@ int main(int argc, char** argv)
     Scene& mainScene = SceneManager::GetInstance().Create(1);
     mainScene.SetClearColor(glm::vec4(0.1f, 0.1f, 0.14f, 1.0f));
 
-    for (int i = 0; i < 16; i++)
+    for (int i = 0; i < 4; i++)
     {
         auto id = entityManager.CreateEntity();
         mainScene.AddEntity(id);
         auto transformScale = randScale(generator);
-        componentManager.AddComponent(id, Transform{
+        componentManager.AddComponent(id, TransformComponent{
                 .position = glm::vec3(randPositionX(generator), randPosition(generator), randPosition(generator)),
                 .rotation = randRotation(generator),
                 .scale = glm::vec3(transformScale, transformScale, transformScale),
         });
-        componentManager.AddComponent(id, Mesh{
-                .pVbo = pCubeVBO,
-                .pVao = pCubeVao,
+        componentManager.AddComponent(id, MeshComponent{
+                .pVbo = pDemoVBO,
+                .pVao = pDemoVAO,
         });
-        componentManager.AddComponent(id, Material{
+        componentManager.AddComponent(id, MaterialComponent{
                 .pDiffuseMap = containerDiffuseTexture,
                 .pSpecularMap = containerSpecularTexture,
                 .pEmissionMap = containerEmissionTexture,
@@ -214,7 +213,7 @@ int main(int argc, char** argv)
 
     auto cameraId = entityManager.CreateEntity();
     mainScene.AddEntity(cameraId);
-    componentManager.AddComponent(cameraId, Camera{
+    componentManager.AddComponent(cameraId, CameraComponent{
             .position = glm::vec3(-0.8f, 0.0f, 12.0f),
             .aspectRatio = mainWindow.GetAspectRatio(),
     });
@@ -228,18 +227,18 @@ int main(int argc, char** argv)
 
     auto directionalLightId = entityManager.CreateEntity();
     mainScene.AddEntity(directionalLightId);
-    componentManager.AddComponent(directionalLightId, Transform{
+    componentManager.AddComponent(directionalLightId, TransformComponent{
             .position = glm::vec3(0.0f, 0.0f, 0.0f),
             .rotation = 0.0f,
             .scale = glm::vec3(0.1f, 0.1f, 0.1f),
     });
-    componentManager.AddComponent(directionalLightId, Mesh{
-            .pVbo = pCubeVBO,
+    componentManager.AddComponent(directionalLightId, MeshComponent{
+            .pVbo = pDemoVBO,
             .pVao = pPointLightVao,
             .color = glm::vec3(0.0f, 0.0f, 0.0f),
     });
-    componentManager.AddComponent(directionalLightId, Material{});
-    componentManager.AddComponent(directionalLightId, DirectionalLight{
+    componentManager.AddComponent(directionalLightId, MaterialComponent{});
+    componentManager.AddComponent(directionalLightId, DirectionalLightComponent{
             .ambient = glm::vec3(0.02f, 0.02f, 0.02f),
             .diffuse = glm::vec3(0.4f, 0.1f, 0.1f),
             .specular = glm::vec3(0.4f, 0.1f, 0.1f),
@@ -250,18 +249,18 @@ int main(int argc, char** argv)
     {
         auto pointLightId = entityManager.CreateEntity();
         mainScene.AddEntity(pointLightId);
-        componentManager.AddComponent(pointLightId, Transform{
+        componentManager.AddComponent(pointLightId, TransformComponent{
                 .position = glm::vec3(randPositionX(generator), randPosition(generator), randPosition(generator)),
                 .rotation = 0.0f,
                 .scale = glm::vec3(0.1f, 0.1f, 0.1f),
         });
-        componentManager.AddComponent(pointLightId, Mesh{
-                .pVbo = pCubeVBO,
+        componentManager.AddComponent(pointLightId, MeshComponent{
+                .pVbo = pDemoVBO,
                 .pVao = pPointLightVao,
                 .color = glm::vec3(1.0f, 1.0f, 1.0f)
         });
-        componentManager.AddComponent(pointLightId, Material{});
-        componentManager.AddComponent(pointLightId, PointLight{
+        componentManager.AddComponent(pointLightId, MaterialComponent{});
+        componentManager.AddComponent(pointLightId, PointLightComponent{
                 .ambient = glm::vec3(0.05f, 0.05f, 0.05f),
                 .diffuse = glm::vec3(0.2f, 0.2f, 0.2f),
                 .specular = glm::vec3(0.5f, 0.5f, 0.5f),
@@ -273,19 +272,19 @@ int main(int argc, char** argv)
 
     auto spotLightId = entityManager.CreateEntity();
     mainScene.AddEntity(spotLightId);
-    componentManager.AddComponent(spotLightId, Transform{
+    componentManager.AddComponent(spotLightId, TransformComponent{
             .position = glm::vec3(0.0f, 0.0f, 0.0f),
             .rotation = 0.0f,
             .scale = glm::vec3(0.01f, 0.01f, 0.01f),
     });
 
-    componentManager.AddComponent(spotLightId, Mesh{
-            .pVbo = pCubeVBO,
+    componentManager.AddComponent(spotLightId, MeshComponent{
+            .pVbo = pDemoVBO,
             .pVao = pPointLightVao,
             .color = glm::vec3(0.0f, 0.0f, 0.0f),
     });
-    componentManager.AddComponent(spotLightId, Material{});
-    componentManager.AddComponent(spotLightId, SpotLight{
+    componentManager.AddComponent(spotLightId, MaterialComponent{});
+    componentManager.AddComponent(spotLightId, SpotLightComponent{
             .ambient = glm::vec3(0.0f, 0.0f, 0.0f),
             .diffuse = glm::vec3(0.0f, 0.0f, 0.0f),
             .specular = glm::vec3(0.0f, 0.0f, 0.0f),

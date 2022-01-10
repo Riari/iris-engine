@@ -7,7 +7,7 @@
 
 namespace Iris
 {
-    class Texture : protected Object
+    class Texture : public Object
     {
     public:
         explicit Texture(std::shared_ptr<Image> image);

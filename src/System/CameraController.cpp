@@ -1,5 +1,5 @@
 #include "Demo/Keys.hpp"
-#include "Entity/Component/Camera.hpp"
+#include "Entity/Component/CameraComponent.hpp"
 #include "System/CameraController.hpp"
 
 using namespace Iris;
@@ -17,7 +17,7 @@ void CameraController::SetActiveCameraId(EntityId id)
 
 void CameraController::Handle(FrameBufferEvent event)
 {
-    GetComponent<Camera>(m_activeCameraId).aspectRatio = (float) event.GetWidth() / (float) event.GetHeight();
+    GetComponent<CameraComponent>(m_activeCameraId).aspectRatio = (float) event.GetWidth() / (float) event.GetHeight();
 }
 
 void CameraController::Handle(KeyEvent event)
@@ -64,7 +64,7 @@ void CameraController::Handle(MouseScrollEvent event)
 
 void CameraController::AdjustFOV(float adjustment) const
 {
-    auto& camera = GetComponent<Camera>(m_activeCameraId);
+    auto& camera = GetComponent<CameraComponent>(m_activeCameraId);
 
     camera.fov -= adjustment;
 
@@ -74,7 +74,7 @@ void CameraController::AdjustFOV(float adjustment) const
 
 void CameraController::Move(CameraMovement direction, double deltaTime, double moveSpeed) const
 {
-    auto& camera = GetComponent<Camera>(m_activeCameraId);
+    auto& camera = GetComponent<CameraComponent>(m_activeCameraId);
 
     float velocity = moveSpeed * deltaTime;
 
@@ -103,7 +103,7 @@ void CameraController::Move(CameraMovement direction, double deltaTime, double m
 
 void CameraController::Rotate(float xOffset, float yOffset, double deltaTime, double rotateSpeed) const
 {
-    auto& camera = GetComponent<Camera>(m_activeCameraId);
+    auto& camera = GetComponent<CameraComponent>(m_activeCameraId);
 
     float velocity = rotateSpeed * deltaTime;
 
@@ -121,7 +121,7 @@ void CameraController::Rotate(float xOffset, float yOffset, double deltaTime, do
 
 void CameraController::UpdateVectors() const
 {
-    auto& camera = GetComponent<Camera>(m_activeCameraId);
+    auto& camera = GetComponent<CameraComponent>(m_activeCameraId);
 
     glm::vec3 front;
     front.x = cos(glm::radians(camera.yaw)) * cos(glm::radians(camera.pitch));

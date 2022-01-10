@@ -1,6 +1,6 @@
 #version 330 core
 
-struct Material {
+struct MaterialComponent {
     sampler2D diffuse;
     sampler2D specular;
     sampler2D emission;
@@ -27,7 +27,7 @@ struct PointLight {
     float quadratic;
 };
 
-struct SpotLight {
+struct SpotLightComponent {
     vec3 position;
 
     vec3 ambient;
@@ -45,7 +45,7 @@ struct SpotLight {
 #define MAX_POINT_LIGHTS 20
 #define MAX_SPOT_LIGHTS 20
 
-uniform Material material;
+uniform MaterialComponent material;
 uniform float time;
 uniform vec3 viewPosition;
 
@@ -54,7 +54,7 @@ uniform int spotLightCount;
 
 uniform DirectionalLight directionalLight;
 uniform PointLight pointLights[MAX_POINT_LIGHTS];
-uniform SpotLight spotLights[MAX_SPOT_LIGHTS];
+uniform SpotLightComponent spotLights[MAX_SPOT_LIGHTS];
 
 in vec3 FragPos;
 in vec3 Normal;
@@ -64,7 +64,7 @@ out vec4 FragColor;
 
 vec3 CalcDirectionalLight(DirectionalLight light, vec3 normal, vec3 viewDirection);
 vec3 CalcPointLight(PointLight light, vec3 normal, vec3 viewDirection);
-vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 viewDirection);
+vec3 CalcSpotLight(SpotLightComponent light, vec3 normal, vec3 viewDirection);
 float CalcLightDiffuseFactor(vec3 normal, vec3 lightDirection);
 float CalcLightSpecularFactor(vec3 normal, vec3 lightDirection, vec3 viewDirection);
 vec3 Sample(sampler2D sampler);
@@ -137,7 +137,7 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 viewDirection)
     return (ambient + diffuse + specular);
 }
 
-vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 viewDirection)
+vec3 CalcSpotLight(SpotLightComponent light, vec3 normal, vec3 viewDirection)
 {
     vec3 lightDirection = normalize(light.position - FragPos);
 

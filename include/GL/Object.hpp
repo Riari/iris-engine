@@ -6,6 +6,8 @@ namespace Iris
 {
     class Object
     {
+    public:
+        [[nodiscard]] GLuint GetID() const;
     protected:
         GLuint m_id;
     };

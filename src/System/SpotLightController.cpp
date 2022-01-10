@@ -1,7 +1,7 @@
 #include "Asset/AssetManager.hpp"
-#include "Entity/Component/Camera.hpp"
-#include "Entity/Component/SpotLight.hpp"
-#include "Entity/Component/Transform.hpp"
+#include "Entity/Component/CameraComponent.hpp"
+#include "Entity/Component/SpotLightComponent.hpp"
+#include "Entity/Component/TransformComponent.hpp"
 #include "Scene/Scene.hpp"
 #include "System/SpotLightController.hpp"
 
@@ -10,8 +10,8 @@ using namespace Iris;
 std::list<ComponentType> SpotLightController::GetComponentTypes()
 {
     return {
-            GetComponentType<Transform>(),
-            GetComponentType<SpotLight>()
+            GetComponentType<TransformComponent>(),
+            GetComponentType<SpotLightComponent>()
     };
 }
 
@@ -23,7 +23,7 @@ void SpotLightController::SetCameraId(EntityId id)
 void SpotLightController::Update(Window &window, Scene& scene, bool debug)
 {
     auto sceneEntities = scene.GetEntities();
-    auto& camera = GetComponent<Camera>(m_cameraId);
+    auto& camera = GetComponent<CameraComponent>(m_cameraId);
 
     AssetManager& assetManager = AssetManager::GetInstance();
     auto materialShaderProgram = assetManager.GetShaderProgram("Material");
@@ -35,8 +35,8 @@ void SpotLightController::Update(Window &window, Scene& scene, bool debug)
         // TODO: find a better way of limiting the update to the intersection of system and scene entities
         if (sceneEntities.find(id) == sceneEntities.end()) continue;
 
-        auto& transform = GetComponent<Transform>(id);
-        auto& spotLight = GetComponent<SpotLight>(id);
+        auto& transform = GetComponent<TransformComponent>(id);
+        auto& spotLight = GetComponent<SpotLightComponent>(id);
 
         // For demo purposes while there's only one spot light defined.
         // This kind of thing should be handled via scene graph traversal

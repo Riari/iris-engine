@@ -1,7 +1,7 @@
 #include <imgui.h>
 
-#include "Entity/Component/PointLight.hpp"
-#include "Entity/Component/Transform.hpp"
+#include "Entity/Component/PointLightComponent.hpp"
+#include "Entity/Component/TransformComponent.hpp"
 #include "Entity/ComponentManager.hpp"
 #include "ImGui/Panel/PointLightControlPanel.hpp"
 #include "System/PointLightController.hpp"
@@ -28,8 +28,8 @@ void PointLightControlPanel::Build()
             {
                 m_selected = id;
 
-                auto transform = componentManager.GetComponent<Transform>(id);
-                auto pointLight = componentManager.GetComponent<PointLight>(id);
+                auto transform = componentManager.GetComponent<TransformComponent>(id);
+                auto pointLight = componentManager.GetComponent<PointLightComponent>(id);
                 m_position[0] = transform.position[0];
                 m_position[1] = transform.position[1];
                 m_position[2] = transform.position[2];
@@ -52,8 +52,8 @@ void PointLightControlPanel::Build()
 
     if (m_selected > 0)
     {
-        auto& transform = componentManager.GetComponent<Transform>(m_selected);
-        auto& pointLight = componentManager.GetComponent<PointLight>(m_selected);
+        auto& transform = componentManager.GetComponent<TransformComponent>(m_selected);
+        auto& pointLight = componentManager.GetComponent<PointLightComponent>(m_selected);
 
         ImGui::BeginGroup();
         ImGui::BeginChild("edit", ImVec2(0, -ImGui::GetFrameHeightWithSpacing()));

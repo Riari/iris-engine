@@ -10,12 +10,12 @@ Mesh::Mesh(std::vector<GLVertex> vertices, std::vector<unsigned int> indices, st
     m_indices(std::move(indices)),
     m_textures(std::move(textures))
 {
-    SetupMesh();
+    Init();
 }
 
 void Mesh::Draw(ShaderProgram &program)
 {
-    unsigned int diffuseIndex, specularIndex, emissionIndex = 0;
+    unsigned int diffuseIndex = 0, specularIndex = 0, emissionIndex = 0, normalIndex = 0, heightIndex = 0;
     const static std::string prefix = "material.";
 
     for (unsigned int i = 0; i < m_textures.size(); i++)
@@ -37,6 +37,14 @@ void Mesh::Draw(ShaderProgram &program)
                 name = "emission";
                 typeIndex = std::to_string(emissionIndex++);
                 break;
+            case Normal:
+                name = "normal";
+                typeIndex = std::to_string(normalIndex++);
+                break;
+            case Height:
+                name = "height";
+                typeIndex = std::to_string(heightIndex++);
+                break;
         }
 
         program.SetUniformFloat(prefix + name + typeIndex, i);
@@ -49,7 +57,7 @@ void Mesh::Draw(ShaderProgram &program)
     glBindVertexArray(0);
 }
 
-void Mesh::SetupMesh()
+void Mesh::Init()
 {
     glGenVertexArrays(1, &m_vao);
     glGenBuffers(1, &m_vbo);

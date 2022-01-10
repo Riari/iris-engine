@@ -1,11 +1,11 @@
 #include <glm/ext.hpp>
 
 #include "Asset/AssetManager.hpp"
-#include "Entity/Component/Camera.hpp"
-#include "Entity/Component/Material.hpp"
+#include "Entity/Component/CameraComponent.hpp"
+#include "Entity/Component/MaterialComponent.hpp"
 #include "Entity/Component/Mesh.hpp"
-#include "Entity/Component/DirectionalLight.hpp"
-#include "Entity/Component/Transform.hpp"
+#include "Entity/Component/DirectionalLightComponent.hpp"
+#include "Entity/Component/TransformComponent.hpp"
 #include "Utility/Logger.hpp"
 #include "Scene/Scene.hpp"
 #include "System/MeshRenderer.hpp"
@@ -15,9 +15,9 @@ using namespace Iris;
 std::list<ComponentType> MeshRenderer::GetComponentTypes()
 {
     return {
-        GetComponentType<Transform>(),
-        GetComponentType<Mesh>(),
-        GetComponentType<Material>()
+        GetComponentType<TransformComponent>(),
+        GetComponentType<MeshComponent>(),
+        GetComponentType<MaterialComponent>()
     };
 }
 
@@ -37,15 +37,15 @@ void MeshRenderer::Update(Window &window, Scene &scene, bool debug)
     auto basicShaderProgram = assetManager.GetShaderProgram("Basic");
     auto materialShaderProgram = assetManager.GetShaderProgram("Material");
 
-    auto& directionalLight = GetComponent<DirectionalLight>(m_directionalLightId);
+    auto& directionalLight = GetComponent<DirectionalLightComponent>(m_directionalLightId);
 
-    auto& camera = GetComponent<Camera>(m_activeCameraId);
+    auto& camera = GetComponent<CameraComponent>(m_activeCameraId);
 
     for (auto const& id : m_entities)
     {
-        auto& transform = GetComponent<Transform>(id);
-        auto& mesh = GetComponent<Mesh>(id);
-        auto& material = GetComponent<Material>(id);
+        auto& transform = GetComponent<TransformComponent>(id);
+        auto& mesh = GetComponent<MeshComponent>(id);
+        auto& material = GetComponent<MaterialComponent>(id);
 
         if (material.pDiffuseMap == nullptr && material.pSpecularMap == nullptr && material.pEmissionMap == nullptr)
         {
