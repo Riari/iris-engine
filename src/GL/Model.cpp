@@ -10,12 +10,12 @@
 
 using namespace Iris;
 
-Model::Model(char *path)
+Model::Model(const std::string& path)
 {
     Load(path);
 }
 
-void Model::Draw(ShaderProgram &program)
+void Model::Draw(const std::shared_ptr<ShaderProgram>& program)
 {
     for (auto & mesh : m_meshes)
     {
@@ -23,10 +23,15 @@ void Model::Draw(ShaderProgram &program)
     }
 }
 
-void Model::Load(std::string path)
+std::vector<GLTexture> Model::GetLoadedTextures()
+{
+    return m_loadedTextures;
+}
+
+void Model::Load(const std::string& path)
 {
     Assimp::Importer importer;
-    const aiScene *scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs);
+    const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
 
     if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
     {
@@ -146,17 +151,19 @@ std::vector<GLTexture> Model::LoadMaterialTextures(aiMaterial *material, aiTextu
             }
         }
 
-        if(!skip)
-        {
-            AssetManager& assetManager = AssetManager::GetInstance();
-            std::shared_ptr<Texture> texture = assetManager.GenerateTexture(m_directory + '/' + str.C_Str());
+        if (skip) continue;
 
-            glTextures.push_back({
-                 .id = texture->GetID(),
-                 .type = localType,
-                 .path = str.C_Str()
-            });
-        }
+        AssetManager& assetManager = AssetManager::GetInstance();
+        std::shared_ptr<Texture> texture = assetManager.GenerateTexture(m_directory + '/' + str.C_Str());
+
+        GLTexture glTexture = {
+            .texture = texture,
+            .type = localType,
+            .path = str.C_Str()
+        };
+
+        glTextures.push_back(glTexture);
+        m_loadedTextures.push_back(glTexture);
     }
 
     return glTextures;

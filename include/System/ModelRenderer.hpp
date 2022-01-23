@@ -4,7 +4,7 @@
 
 namespace Iris
 {
-    class MeshRenderer : public System
+    class ModelRenderer : public System
     {
     public:
         static std::list<ComponentType> GetComponentTypes();

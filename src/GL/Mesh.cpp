@@ -13,7 +13,7 @@ Mesh::Mesh(std::vector<GLVertex> vertices, std::vector<unsigned int> indices, st
     Init();
 }
 
-void Mesh::Draw(ShaderProgram &program)
+void Mesh::Draw(const std::shared_ptr<ShaderProgram>& program)
 {
     unsigned int diffuseIndex = 0, specularIndex = 0, emissionIndex = 0, normalIndex = 0, heightIndex = 0;
     const static std::string prefix = "material.";
@@ -47,8 +47,8 @@ void Mesh::Draw(ShaderProgram &program)
                 break;
         }
 
-        program.SetUniformFloat(prefix + name + typeIndex, i);
-        glBindTexture(GL_TEXTURE_2D, m_textures[i].id);
+        program->SetUniformFloat(prefix + name + typeIndex, i);
+        glBindTexture(GL_TEXTURE_2D, m_textures[i].texture->GetID());
     }
     glActiveTexture(GL_TEXTURE0);
 
@@ -59,6 +59,7 @@ void Mesh::Draw(ShaderProgram &program)
 
 void Mesh::Init()
 {
+    // TODO: Use VAO/VBO/EBO objects and enable sharing of them
     glGenVertexArrays(1, &m_vao);
     glGenBuffers(1, &m_vbo);
     glGenBuffers(1, &m_ebo);

@@ -10,11 +10,13 @@
 #include "Entity/Component/CameraComponent.hpp"
 #include "Entity/Component/MaterialComponent.hpp"
 #include "Entity/Component/MeshComponent.hpp"
+#include "Entity/Component/ModelComponent.hpp"
 #include "Entity/Component/DirectionalLightComponent.hpp"
 #include "Entity/Component/PointLightComponent.hpp"
 #include "Entity/Component/SpotLightComponent.hpp"
 #include "Entity/Component/TransformComponent.hpp"
 #include "Entity/EntityManager.hpp"
+#include "GL/Model.hpp"
 #include "GL/Renderer.hpp"
 #include "GL/Texture.hpp"
 #include "ImGui/ImGuiLayer.hpp"
@@ -25,7 +27,7 @@
 #include "Scene/SceneManager.hpp"
 #include "State/State.hpp"
 #include "System/CameraController.hpp"
-#include "System/MeshRenderer.hpp"
+#include "System/ModelRenderer.hpp"
 #include "System/PointLightController.hpp"
 #include "System/SpotLightController.hpp"
 #include "System/SystemManager.hpp"
@@ -95,55 +97,6 @@ int main(int argc, char** argv)
 
     Renderer::EnableCapability(GL_DEPTH_TEST);
 
-    float cubeVertices[] = {
-            // positions          // normals           // texture coords
-            -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
-            0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 0.0f,
-            0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 1.0f,
-            0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 1.0f,
-            -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 1.0f,
-            -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
-
-            -0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   0.0f, 0.0f,
-            0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   1.0f, 0.0f,
-            0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   1.0f, 1.0f,
-            0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   1.0f, 1.0f,
-            -0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   0.0f, 1.0f,
-            -0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   0.0f, 0.0f,
-
-            -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
-            -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 1.0f,
-            -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
-            -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
-            -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
-            -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
-
-            0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
-            0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 1.0f,
-            0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
-            0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
-            0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
-            0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
-
-            -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f,
-            0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 1.0f,
-            0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 0.0f,
-            0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 0.0f,
-            -0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 0.0f,
-            -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f,
-
-            -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f,
-            0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 1.0f,
-            0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
-            0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
-            -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 0.0f,
-            -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f
-    };
-
-    auto pDemoVBO = std::make_shared<VBO>();
-    pDemoVBO->Bind();
-    pDemoVBO->SetData(sizeof(cubeVertices), cubeVertices, GL_STATIC_DRAW);
-
     EntityManager& entityManager = EntityManager::GetInstance();
     ComponentManager& componentManager = ComponentManager::GetInstance();
     SystemManager& systemManager = SystemManager::GetInstance();
@@ -151,6 +104,7 @@ int main(int argc, char** argv)
     componentManager.RegisterComponentType<CameraComponent>();
     componentManager.RegisterComponentType<MaterialComponent>();
     componentManager.RegisterComponentType<MeshComponent>();
+    componentManager.RegisterComponentType<ModelComponent>();
     componentManager.RegisterComponentType<DirectionalLightComponent>();
     componentManager.RegisterComponentType<PointLightComponent>();
     componentManager.RegisterComponentType<SpotLightComponent>();
@@ -165,26 +119,15 @@ int main(int argc, char** argv)
     auto cameraController = systemManager.RegisterSystem<CameraController>();
     auto pointLightController = systemManager.RegisterSystem<PointLightController>();
     auto spotLightController = systemManager.RegisterSystem<SpotLightController>();
-    auto meshRenderer = systemManager.RegisterSystem<MeshRenderer>();
+    auto modelRenderer = systemManager.RegisterSystem<ModelRenderer>();
 
     App& app = App::GetInstance();
     app.RegisterUpdateSystem(cameraController);
     app.RegisterPreRenderSystem(pointLightController);
     app.RegisterPreRenderSystem(spotLightController);
-    app.RegisterRenderSystem(meshRenderer);
+    app.RegisterRenderSystem(modelRenderer);
 
-    auto pDemoVAO = std::make_shared<VAO>();
-    pDemoVAO->Bind();
-    VBO::SetVertexAttribute(0, 3, 8 * sizeof(float), (void*)0);
-    VBO::SetVertexAttribute(1, 3, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-    VBO::SetVertexAttribute(2, 2, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-    VAO::Unbind();
-
-    AssetManager& assetManager = AssetManager::GetInstance();
-
-    std::shared_ptr<Texture> containerDiffuseTexture = assetManager.GenerateTexture("assets/textures/container_diffuse.png");
-    std::shared_ptr<Texture> containerSpecularTexture = assetManager.GenerateTexture("assets/textures/container_specular.png");
-    std::shared_ptr<Texture> containerEmissionTexture = assetManager.GenerateTexture("assets/textures/container_emission.jpg");
+    auto demoModel = std::make_shared<Model>("assets/models/backpack/backpack.obj");
 
     Scene& mainScene = SceneManager::GetInstance().Create(1);
     mainScene.SetClearColor(glm::vec4(0.1f, 0.1f, 0.14f, 1.0f));
@@ -199,15 +142,9 @@ int main(int argc, char** argv)
                 .rotation = randRotation(generator),
                 .scale = glm::vec3(transformScale, transformScale, transformScale),
         });
-        componentManager.AddComponent(id, MeshComponent{
-                .pVbo = pDemoVBO,
-                .pVao = pDemoVAO,
-        });
-        componentManager.AddComponent(id, MaterialComponent{
-                .pDiffuseMap = containerDiffuseTexture,
-                .pSpecularMap = containerSpecularTexture,
-                .pEmissionMap = containerEmissionTexture,
-                .shininess = 32.0f,
+        componentManager.AddComponent(id, ModelComponent{
+                .pModel = demoModel,
+                .color = glm::vec3(1.0f, 1.0f, 1.0f),
         });
     }
 
@@ -232,11 +169,11 @@ int main(int argc, char** argv)
             .rotation = 0.0f,
             .scale = glm::vec3(0.1f, 0.1f, 0.1f),
     });
-    componentManager.AddComponent(directionalLightId, MeshComponent{
-            .pVbo = pDemoVBO,
-            .pVao = pPointLightVao,
-            .color = glm::vec3(0.0f, 0.0f, 0.0f),
-    });
+//    componentManager.AddComponent(directionalLightId, MeshComponent{
+//            .pVbo = pDemoVBO,
+//            .pVao = pPointLightVao,
+//            .color = glm::vec3(0.0f, 0.0f, 0.0f),
+//    });
     componentManager.AddComponent(directionalLightId, MaterialComponent{});
     componentManager.AddComponent(directionalLightId, DirectionalLightComponent{
             .ambient = glm::vec3(0.02f, 0.02f, 0.02f),
@@ -254,11 +191,11 @@ int main(int argc, char** argv)
                 .rotation = 0.0f,
                 .scale = glm::vec3(0.1f, 0.1f, 0.1f),
         });
-        componentManager.AddComponent(pointLightId, MeshComponent{
-                .pVbo = pDemoVBO,
-                .pVao = pPointLightVao,
-                .color = glm::vec3(1.0f, 1.0f, 1.0f)
-        });
+//        componentManager.AddComponent(pointLightId, MeshComponent{
+//                .pVbo = pDemoVBO,
+//                .pVao = pPointLightVao,
+//                .color = glm::vec3(1.0f, 1.0f, 1.0f)
+//        });
         componentManager.AddComponent(pointLightId, MaterialComponent{});
         componentManager.AddComponent(pointLightId, PointLightComponent{
                 .ambient = glm::vec3(0.05f, 0.05f, 0.05f),
@@ -277,12 +214,11 @@ int main(int argc, char** argv)
             .rotation = 0.0f,
             .scale = glm::vec3(0.01f, 0.01f, 0.01f),
     });
-
-    componentManager.AddComponent(spotLightId, MeshComponent{
-            .pVbo = pDemoVBO,
-            .pVao = pPointLightVao,
-            .color = glm::vec3(0.0f, 0.0f, 0.0f),
-    });
+//    componentManager.AddComponent(spotLightId, MeshComponent{
+//            .pVbo = pDemoVBO,
+//            .pVao = pPointLightVao,
+//            .color = glm::vec3(0.0f, 0.0f, 0.0f),
+//    });
     componentManager.AddComponent(spotLightId, MaterialComponent{});
     componentManager.AddComponent(spotLightId, SpotLightComponent{
             .ambient = glm::vec3(0.0f, 0.0f, 0.0f),
@@ -295,8 +231,8 @@ int main(int argc, char** argv)
             .quadratic = 0.032f,
     });
 
-    meshRenderer->SetDirectionalLightId(directionalLightId);
-    meshRenderer->SetActiveCameraId(cameraId);
+    modelRenderer->SetDirectionalLightId(directionalLightId);
+    modelRenderer->SetActiveCameraId(cameraId);
 
     // For demo purposes while there's only one spot light defined.
     spotLightController->SetCameraId(cameraId);

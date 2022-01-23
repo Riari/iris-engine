@@ -1,5 +1,9 @@
 #pragma once
 
+#include <memory>
+
+#include "Texture.hpp"
+
 namespace Iris
 {
     enum GLTextureType
@@ -13,7 +17,7 @@ namespace Iris
 
     struct GLTexture
     {
-        unsigned int id;
+        std::shared_ptr<Texture> texture;
         GLTextureType type;
         const char* path;
     };

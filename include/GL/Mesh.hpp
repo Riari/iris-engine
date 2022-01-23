@@ -8,10 +8,12 @@
 
 namespace Iris
 {
-    class Mesh {
+    class Mesh
+    {
     public:
         Mesh(std::vector<GLVertex> vertices, std::vector<unsigned int> indices, std::vector<GLTexture> textures);
-        void Draw(ShaderProgram &shader);
+        void Draw(const std::shared_ptr<ShaderProgram>& program);
+
     private:
         // MeshComponent data
         std::vector<GLVertex> m_vertices;
