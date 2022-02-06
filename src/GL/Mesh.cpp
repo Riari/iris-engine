@@ -20,7 +20,7 @@ void Mesh::Draw(const std::shared_ptr<ShaderProgram>& program)
 
     for (unsigned int i = 0; i < m_textures.size(); i++)
     {
-        glActiveTexture(GL_TEXTURE0 + i);
+        m_textures[i].texture->Bind(GL_TEXTURE0 + i);
 
         std::string name, typeIndex;
         switch (m_textures[i].type)
@@ -48,41 +48,37 @@ void Mesh::Draw(const std::shared_ptr<ShaderProgram>& program)
         }
 
         program->SetUniformFloat(prefix + name + typeIndex, i);
-        glBindTexture(GL_TEXTURE_2D, m_textures[i].texture->GetID());
     }
-    glActiveTexture(GL_TEXTURE0);
 
-    glBindVertexArray(m_vao);
-    glDrawElements(GL_TRIANGLES, m_indices.size(), GL_UNSIGNED_INT, 0);
-    glBindVertexArray(0);
+    m_vao->Bind();
+    glDrawArrays(GL_TRIANGLES, 0, m_indices.size());
+    m_vao->Unbind();
 }
 
 void Mesh::Init()
 {
-    // TODO: Use VAO/VBO/EBO objects and enable sharing of them
-    glGenVertexArrays(1, &m_vao);
-    glGenBuffers(1, &m_vbo);
-    glGenBuffers(1, &m_ebo);
+    // TODO: Enable sharing of buffers between meshes
 
-    glBindVertexArray(m_vao);
-    glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
+    m_vao = std::make_unique<VAO>();
+    m_vbo = std::make_unique<VBO>();
+    m_ebo = std::make_unique<EBO>();
 
-    glBufferData(GL_ARRAY_BUFFER, m_vertices.size() * sizeof(GLVertex), &m_vertices[0], GL_STATIC_DRAW);
+    m_vao->Bind();
 
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indices.size() * sizeof(unsigned int), &m_indices[0], GL_STATIC_DRAW);
+    m_vbo->Bind();
+    m_vbo->SetData(m_vertices.size() * sizeof(GLVertex), &m_vertices[0], GL_STATIC_DRAW);
+
+    m_ebo->Bind();
+    m_ebo->SetData(m_indices.size() * sizeof(unsigned int), &m_indices[0], GL_STATIC_DRAW);
 
     // Vertex positions
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(GLVertex), (void*)0);
+    m_vbo->SetVertexAttribute(0, 3, sizeof(GLVertex), (void*)0);
 
-    // Vertex normals
-    glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(GLVertex), (void*)offsetof(GLVertex, normal));
+    // Normals
+    m_vbo->SetVertexAttribute(1, 3, sizeof(GLVertex), (void*)offsetof(GLVertex, normal));
 
-    // Vertex texture coords
-    glEnableVertexAttribArray(2);
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(GLVertex), (void*)offsetof(GLVertex, texCoords));
+    // Texture coords
+    m_vbo->SetVertexAttribute(2, 2, sizeof(GLVertex), (void*)offsetof(GLVertex, texCoords));
 
-    glBindVertexArray(0);
+    m_vao->Unbind();
 }

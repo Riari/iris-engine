@@ -4,7 +4,10 @@
 
 #include "GLTexture.hpp"
 #include "GLVertex.hpp"
+#include "EBO.hpp"
 #include "Shader/ShaderProgram.hpp"
+#include "VAO.hpp"
+#include "VBO.hpp"
 
 namespace Iris
 {
@@ -20,8 +23,10 @@ namespace Iris
         std::vector<unsigned int> m_indices;
         std::vector<GLTexture> m_textures;
 
-        // Render data
-        unsigned int m_vao, m_vbo, m_ebo;
+        // GL buffers
+        std::unique_ptr<VAO> m_vao;
+        std::unique_ptr<VBO> m_vbo;
+        std::unique_ptr<EBO> m_ebo;
 
         void Init();
     };
