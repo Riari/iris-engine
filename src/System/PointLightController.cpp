@@ -19,8 +19,8 @@ void PointLightController::Update(Window &window, Scene& scene, bool debug)
     auto sceneEntities = scene.GetEntities();
 
     AssetManager& assetManager = AssetManager::GetInstance();
-    auto materialShaderProgram = assetManager.GetShaderProgram("Material");
-    materialShaderProgram->Use();
+    auto program = assetManager.GetShaderProgram("Material");
+    program->Use();
 
     int i = 0;
     for (auto const& id : m_entities)
@@ -32,16 +32,16 @@ void PointLightController::Update(Window &window, Scene& scene, bool debug)
         auto& pointLight = GetComponent<PointLightComponent>(id);
 
         auto key = "pointLights[" + std::to_string(i) + "].";
-        materialShaderProgram->SetUniform3f(key + "position", transform.position);
-        materialShaderProgram->SetUniform3f(key + "ambient", pointLight.ambient);
-        materialShaderProgram->SetUniform3f(key + "diffuse", pointLight.diffuse);
-        materialShaderProgram->SetUniform3f(key + "specular", pointLight.specular);
-        materialShaderProgram->SetUniformFloat(key + "constant", pointLight.constant);
-        materialShaderProgram->SetUniformFloat(key + "linear", pointLight.linear);
-        materialShaderProgram->SetUniformFloat(key + "quadratic", pointLight.quadratic);
+        program->SetUniform3f(key + "position", transform.position);
+        program->SetUniform3f(key + "ambient", pointLight.ambient);
+        program->SetUniform3f(key + "diffuse", pointLight.diffuse);
+        program->SetUniform3f(key + "specular", pointLight.specular);
+        program->SetUniformFloat(key + "constant", pointLight.constant);
+        program->SetUniformFloat(key + "linear", pointLight.linear);
+        program->SetUniformFloat(key + "quadratic", pointLight.quadratic);
 
         i++;
     }
 
-    materialShaderProgram->SetUniformInt("pointLightCount", i);
+    program->SetUniformInt("pointLightCount", i);
 }

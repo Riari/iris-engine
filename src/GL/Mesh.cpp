@@ -50,7 +50,7 @@ void Mesh::Draw(const std::shared_ptr<ShaderProgram>& program)
     }
 
     m_vao->Bind();
-    glDrawArrays(GL_TRIANGLES, 0, m_indices.size());
+    glDrawElements(GL_TRIANGLES, static_cast<unsigned int>(m_indices.size()), GL_UNSIGNED_INT, 0);
     m_vao->Unbind();
 }
 
@@ -62,13 +62,13 @@ void Mesh::Init()
     m_vbo = std::make_unique<VBO>();
     m_ebo = std::make_unique<EBO>();
 
+    m_vao->Bind();
+
     m_vbo->Bind();
     m_vbo->SetData(m_vertices.size() * sizeof(GLVertex), &m_vertices[0], GL_STATIC_DRAW);
 
     m_ebo->Bind();
     m_ebo->SetData(m_indices.size() * sizeof(unsigned int), &m_indices[0], GL_STATIC_DRAW);
-
-    m_vao->Bind();
 
     // Vertex positions
     VAO::SetAttrPointer(0, 3, sizeof(GLVertex), (void*)0);
@@ -79,5 +79,11 @@ void Mesh::Init()
     // Texture coords
     VAO::SetAttrPointer(2, 2, sizeof(GLVertex), (void*)offsetof(GLVertex, texCoords));
 
-    m_vao->Unbind();
+    // Tangents
+    VAO::SetAttrPointer(3, 3, sizeof(GLVertex), (void*)offsetof(GLVertex, tangent));
+
+    // Bitangents
+    VAO::SetAttrPointer(4, 3, sizeof(GLVertex), (void*)offsetof(GLVertex, bitangent));
+
+    VAO::Unbind();
 }

@@ -21,11 +21,11 @@ namespace Iris
     };
 
     class CameraController :
-            public System,
-            public WindowEventHandler<FrameBufferEvent>,
-            public InputHandler<KeyEvent>,
-            public InputHandler<MouseMoveEvent>,
-            public InputHandler<MouseScrollEvent>
+        public System,
+        public WindowEventHandler<FrameBufferEvent>,
+        public InputHandler<KeyEvent>,
+        public InputHandler<MouseMoveEvent>,
+        public InputHandler<MouseScrollEvent>
     {
     public:
         static std::list<ComponentType> GetComponentTypes();

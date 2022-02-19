@@ -10,8 +10,8 @@ using namespace Iris;
 std::list<ComponentType> SpotLightController::GetComponentTypes()
 {
     return {
-            GetComponentType<TransformComponent>(),
-            GetComponentType<SpotLightComponent>()
+        GetComponentType<TransformComponent>(),
+        GetComponentType<SpotLightComponent>()
     };
 }
 
@@ -26,8 +26,8 @@ void SpotLightController::Update(Window &window, Scene& scene, bool debug)
     auto& camera = GetComponent<CameraComponent>(m_cameraId);
 
     AssetManager& assetManager = AssetManager::GetInstance();
-    auto materialShaderProgram = assetManager.GetShaderProgram("Material");
-    materialShaderProgram->Use();
+    auto program = assetManager.GetShaderProgram("Material");
+    program->Use();
 
     int i = 0;
     for (auto const& id : m_entities)
@@ -44,19 +44,19 @@ void SpotLightController::Update(Window &window, Scene& scene, bool debug)
         spotLight.direction = camera.front;
 
         auto key = "spotLights[" + std::to_string(i) + "].";
-        materialShaderProgram->SetUniform3f(key + "position", transform.position);
-        materialShaderProgram->SetUniform3f(key + "ambient", spotLight.ambient);
-        materialShaderProgram->SetUniform3f(key + "diffuse", spotLight.diffuse);
-        materialShaderProgram->SetUniform3f(key + "specular", spotLight.specular);
-        materialShaderProgram->SetUniform3f(key + "direction", spotLight.direction);
-        materialShaderProgram->SetUniformFloat(key + "innerEdge", spotLight.innerEdge);
-        materialShaderProgram->SetUniformFloat(key + "outerEdge", spotLight.outerEdge);
-        materialShaderProgram->SetUniformFloat(key + "constant", spotLight.constant);
-        materialShaderProgram->SetUniformFloat(key + "linear", spotLight.linear);
-        materialShaderProgram->SetUniformFloat(key + "quadratic", spotLight.quadratic);
+        program->SetUniform3f(key + "position", transform.position);
+        program->SetUniform3f(key + "ambient", spotLight.ambient);
+        program->SetUniform3f(key + "diffuse", spotLight.diffuse);
+        program->SetUniform3f(key + "specular", spotLight.specular);
+        program->SetUniform3f(key + "direction", spotLight.direction);
+        program->SetUniformFloat(key + "innerEdge", spotLight.innerEdge);
+        program->SetUniformFloat(key + "outerEdge", spotLight.outerEdge);
+        program->SetUniformFloat(key + "constant", spotLight.constant);
+        program->SetUniformFloat(key + "linear", spotLight.linear);
+        program->SetUniformFloat(key + "quadratic", spotLight.quadratic);
 
         i++;
     }
 
-    materialShaderProgram->SetUniformInt("spotLightCount", i);
+    program->SetUniformInt("spotLightCount", i);
 }

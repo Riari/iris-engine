@@ -2,6 +2,9 @@
     "cmake.debugConfig": {
         "cwd": "${workspaceFolder}/build"
     },
+    "LineCount.includes": [
+        "src/**/*"
+    ],
     "files.associations": {
         "vector": "cpp",
         "memory": "cpp",
@@ -72,6 +75,14 @@
         "xstring": "cpp",
         "xtr1common": "cpp",
         "xtree": "cpp",
-        "xutility": "cpp"
+        "xutility": "cpp",
+        "bitset": "cpp",
+        "deque": "cpp",
+        "queue": "cpp",
+        "random": "cpp",
+        "regex": "cpp",
+        "set": "cpp",
+        "typeindex": "cpp",
+        "unordered_set": "cpp"
     }
 }

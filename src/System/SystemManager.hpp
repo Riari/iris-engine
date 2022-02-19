@@ -13,8 +13,8 @@
 namespace Iris
 {
     class SystemManager :
-            public EventHandler<DestroyEntityEvent>,
-            public EventHandler<EntitySignatureChangeEvent>
+        public EventHandler<DestroyEntityEvent>,
+        public EventHandler<EntitySignatureChangeEvent>
     {
     public:
         SystemManager(SystemManager const&) = delete;
