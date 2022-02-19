@@ -1,4 +1,4 @@
-#include "Scene/Scene.hpp"
+#include "Scene.hpp"
 
 using namespace Iris;
 

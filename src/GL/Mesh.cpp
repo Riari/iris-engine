@@ -1,7 +1,6 @@
 #include <utility>
 #include <string>
-
-#include "GL/Mesh.hpp"
+#include "Mesh.hpp"
 
 using namespace Iris;
 
@@ -63,22 +62,22 @@ void Mesh::Init()
     m_vbo = std::make_unique<VBO>();
     m_ebo = std::make_unique<EBO>();
 
-    m_vao->Bind();
-
     m_vbo->Bind();
     m_vbo->SetData(m_vertices.size() * sizeof(GLVertex), &m_vertices[0], GL_STATIC_DRAW);
 
     m_ebo->Bind();
     m_ebo->SetData(m_indices.size() * sizeof(unsigned int), &m_indices[0], GL_STATIC_DRAW);
 
+    m_vao->Bind();
+
     // Vertex positions
-    m_vbo->SetVertexAttribute(0, 3, sizeof(GLVertex), (void*)0);
+    VAO::SetAttrPointer(0, 3, sizeof(GLVertex), (void*)0);
 
     // Normals
-    m_vbo->SetVertexAttribute(1, 3, sizeof(GLVertex), (void*)offsetof(GLVertex, normal));
+    VAO::SetAttrPointer(1, 3, sizeof(GLVertex), (void*)offsetof(GLVertex, normal));
 
     // Texture coords
-    m_vbo->SetVertexAttribute(2, 2, sizeof(GLVertex), (void*)offsetof(GLVertex, texCoords));
+    VAO::SetAttrPointer(2, 2, sizeof(GLVertex), (void*)offsetof(GLVertex, texCoords));
 
     m_vao->Unbind();
 }

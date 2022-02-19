@@ -1,5 +1,4 @@
 #include <GLFW/glfw3.h>
-
 #include "Event/Event.hpp"
 
 using namespace Iris;

@@ -2,7 +2,7 @@
 #include "Entity/Component/PointLightComponent.hpp"
 #include "Entity/Component/TransformComponent.hpp"
 #include "Scene/Scene.hpp"
-#include "System/PointLightController.hpp"
+#include "PointLightController.hpp"
 
 using namespace Iris;
 

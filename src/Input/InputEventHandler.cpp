@@ -1,4 +1,4 @@
-#include "Input/InputEventHandler.hpp"
+#include "InputEventHandler.hpp"
 
 using namespace Iris;
 

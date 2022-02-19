@@ -2,11 +2,10 @@
 
 #include <fmt/core.h>
 #include <GLFW/glfw3.h>
-
-#include "Input/Exception/KeyInUseException.hpp"
-#include "Input/Exception/PrimaryKeyMissingException.hpp"
-#include "Input/InputBinding.hpp"
-#include "Input/InputManager.hpp"
+#include "Exception/KeyInUseException.hpp"
+#include "Exception/PrimaryKeyMissingException.hpp"
+#include "InputBinding.hpp"
+#include "InputManager.hpp"
 
 using namespace Iris;
 

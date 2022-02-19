@@ -1,21 +1,17 @@
 #include <memory>
-
 #include <glad/glad.h>
 #include <spdlog/spdlog.h>
-
 #include "GL/Shader/ShaderProgram.hpp"
-#include "GL/Shader/VertexShader.hpp"
-#include "GL/Shader/FragmentShader.hpp"
 #include "Exception/Exception.hpp"
 
 using namespace Iris;
 
 ShaderProgram::ShaderProgram(std::string name, std::shared_ptr<spdlog::logger> logger) :
-        m_name(std::move(name)),
-        m_program(glCreateProgram()),
-        m_vertexShader(new VertexShader(m_name, logger)),
-        m_fragmentShader(new FragmentShader(m_name, logger)),
-        m_logger(std::move(logger))
+    m_name(std::move(name)),
+    m_program(glCreateProgram()),
+    m_vertexShader(new Shader(GL_VERTEX_SHADER, m_name, ".vert", logger)),
+    m_fragmentShader(new Shader(GL_FRAGMENT_SHADER, m_name, ".frag", logger)),
+    m_logger(std::move(logger))
 {}
 
 ShaderProgram::~ShaderProgram()

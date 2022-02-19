@@ -1,12 +1,11 @@
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
-
 #include "Asset/AssetManager.hpp"
 #include "Exception/Exception.hpp"
-#include "GL/GLTexture.hpp"
-#include "GL/Model.hpp"
-#include "GL/Texture.hpp"
+#include "Data/GLTexture.hpp"
+#include "Model.hpp"
+#include "Texture.hpp"
 
 using namespace Iris;
 

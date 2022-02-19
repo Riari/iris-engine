@@ -1,4 +1,5 @@
 resources/
+build/
 
 ## CMake
 .cmake

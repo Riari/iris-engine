@@ -1,8 +1,6 @@
 #include <string>
-
 #include <stb_image.h>
-
-#include "Asset/Image.hpp"
+#include "Image.hpp"
 
 using namespace Iris;
 

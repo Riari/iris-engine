@@ -3,7 +3,7 @@
 #include "Entity/Component/SpotLightComponent.hpp"
 #include "Entity/Component/TransformComponent.hpp"
 #include "Scene/Scene.hpp"
-#include "System/SpotLightController.hpp"
+#include "SpotLightController.hpp"
 
 using namespace Iris;
 

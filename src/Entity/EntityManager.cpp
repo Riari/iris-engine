@@ -1,5 +1,4 @@
 #include <cassert>
-
 #include "Entity/Entity.hpp"
 #include "Entity/EntityManager.hpp"
 #include "Entity/Event/DestroyEntityEvent.hpp"

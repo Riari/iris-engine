@@ -1,7 +1,7 @@
-#include "Window/Exception/MonitorNotFoundException.hpp"
-#include "Window/FrameBufferEvent.hpp"
-#include "Window/Window.hpp"
-#include "Window/WindowManager.hpp"
+#include "Exception/MonitorNotFoundException.hpp"
+#include "FrameBufferEvent.hpp"
+#include "Window.hpp"
+#include "WindowManager.hpp"
 
 using namespace Iris;
 

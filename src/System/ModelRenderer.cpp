@@ -1,5 +1,4 @@
 #include <glm/ext.hpp>
-
 #include "Asset/AssetManager.hpp"
 #include "Entity/Component/CameraComponent.hpp"
 #include "Entity/Component/ModelComponent.hpp"
@@ -7,7 +6,7 @@
 #include "Entity/Component/TransformComponent.hpp"
 #include "Utility/Logger.hpp"
 #include "Scene/Scene.hpp"
-#include "System/ModelRenderer.hpp"
+#include "ModelRenderer.hpp"
 
 using namespace Iris;
 

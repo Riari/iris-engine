@@ -1,4 +1,4 @@
-#include "Entity/Event/DestroyEntityEvent.hpp"
+#include "DestroyEntityEvent.hpp"
 
 using namespace Iris;
 

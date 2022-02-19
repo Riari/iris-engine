@@ -1,9 +1,7 @@
 #include <memory>
 #include <random>
-
 #include <glm/glm.hpp>
 #include <cxxopts.hpp>
-
 #include "App/App.hpp"
 #include "Asset/AssetManager.hpp"
 #include "Demo/Keys.hpp"

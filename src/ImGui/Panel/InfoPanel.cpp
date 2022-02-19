@@ -1,8 +1,7 @@
 #include <imgui.h>
-
 #include "Entity/Component/CameraComponent.hpp"
 #include "Entity/ComponentManager.hpp"
-#include "ImGui/Panel/InfoPanel.hpp"
+#include "InfoPanel.hpp"
 
 using namespace Iris;
 

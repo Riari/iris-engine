@@ -1,4 +1,4 @@
-#include "Entity/Event/EntitySignatureChangeEvent.hpp"
+#include "EntitySignatureChangeEvent.hpp"
 
 using namespace Iris;
 

@@ -3,9 +3,9 @@
 using namespace Iris;
 
 InputBinding::InputBinding(int id, int primaryKey, int secondaryKey) :
-        m_id(id),
-        m_primary(primaryKey),
-        m_secondary(secondaryKey)
+    m_id(id),
+    m_primary(primaryKey),
+    m_secondary(secondaryKey)
 {}
 
 void InputBinding::BindPrimary(int key)

@@ -1,6 +1,6 @@
-#include "App/App.hpp"
 #include "Demo/Keys.hpp"
 #include "GL/Renderer.hpp"
+#include "App.hpp"
 
 using namespace Iris;
 

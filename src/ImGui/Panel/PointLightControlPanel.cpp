@@ -1,11 +1,10 @@
 #include <imgui.h>
-
 #include "Entity/Component/PointLightComponent.hpp"
 #include "Entity/Component/TransformComponent.hpp"
 #include "Entity/ComponentManager.hpp"
-#include "ImGui/Panel/PointLightControlPanel.hpp"
 #include "System/PointLightController.hpp"
 #include "System/SystemManager.hpp"
+#include "PointLightControlPanel.hpp"
 
 using namespace Iris;
 

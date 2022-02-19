@@ -1,4 +1,4 @@
-#include "Entity/Event/AddComponentEvent.hpp"
+#include "AddComponentEvent.hpp"
 
 using namespace Iris;
 

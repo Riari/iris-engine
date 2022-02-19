@@ -1,12 +1,10 @@
 #include <fstream>
 #include <iostream>
 #include <utility>
-
 #include <glad/glad.h>
 #include <spdlog/spdlog.h>
-
-#include "GL/Shader/Shader.hpp"
 #include "Exception/Exception.hpp"
+#include "Shader.hpp"
 
 using namespace Iris;
 

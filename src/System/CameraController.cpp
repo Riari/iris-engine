@@ -1,6 +1,6 @@
 #include "Demo/Keys.hpp"
 #include "Entity/Component/CameraComponent.hpp"
-#include "System/CameraController.hpp"
+#include "CameraController.hpp"
 
 using namespace Iris;
 
