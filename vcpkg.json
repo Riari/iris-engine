@@ -3,7 +3,10 @@
   "name": "iris-engine",
   "version": "0.0.1",
   "dependencies": [
-    "assimp",
+    {
+      "name": "assimp",
+      "platform": "windows"
+    },
     "cxxopts",
     "fmt",
     "glad",
@@ -13,6 +16,7 @@
       "name": "imgui",
       "features": ["glfw-binding", "opengl3-binding"]
     },
-    "spdlog"
+    "spdlog",
+    "stb"
   ]
 }

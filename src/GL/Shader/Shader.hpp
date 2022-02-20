@@ -18,7 +18,7 @@ namespace Iris
 
     private:
         const std::string m_name;
-        const std::string m_path = "assets\\shaders\\";
+        const std::string m_path = "assets/shaders/";
         const std::string m_extension = ".glsl";
 
         std::shared_ptr<spdlog::logger> m_logger;

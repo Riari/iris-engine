@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#include "Texture.hpp"
+#include "../Texture.hpp"
 
 namespace Iris
 {
