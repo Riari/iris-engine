@@ -43,7 +43,27 @@ int main(int argc, char **argv)
 {
     cxxopts::Options options("IrisEngine", "");
 
-    options.add_options()("d,display", "Display # to use (launches as window if unspecified)", cxxopts::value<int>()->default_value("-1"))("h,hres", "Horizontal screen resolution", cxxopts::value<int>()->default_value("1920"))("v,vres", "Vertical screen resolution", cxxopts::value<int>()->default_value("1080"))("f,fpscap", "FPS cap", cxxopts::value<double>()->default_value("60"));
+    options.add_options()
+    (
+        "d,display", 
+        "Display # to use (launches as window if unspecified)",
+        cxxopts::value<int>()->default_value("-1")
+    )
+    (
+        "h,hres",
+        "Horizontal screen resolution",
+        cxxopts::value<int>()->default_value("1440")
+    )
+    (
+        "v,vres",
+        "Vertical screen resolution",
+        cxxopts::value<int>()->default_value("900")
+    )
+    (
+        "f,fpscap",
+        "FPS cap",
+        cxxopts::value<double>()->default_value("60")
+    );
 
     auto opts = options.parse(argc, argv);
 
@@ -59,7 +79,8 @@ int main(int argc, char **argv)
     const double fpsCap = opts["fpscap"].as<double>();
 
     WindowManager &windowManager = WindowManager::GetInstance();
-    Window &mainWindow = windowManager.Create(0, "Iris Engine", display, horizontalRes, verticalRes, fpsCap);
+    Window &mainWindow = windowManager.Create(
+        0, "Iris Engine", display, horizontalRes, verticalRes, fpsCap);
     mainWindow.MakeCurrent();
 
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -83,7 +104,9 @@ int main(int argc, char **argv)
     InputManager::RegisterBinding(Keys::ToggleDebug, GLFW_KEY_H);
 
     WindowManager::RegisterHandler<FrameBufferEvent>([](const FrameBufferEvent &event)
-                                                     { Renderer::SetViewport(event.GetWidth(), event.GetHeight()); });
+    {
+        Renderer::SetViewport(event.GetWidth(), event.GetHeight());
+    });
 
     auto bufferSize = mainWindow.GetFramebufferSize();
     Renderer::SetViewport(bufferSize[0], bufferSize[1]);
@@ -129,77 +152,81 @@ int main(int argc, char **argv)
     auto id = entityManager.CreateEntity();
     mainScene.AddEntity(id);
     componentManager.AddComponent(id, TransformComponent{
-                                          .position = glm::vec3(0, 0, 0),
-                                          .rotation = 0,
-                                          .scale = glm::vec3(1, 1, 1),
-                                      });
+        .position = glm::vec3(0, 0, 0),
+        .rotation = 0,
+        .scale = glm::vec3(1, 1, 1),
+    });
     componentManager.AddComponent(id, ModelComponent{
-                                          .pModel = demoModel,
-                                          .color = glm::vec3(1.0f, 1.0f, 1.0f),
-                                      });
+        .pModel = demoModel,
+        .color = glm::vec3(1.0f, 1.0f, 1.0f),
+    });
 
     auto cameraId = entityManager.CreateEntity();
     mainScene.AddEntity(cameraId);
     componentManager.AddComponent(cameraId, CameraComponent{
-                                                .position = glm::vec3(-0.8f, 0.0f, 12.0f),
-                                                .aspectRatio = mainWindow.GetAspectRatio(),
-                                            });
+        .position = glm::vec3(-0.8f, 0.0f, 12.0f),
+        .aspectRatio = mainWindow.GetAspectRatio(),
+    });
 
     cameraController->SetActiveCameraId(cameraId);
 
     auto directionalLightId = entityManager.CreateEntity();
     mainScene.AddEntity(directionalLightId);
     componentManager.AddComponent(directionalLightId, TransformComponent{
-                                                          .position = glm::vec3(0.0f, 0.0f, 0.0f),
-                                                          .rotation = 0.0f,
-                                                          .scale = glm::vec3(0.1f, 0.1f, 0.1f),
-                                                      });
+        .position = glm::vec3(0.0f, 0.0f, 0.0f),
+        .rotation = 0.0f,
+        .scale = glm::vec3(0.1f, 0.1f, 0.1f),
+    });
     componentManager.AddComponent(directionalLightId, DirectionalLightComponent{
-                                                          .ambient = glm::vec3(0.02f, 0.02f, 0.02f),
-                                                          .diffuse = glm::vec3(0.4f, 0.1f, 0.1f),
-                                                          .specular = glm::vec3(0.4f, 0.1f, 0.1f),
-                                                          .direction = glm::vec3(-0.2f, -1.0f, -0.3f),
-                                                      });
+        .ambient = glm::vec3(0.02f, 0.02f, 0.02f),
+        .diffuse = glm::vec3(0.4f, 0.1f, 0.1f),
+        .specular = glm::vec3(0.4f, 0.1f, 0.1f),
+        .direction = glm::vec3(-0.2f, -1.0f, -0.3f),
+    });
 
     for (int i = 0; i < 2; i++)
     {
         auto pointLightId = entityManager.CreateEntity();
         mainScene.AddEntity(pointLightId);
         componentManager.AddComponent(pointLightId, TransformComponent{
-                                                        .position = glm::vec3(randPositionX(generator), randPosition(generator), randPosition(generator)),
-                                                        .rotation = 0.0f,
-                                                        .scale = glm::vec3(0.1f, 0.1f, 0.1f),
-                                                    });
+            .position = glm::vec3(
+                randPositionX(generator),
+                randPosition(generator),
+                randPosition(generator)
+            ),
+            .rotation = 0.0f,
+            .scale = glm::vec3(0.1f, 0.1f, 0.1f),
+        });
         // componentManager.AddComponent(pointLightId, ModelComponent{
         //         .pModel = pointLightModel
         // });
         componentManager.AddComponent(pointLightId, PointLightComponent{
-                                                        .ambient = glm::vec3(0.05f, 0.05f, 0.05f),
-                                                        .diffuse = glm::vec3(0.2f, 0.2f, 0.2f),
-                                                        .specular = glm::vec3(0.5f, 0.5f, 0.5f),
-                                                        .constant = 1.0f,
-                                                        .linear = 0.09f,
-                                                        .quadratic = 0.032f,
-                                                    });
+            .ambient = glm::vec3(0.05f, 0.05f, 0.05f),
+            .diffuse = glm::vec3(0.2f, 0.2f, 0.2f),
+            .specular = glm::vec3(0.5f, 0.5f, 0.5f),
+            .constant = 1.0f,
+            .linear = 0.09f,
+            .quadratic = 0.032f,
+        });
     }
 
     auto spotLightId = entityManager.CreateEntity();
     mainScene.AddEntity(spotLightId);
     componentManager.AddComponent(spotLightId, TransformComponent{
-                                                   .position = glm::vec3(0.0f, 0.0f, 0.0f),
-                                                   .rotation = 0.0f,
-                                                   .scale = glm::vec3(0.01f, 0.01f, 0.01f),
-                                               });
+        .position = glm::vec3(0.0f, 0.0f, 0.0f),
+        .rotation = 0.0f,
+        .scale = glm::vec3(0.01f, 0.01f, 0.01f),
+    });
     componentManager.AddComponent(spotLightId, SpotLightComponent{
-                                                   .ambient = glm::vec3(0.0f, 0.0f, 0.0f),
-                                                   .diffuse = glm::vec3(0.0f, 0.0f, 0.0f),
-                                                   .specular = glm::vec3(0.0f, 0.0f, 0.0f),
-                                                   .innerEdge = glm::cos(glm::radians(12.5f)),
-                                                   .outerEdge = glm::cos(glm::radians(17.5f)),
-                                                   .constant = 1.0f,
-                                                   .linear = 0.09f,
-                                                   .quadratic = 0.032f,
-                                               });
+        .ambient = glm::vec3(0.0f, 0.0f, 0.0f),
+        .diffuse = glm::vec3(0.0f, 0.0f, 0.0f),
+        .specular = glm::vec3(0.0f, 0.0f, 0.0f),
+        .innerEdge = glm::cos(glm::radians(12.5f)),
+        .outerEdge = glm::cos(glm::radians(17.5f)),
+        .constant = 1.0f,
+        .linear = 0.09f,
+        .quadratic = 0.032f,
+    });
 
     modelRenderer->SetDirectionalLightId(directionalLightId);
     modelRenderer->SetActiveCameraId(cameraId);
