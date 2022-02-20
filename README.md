@@ -75,7 +75,7 @@ Install these extensions:
 * [CodeLLDB](https://marketplace.visualstudio.com/items?itemName=vadimcn.vscode-lldb)
 * [CMake Tools](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cmake-tools)
 
-Use the `CMake: ` commands in the command palette to configure, build, and debug the project.
+Use the `CMake:` commands in the command palette to configure, build, and debug the project.
 
 ### CLion
 
