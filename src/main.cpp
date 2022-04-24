@@ -1,7 +1,10 @@
+#define GLFW_INCLUDE_NONE
+
 #include <memory>
 #include <random>
 #include <glm/glm.hpp>
 #include <cxxopts.hpp>
+#include <flecs.h>
 #include "App/App.hpp"
 #include "Asset/AssetManager.hpp"
 #include "Demo/Keys.hpp"
@@ -41,6 +44,10 @@ using namespace Iris;
 
 int main(int argc, char **argv)
 {
+    flecs::world ecs;
+    auto entity = ecs.entity();
+
+
     cxxopts::Options options("IrisEngine", "");
 
     options.add_options()

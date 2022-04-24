@@ -6,7 +6,9 @@ set(CMAKE_CXX_STANDARD 20)
 set(CXX_FLAGS "-Wall")
 
 # Paths
-set(VCPKG_DIR "${CMAKE_SOURCE_DIR}/external/vcpkg")
+set(EXT_DIR "${CMAKE_SOURCE_DIR}/external")
+set(FLECS_DIR "${EXT_DIR}/flecs")
+set(VCPKG_DIR "${EXT_DIR}/vcpkg")
 set(ASSETS_DIR "${CMAKE_SOURCE_DIR}/assets")
 set(SRC_DIR "${CMAKE_SOURCE_DIR}/src")
 
@@ -28,12 +30,12 @@ find_path(STB_INCLUDE_DIRS "stb.h")
 # First party stuff
 file(GLOB_RECURSE SOURCES "${SRC_DIR}/*.cpp")
 
-add_executable(${PROJECT_NAME} ${SOURCES})
+add_executable(${PROJECT_NAME} ${SOURCES} "${FLECS_DIR}/flecs.c")
 
 add_custom_target(copy-assets ALL COMMAND ${CMAKE_COMMAND} -E copy_directory "${ASSETS_DIR}" "${CMAKE_BINARY_DIR}/assets")
 add_dependencies(${PROJECT_NAME} copy-assets)
 
-target_include_directories(${PROJECT_NAME} PRIVATE ${SRC_DIR} ${STB_INCLUDE_DIRS})
+target_include_directories(${PROJECT_NAME} PRIVATE ${SRC_DIR} ${STB_INCLUDE_DIRS} ${FLECS_DIR})
 
 target_link_libraries(
         ${PROJECT_NAME} PRIVATE
@@ -45,19 +47,4 @@ target_link_libraries(
         glm::glm
         imgui::imgui
         spdlog::spdlog
-)
-
-target_precompile_headers(
-        ${PROJECT_NAME} PRIVATE
-
-        # STL
-        <algorithm>
-        <utility>
-        <memory>
-
-        # Third-party
-        <spdlog/spdlog.h>
-        <fmt/core.h>
-        <glad/glad.h>
-        <GLFW/glfw3.h>
 )
