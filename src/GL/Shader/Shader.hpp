@@ -5,7 +5,7 @@
 #include <spdlog/spdlog.h>
 #include "GL/Object.hpp"
 
-namespace Iris
+namespace Iris::GL
 {
     class Shader : protected Object
     {

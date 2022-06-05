@@ -4,7 +4,7 @@
 
 namespace Iris
 {
-    struct DirectionalLightComponent
+    struct DirectionalLight
     {
         glm::vec3 ambient;
         glm::vec3 diffuse;

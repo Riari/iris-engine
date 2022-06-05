@@ -2,9 +2,9 @@
 #include <string>
 #include "Mesh.hpp"
 
-using namespace Iris;
+using namespace Iris::GL;
 
-Mesh::Mesh(std::vector<GLVertex> vertices, std::vector<unsigned int> indices, std::vector<GLTexture> textures) :
+Mesh::Mesh(std::vector<VertexData> vertices, std::vector<unsigned int> indices, std::vector<TextureData> textures) :
     m_vertices(std::move(vertices)),
     m_indices(std::move(indices)),
     m_textures(std::move(textures))
@@ -65,25 +65,25 @@ void Mesh::Init()
     m_vao->Bind();
 
     m_vbo->Bind();
-    m_vbo->SetData(m_vertices.size() * sizeof(GLVertex), &m_vertices[0], GL_STATIC_DRAW);
+    m_vbo->SetData(m_vertices.size() * sizeof(VertexData), &m_vertices[0], GL_STATIC_DRAW);
 
     m_ebo->Bind();
     m_ebo->SetData(m_indices.size() * sizeof(unsigned int), &m_indices[0], GL_STATIC_DRAW);
 
     // Vertex positions
-    VAO::SetAttrPointer(0, 3, sizeof(GLVertex), (void*)0);
+    VAO::SetAttrPointer(0, 3, sizeof(VertexData), (void*)0);
 
     // Normals
-    VAO::SetAttrPointer(1, 3, sizeof(GLVertex), (void*)offsetof(GLVertex, normal));
+    VAO::SetAttrPointer(1, 3, sizeof(VertexData), (void*)offsetof(VertexData, normal));
 
     // Texture coords
-    VAO::SetAttrPointer(2, 2, sizeof(GLVertex), (void*)offsetof(GLVertex, texCoords));
+    VAO::SetAttrPointer(2, 2, sizeof(VertexData), (void*)offsetof(VertexData, texCoords));
 
     // Tangents
-    VAO::SetAttrPointer(3, 3, sizeof(GLVertex), (void*)offsetof(GLVertex, tangent));
+    VAO::SetAttrPointer(3, 3, sizeof(VertexData), (void*)offsetof(VertexData, tangent));
 
     // Bitangents
-    VAO::SetAttrPointer(4, 3, sizeof(GLVertex), (void*)offsetof(GLVertex, bitangent));
+    VAO::SetAttrPointer(4, 3, sizeof(VertexData), (void*)offsetof(VertexData, bitangent));
 
     VAO::Unbind();
 }

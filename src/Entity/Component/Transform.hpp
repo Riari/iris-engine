@@ -7,7 +7,7 @@ namespace Iris
 {
     const glm::mat4 IDENTITY = glm::mat4(1.0f);
 
-    struct TransformComponent
+    struct Transform
     {
         glm::vec3 position;
         float rotation;

@@ -2,6 +2,7 @@
 
 #include <map>
 #include <memory>
+#include "GL/Shader/ShaderProgram.hpp"
 #include "GL/Texture.hpp"
 #include "ImageRepository.hpp"
 #include "ShaderProgramRepository.hpp"
@@ -20,13 +21,13 @@ namespace Iris
             return instance;
         }
 
-        [[nodiscard]] std::shared_ptr<ShaderProgram> GetShaderProgram(std::string name) const;
+        [[nodiscard]] std::shared_ptr<GL::ShaderProgram> GetShaderProgram(std::string name) const;
         void UnloadShaderProgram(const std::string &name) const;
 
         [[nodiscard]] std::shared_ptr<Image> GetImage(std::string path) const;
         void UnloadImage(const std::string &path) const;
 
-        [[nodiscard]] std::shared_ptr<Texture> GenerateTexture(std::string path) const;
+        [[nodiscard]] std::shared_ptr<GL::Texture> GenerateTexture(std::string path) const;
 
     private:
         AssetManager() : m_images(new ImageRepository), m_shaderPrograms(new ShaderProgramRepository) {}

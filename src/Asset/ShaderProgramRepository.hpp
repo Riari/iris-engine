@@ -5,12 +5,12 @@
 
 namespace Iris
 {
-    class ShaderProgramRepository : public AssetRepository<ShaderProgram>
+    class ShaderProgramRepository : public AssetRepository<GL::ShaderProgram>
     {
     public:
         void Unload(const std::string &path);
 
     private:
-        std::shared_ptr<ShaderProgram> Load(std::string path) override;
+        std::shared_ptr<GL::ShaderProgram> Load(std::string path) override;
     };
 }

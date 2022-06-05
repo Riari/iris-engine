@@ -6,7 +6,7 @@
 #include "Exception/Exception.hpp"
 #include "Shader.hpp"
 
-using namespace Iris;
+using namespace Iris::GL;
 
 Shader::Shader(unsigned int type, const std::string &name, const std::string &suffix,
                std::shared_ptr<spdlog::logger> logger) :

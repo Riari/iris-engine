@@ -4,23 +4,23 @@
 #include "Buffer/EBO.hpp"
 #include "Buffer/VAO.hpp"
 #include "Buffer/VBO.hpp"
-#include "Data/GLTexture.hpp"
-#include "Data/GLVertex.hpp"
+#include "Data/TextureData.hpp"
+#include "Data/VertexData.hpp"
 #include "Shader/ShaderProgram.hpp"
 
-namespace Iris
+namespace Iris::GL
 {
     class Mesh
     {
     public:
-        Mesh(std::vector<GLVertex> vertices, std::vector<unsigned int> indices, std::vector<GLTexture> textures);
+        Mesh(std::vector<VertexData> vertices, std::vector<unsigned int> indices, std::vector<TextureData> textures);
         void Draw(const std::shared_ptr<ShaderProgram>& program);
 
     private:
         // MeshComponent data
-        std::vector<GLVertex> m_vertices;
+        std::vector<VertexData> m_vertices;
         std::vector<unsigned int> m_indices;
-        std::vector<GLTexture> m_textures;
+        std::vector<TextureData> m_textures;
 
         // Buffers
         std::unique_ptr<VAO> m_vao;

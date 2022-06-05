@@ -4,7 +4,7 @@
 
 namespace Iris
 {
-    struct PointLightComponent
+    struct PointLight
     {
         glm::vec3 ambient;
         glm::vec3 diffuse;

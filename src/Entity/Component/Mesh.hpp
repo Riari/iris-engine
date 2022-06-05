@@ -8,10 +8,10 @@
 
 namespace Iris
 {
-    struct MeshComponent
+    struct Mesh
     {
-        std::shared_ptr<VBO> pVbo;
-        std::shared_ptr<VAO> pVao;
+        std::shared_ptr<GL::VBO> pVbo;
+        std::shared_ptr<GL::VAO> pVao;
         glm::vec3 color;
     };
 }

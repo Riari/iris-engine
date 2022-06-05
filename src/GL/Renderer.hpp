@@ -2,7 +2,7 @@
 
 #include <glm/glm.hpp>
 
-namespace Iris
+namespace Iris::GL
 {
     class Renderer
     {

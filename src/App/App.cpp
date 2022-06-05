@@ -10,25 +10,25 @@ App &App::GetInstance()
     return instance;
 }
 
-void App::RegisterUpdateSystem(const std::shared_ptr<System>& system)
-{
-    m_updateSystems.push_back(system);
-}
+// void App::RegisterUpdateSystem(const std::shared_ptr<System>& system)
+// {
+//     m_updateSystems.push_back(system);
+// }
 
-void App::RegisterPreRenderSystem(const std::shared_ptr<System>& system)
-{
-    m_preRenderSystems.push_back(system);
-}
+// void App::RegisterPreRenderSystem(const std::shared_ptr<System>& system)
+// {
+//     m_preRenderSystems.push_back(system);
+// }
 
-void App::RegisterRenderSystem(const std::shared_ptr<System>& system)
-{
-    m_renderSystems.push_back(system);
-}
+// void App::RegisterRenderSystem(const std::shared_ptr<System>& system)
+// {
+//     m_renderSystems.push_back(system);
+// }
 
-void App::RegisterPostRenderSystem(const std::shared_ptr<System>& system)
-{
-    m_postRenderSystems.push_back(system);
-}
+// void App::RegisterPostRenderSystem(const std::shared_ptr<System>& system)
+// {
+//     m_postRenderSystems.push_back(system);
+// }
 
 void App::Handle(KeyEvent event)
 {
@@ -50,7 +50,7 @@ void App::Run(const std::list<std::unique_ptr<State>>& states) const
         for (auto const &state : states)
         {
             auto &window = state->GetWindow();
-            auto &scene = state->GetScene();
+            // auto &scene = state->GetScene();
             auto &imGuiLayer = state->GetImGuiLayer();
 
             if (m_debug) imGuiLayer.PrepareNewFrame();
@@ -69,21 +69,21 @@ void App::Run(const std::list<std::unique_ptr<State>>& states) const
 
             while (window.ShouldUpdate())
             {
-                for (const auto &system : m_updateSystems) system->Update(window, m_debug);
+                // for (const auto &system : m_updateSystems) system->Update(window, m_debug);
                 window.OnUpdated();
             }
 
             if (m_debug) imGuiLayer.PrepareRender();
 
-            Renderer::Clear(scene.GetClearColor());
+            // Renderer::Clear(scene.GetClearColor());
 
-            for (const auto &system : m_preRenderSystems) system->Update(window, scene, m_debug);
-            for (const auto &system : m_renderSystems) system->Update(window, scene, m_debug);
+            // for (const auto &system : m_preRenderSystems) system->Update(window, scene, m_debug);
+            // for (const auto &system : m_renderSystems) system->Update(window, scene, m_debug);
 
             if (m_debug) imGuiLayer.Render();
 
             window.SwapBuffers();
-            for (const auto &system : m_postRenderSystems) system->Update(window, scene, m_debug);
+            // for (const auto &system : m_postRenderSystems) system->Update(window, scene, m_debug);
         }
     }
 }

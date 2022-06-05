@@ -7,7 +7,6 @@
 #include "Exception/Exception.hpp"
 #include "Input/InputManager.hpp"
 #include "Utility/Logger.hpp"
-#include "Scene/Scene.hpp"
 #include "Window.hpp"
 #include "WindowManager.hpp"
 

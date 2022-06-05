@@ -5,7 +5,7 @@
 #include "Asset/Image.hpp"
 #include "GL/Object.hpp"
 
-namespace Iris
+namespace Iris::GL
 {
     class Texture : public Object
     {

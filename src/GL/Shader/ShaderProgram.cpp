@@ -4,7 +4,7 @@
 #include "GL/Shader/ShaderProgram.hpp"
 #include "Exception/Exception.hpp"
 
-using namespace Iris;
+using namespace Iris::GL;
 
 ShaderProgram::ShaderProgram(std::string name, std::shared_ptr<spdlog::logger> logger) :
     m_name(std::move(name)),

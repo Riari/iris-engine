@@ -1,11 +1,11 @@
 #pragma once
 
 #include <memory>
-#include "../Object.hpp"
+#include "GL/Object.hpp"
 
-namespace Iris
+namespace Iris::GL
 {
-    class Buffer : protected Object
+    class Buffer : protected GL::Object
     {
     public:
         explicit Buffer(unsigned int target);

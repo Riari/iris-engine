@@ -16,7 +16,7 @@ namespace Iris
     const float DEFAULT_CLIP_NEAR = 0.1f;
     const float DEFAULT_CLIP_FAR = 100.0f;
 
-    struct CameraComponent
+    struct Camera
     {
         bool constrainPitch = true;
 

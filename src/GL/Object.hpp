@@ -2,7 +2,7 @@
 
 #include <glad/glad.h>
 
-namespace Iris
+namespace Iris::GL
 {
     class Object
     {

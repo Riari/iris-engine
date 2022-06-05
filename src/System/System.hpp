@@ -1,39 +1,21 @@
 #pragma once
 
-#include <list>
-#include "Entity/ComponentManager.hpp"
-#include "Entity/Entity.hpp"
-#include "Scene/Scene.hpp"
-#include "Window/Window.hpp"
+#include <flecs.h>
 
 namespace Iris
 {
+    template <typename... Components>
     class System
     {
     public:
-        void AddEntity(EntityId);
-        void RemoveEntity(EntityId);
-
-        static std::list<ComponentType> GetComponentTypes();
-
-        std::set<EntityId> GetEntities();
-
-        virtual void Update(Window&, bool debug);
-        virtual void Update(Window&, Scene&, bool debug);
-
-    protected:
-        std::set<EntityId> m_entities;
-
-        template<typename T>
-        static ComponentType GetComponentType()
+        System(flecs::world &world, flecs::entity &phase) : m_system(world.system<Components...>().kind(phase))
         {
-            return ComponentManager::GetInstance().GetComponentType<T>();
+            Init(m_system);
         }
 
-        template<typename T>
-        static T& GetComponent(EntityId id)
-        {
-            return ComponentManager::GetInstance().GetComponent<T>(id);
-        }
+    private:
+        flecs::system::entity m_system;
+
+        virtual void Init(flecs::system::entity) = 0;
     };
 }

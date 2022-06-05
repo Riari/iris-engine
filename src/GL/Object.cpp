@@ -1,7 +1,7 @@
 
 #include <GL/Object.hpp>
 
-using namespace Iris;
+using namespace Iris::GL;
 
 GLuint Object::GetID() const
 {

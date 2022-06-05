@@ -5,7 +5,7 @@
 
 namespace Iris
 {
-    struct ModelComponent
+    struct Model
     {
         std::shared_ptr<Model> pModel;
         glm::vec3 color;

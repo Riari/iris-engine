@@ -2,7 +2,7 @@
 
 #include "Buffer.hpp"
 
-namespace Iris
+namespace Iris::GL
 {
     class EBO : public Buffer
     {

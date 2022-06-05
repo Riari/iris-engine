@@ -3,11 +3,11 @@
 #include <assimp/postprocess.h>
 #include "Asset/AssetManager.hpp"
 #include "Exception/Exception.hpp"
-#include "Data/GLTexture.hpp"
+#include "Data/TextureData.hpp"
 #include "Model.hpp"
 #include "Texture.hpp"
 
-using namespace Iris;
+using namespace Iris::GL;
 
 Model::Model(const std::string& path)
 {
@@ -22,7 +22,7 @@ void Model::Draw(const std::shared_ptr<ShaderProgram>& program)
     }
 }
 
-std::vector<GLTexture> Model::GetLoadedTextures()
+std::vector<TextureData> Model::GetLoadedTextures()
 {
     return m_loadedTextures;
 }
@@ -58,9 +58,9 @@ void Model::ProcessNode(aiNode *node, const aiScene *scene)
 
 Mesh Model::ProcessMesh(aiMesh *mesh, const aiScene *scene)
 {
-    std::vector<GLVertex> vertices;
+    std::vector<VertexData> vertices;
     std::vector<unsigned int> indices;
-    std::vector<GLTexture> textures;
+    std::vector<TextureData> textures;
 
     for (unsigned int i = 0; i < mesh->mNumVertices; i++)
     {
@@ -69,7 +69,7 @@ Mesh Model::ProcessMesh(aiMesh *mesh, const aiScene *scene)
         vector.y = mesh->mVertices[i].y;
         vector.z = mesh->mVertices[i].z;
 
-        GLVertex vertex{
+        VertexData vertex{
             .position = vector
         };
 
@@ -117,27 +117,27 @@ Mesh Model::ProcessMesh(aiMesh *mesh, const aiScene *scene)
 
     aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
 
-    std::vector<GLTexture> diffuseMaps = LoadMaterialTextures(material, aiTextureType_DIFFUSE, GLTextureType::Diffuse);
+    std::vector<TextureData> diffuseMaps = LoadMaterialTextures(material, aiTextureType_DIFFUSE, TextureDataType::Diffuse);
     textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
 
-    std::vector<GLTexture> specularMaps = LoadMaterialTextures(material, aiTextureType_SPECULAR, GLTextureType::Specular);
+    std::vector<TextureData> specularMaps = LoadMaterialTextures(material, aiTextureType_SPECULAR, TextureDataType::Specular);
     textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
 
-    std::vector<GLTexture> normalMaps = LoadMaterialTextures(material, aiTextureType_HEIGHT, GLTextureType::Normal);
+    std::vector<TextureData> normalMaps = LoadMaterialTextures(material, aiTextureType_HEIGHT, TextureDataType::Normal);
     textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
 
-    std::vector<GLTexture> heightMaps = LoadMaterialTextures(material, aiTextureType_AMBIENT, GLTextureType::Height);
+    std::vector<TextureData> heightMaps = LoadMaterialTextures(material, aiTextureType_AMBIENT, TextureDataType::Height);
     textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
 
-    std::vector<GLTexture> emissionMaps = LoadMaterialTextures(material, aiTextureType_EMISSIVE, GLTextureType::Emission);
+    std::vector<TextureData> emissionMaps = LoadMaterialTextures(material, aiTextureType_EMISSIVE, TextureDataType::Emission);
     textures.insert(textures.end(), emissionMaps.begin(), emissionMaps.end());
 
     return {vertices, indices, textures};
 }
 
-std::vector<GLTexture> Model::LoadMaterialTextures(aiMaterial *material, aiTextureType assimpType, GLTextureType localType)
+std::vector<TextureData> Model::LoadMaterialTextures(aiMaterial *material, aiTextureType assimpType, TextureDataType localType)
 {
-    std::vector<GLTexture> glTextures;
+    std::vector<TextureData> TextureDatas;
     for (unsigned int i = 0; i < material->GetTextureCount(assimpType); i++)
     {
         aiString str;
@@ -147,7 +147,7 @@ std::vector<GLTexture> Model::LoadMaterialTextures(aiMaterial *material, aiTextu
         {
             if (std::strcmp(m_loadedTexture.path, str.C_Str()) == 0)
             {
-                glTextures.push_back(m_loadedTexture);
+                TextureDatas.push_back(m_loadedTexture);
                 skip = true;
                 break;
             }
@@ -158,15 +158,15 @@ std::vector<GLTexture> Model::LoadMaterialTextures(aiMaterial *material, aiTextu
         AssetManager& assetManager = AssetManager::GetInstance();
         std::shared_ptr<Texture> texture = assetManager.GenerateTexture(m_directory + '/' + str.C_Str());
 
-        GLTexture glTexture = {
+        TextureData TextureData = {
             .texture = texture,
             .type = localType,
             .path = str.C_Str()
         };
 
-        glTextures.push_back(glTexture);
-        m_loadedTextures.push_back(glTexture);
+        TextureDatas.push_back(TextureData);
+        m_loadedTextures.push_back(TextureData);
     }
 
-    return glTextures;
+    return TextureDatas;
 }

@@ -2,9 +2,9 @@
 
 #include <glm/glm.hpp>
 
-namespace Iris
+namespace Iris::GL
 {
-    struct GLVertex
+    struct VertexData
     {
         glm::vec3 position;
         glm::vec3 normal;

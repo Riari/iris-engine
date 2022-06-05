@@ -7,7 +7,7 @@
 #include "GL/Texture.hpp"
 #include "Exception/Exception.hpp"
 
-using namespace Iris;
+using namespace Iris::GL;
 
 Texture::Texture(std::shared_ptr<Image> image) : Object(), m_image(std::move(image))
 {

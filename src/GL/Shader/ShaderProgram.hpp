@@ -9,7 +9,7 @@
 
 #include "Shader.hpp"
 
-namespace Iris
+namespace Iris::GL
 {
     class ShaderProgram
     {

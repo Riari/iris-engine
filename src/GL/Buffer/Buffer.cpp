@@ -1,7 +1,7 @@
 #include <glad/glad.h>
 #include "GL/Buffer/Buffer.hpp"
 
-using namespace Iris;
+using namespace Iris::GL;
 
 Buffer::Buffer(unsigned int target) : Object(), m_target(target)
 {

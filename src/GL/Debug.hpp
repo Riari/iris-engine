@@ -4,7 +4,7 @@
 #include <glad/glad.h>
 #include "Utility/Logger.hpp"
 
-using namespace Iris;
+using namespace Iris::GL;
 
 void APIENTRY glDebugOutput(GLenum source, GLenum type, unsigned int id, GLenum severity, GLsizei length, const char *message, const void *userParam)
 {
@@ -45,7 +45,7 @@ void APIENTRY glDebugOutput(GLenum source, GLenum type, unsigned int id, GLenum 
         case GL_DEBUG_SEVERITY_NOTIFICATION: strSeverity = "Notification"; break;
     }
 
-    Logger::GL->error(fmt::format("GL: Error {0} received: {1} (Source: {2}, EventListener: {3}, Severity: {4})", id, message, strSource, strType, strSeverity));
+    Iris::Logger::GL->error(fmt::format("GL: Error {0} received: {1} (Source: {2}, EventListener: {3}, Severity: {4})", id, message, strSource, strType, strSeverity));
 }
 
 void InitGLDebug()
@@ -59,5 +59,5 @@ void InitGLDebug()
         glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DEBUG_SEVERITY_MEDIUM, 0, NULL, GL_TRUE);
     }
 
-    Logger::GL->info("Debugging initialized");
+    Iris::Logger::GL->info("Debugging initialized");
 }

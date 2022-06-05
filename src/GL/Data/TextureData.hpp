@@ -1,12 +1,11 @@
 #pragma once
 
 #include <memory>
+#include "GL/Texture.hpp"
 
-#include "../Texture.hpp"
-
-namespace Iris
+namespace Iris::GL
 {
-    enum GLTextureType
+    enum TextureDataType
     {
         Diffuse,
         Specular,
@@ -15,10 +14,10 @@ namespace Iris
         Height,
     };
 
-    struct GLTexture
+    struct TextureData
     {
-        std::shared_ptr<Texture> texture;
-        GLTextureType type;
+        std::shared_ptr<GL::Texture> texture;
+        TextureDataType type;
         const char* path;
     };
 }

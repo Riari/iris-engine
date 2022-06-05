@@ -2,7 +2,7 @@
 
 #include "../Object.hpp"
 
-namespace Iris
+namespace Iris::GL
 {
     class VAO : protected Object
     {

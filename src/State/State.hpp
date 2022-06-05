@@ -2,7 +2,6 @@
 
 #include <memory>
 #include "ImGui/ImGuiLayer.hpp"
-#include "Scene/Scene.hpp"
 #include "Window/Window.hpp"
 
 namespace Iris
@@ -10,15 +9,13 @@ namespace Iris
     class State
     {
     public:
-        State(Window&, Scene&, ImGuiLayer&);
+        State(Window &, ImGuiLayer &);
 
-        Window& GetWindow();
-        Scene& GetScene();
-        ImGuiLayer& GetImGuiLayer();
+        Window &GetWindow();
+        ImGuiLayer &GetImGuiLayer();
 
     private:
-        Window& m_window;
-        Scene& m_scene;
-        ImGuiLayer& m_imGuiLayer;
+        Window &m_window;
+        ImGuiLayer &m_imGuiLayer;
     };
 }

@@ -1,7 +1,7 @@
 #include <glad/glad.h>
 #include "VAO.hpp"
 
-using namespace Iris;
+using namespace Iris::GL;
 
 VAO::VAO() : Object()
 {
